@@ -3,5 +3,8 @@ calendar: <%= @calendar.id %>
 </p>
 
 <p>
-今月の時間入力をする
+  今月の時間入力をする
+  <p>
+    <%= link_to '今月の時間入力', calendar_calendar_months_path(@calendar), method: :post %>
+  </p>
 </p>
