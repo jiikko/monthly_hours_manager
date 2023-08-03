@@ -1,0 +1,2 @@
+class CalendarDay < ApplicationRecord
+end

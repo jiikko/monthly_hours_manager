@@ -1,0 +1,2 @@
+class CalendarMonth < ApplicationRecord
+end
