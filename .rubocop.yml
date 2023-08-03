@@ -3,3 +3,6 @@ AllCops:
     - 'bin/*'
     - 'db/**/*'
     - 'vendor/**/*'
+
+Style/Documentation:
+  Enabled: false
