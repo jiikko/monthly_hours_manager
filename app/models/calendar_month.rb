@@ -5,10 +5,19 @@ class CalendarMonth < ApplicationRecord
   PREV_WDAY_TABLE = { '月' => '日', '火' => '月', '水' => '火', '木' => '水', '金' => '木', '土' => '金', '日' => '土' }.freeze
   MAX_WEEK_SIZE = 6
 
-  has_many :calendar_days, dependent: :destroy
+  belongs_to :calendar
+
+  has_many :days, dependent: :destroy, class_name: 'CalendarDay'
+
+  # @return [void]
+  def create_days!
+    Date.new(year, month, 1).end_of_month.day.times do |day|
+      days.create!(day: day + 1)
+    end
+  end
 
   def weeks
-    grouped_days = calendar_days.group_by(&:wday)
+    grouped_days = days.group_by(&:wday)
 
     WDAY_TABLE.inject(nil) do |previous, wday|
       current = grouped_days[wday][0]
