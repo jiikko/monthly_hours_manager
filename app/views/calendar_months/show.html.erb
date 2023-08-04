@@ -2,28 +2,6 @@
   <%= @calendar_month.year %>年<%= @calendar_month.month %>月
 </p>
 
-<% grouped_days = @calendar_month.calendar_days.group_by(&:wday) %>
-<% prev_wday = { "月" => '日', "火" => '月', "水" => '火', "木" => '水', "金" => '木', "土" => '金', "日" => '土' } %>
-
-<% ["月", "火", "水", "木", "金", "土", "日"].inject(nil) { |previous, wday|
-  current = grouped_days[wday][0]
-  next if current.nil?
-  next(current) if previous.nil?
-  if previous.day < current.day
-    next previous
-  else
-    pw = nil
-    7.times do
-      pw = prev_wday[pw || wday]
-      grouped_days[pw].unshift(nil)
-      if pw == '月'
-        break
-      end
-    end
-  end
-}
-  %>
-
 <table border='1'>
   <tr>
     <th>月</th>
@@ -34,11 +12,10 @@
     <th>土</th>
     <th>日</th>
   </tr>
-
-  <% 6.times do |week_no| %>
+  <% @calendar_month.weeks.each do |week| %>
     <tr>
-      <% ["月", "火", "水", "木", "金", "土", "日"].each do |wday| %>
-        <td><%= grouped_days[wday][week_no]&.day %></td>
+      <% week.each do |day| %>
+        <td><%= day %></td>
       <% end %>
     </tr>
   <% end %>
