@@ -16,6 +16,7 @@ class CalendarMonth < ApplicationRecord
     end
   end
 
+  # @return [Array<Array<CalendarDay>>]
   def weeks
     grouped_days = days.group_by(&:wday)
 
@@ -34,7 +35,7 @@ class CalendarMonth < ApplicationRecord
     end
 
     Array.new(MAX_WEEK_SIZE) do |week_no|
-      WDAY_TABLE.map { |wday| grouped_days[wday][week_no]&.day }
+      WDAY_TABLE.map { |wday| grouped_days[wday][week_no] }
     end
   end
 end

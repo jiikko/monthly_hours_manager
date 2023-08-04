@@ -14,8 +14,20 @@
   </tr>
   <% @calendar_month.weeks.each do |week| %>
     <tr>
-      <% week.each do |day| %>
-        <td><%= day %></td>
+      <% week.each do |day_instance| %>
+        <td>
+          <% if day_instance %>
+            <%= day_instance.day %>日
+            <%= form_for day_instance do |f| %>
+              <%= f.label :scheduled, '予定' %>
+              <%= f.text_field :scheduled, size: 3 %>
+            <% end %>
+            <%= form_for day_instance do |f| %>
+              <%= f.label :result, '実績' %>
+              <%= f.text_field :result, size: 3 %>
+            <% end %>
+          <% end %>
+        </td>
       <% end %>
     </tr>
   <% end %>
