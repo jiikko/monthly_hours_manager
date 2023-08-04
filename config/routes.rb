@@ -2,6 +2,6 @@
 
 Rails.application.routes.draw do
   resources :calendars do
-    resources :calendar_months, only: [:create, :show]
+    resources :calendar_months, only: %i[create show]
   end
 end

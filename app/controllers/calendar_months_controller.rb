@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CalendarMonthsController < ApplicationController
   def create
     @calendar = Calendar.find(params[:calendar_id])
