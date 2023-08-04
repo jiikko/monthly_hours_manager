@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe CalendarMonth, type: :model do
@@ -10,7 +12,7 @@ RSpec.describe CalendarMonth, type: :model do
       subject { calendar_month.create_days! }
 
       it 'create 31 days' do
-        expect { subject }.to change{ calendar_month.days.count }.from(0).to(31)
+        expect { subject }.to change { calendar_month.days.count }.from(0).to(31)
       end
 
       it 'create 31 days with day 1 to 28' do
@@ -45,13 +47,13 @@ RSpec.describe CalendarMonth, type: :model do
 
       it 'return 6 weeks' do
         expect(subject).to eq([
-          [nil, nil, nil, nil, nil, 1, 2],
-          [3, 4, 5, 6, 7, 8, 9],
-          [10, 11, 12, 13, 14, 15, 16],
-          [17, 18, 19, 20, 21, 22, 23],
-          [24, 25, 26, 27, 28, 29, 30],
-          [31, nil, nil, nil, nil, nil, nil],
-        ])
+                                [nil, nil, nil, nil, nil, 1, 2],
+                                [3, 4, 5, 6, 7, 8, 9],
+                                [10, 11, 12, 13, 14, 15, 16],
+                                [17, 18, 19, 20, 21, 22, 23],
+                                [24, 25, 26, 27, 28, 29, 30],
+                                [31, nil, nil, nil, nil, nil, nil]
+                              ])
       end
     end
 
@@ -60,13 +62,13 @@ RSpec.describe CalendarMonth, type: :model do
 
       it 'return 5 weeks' do
         expect(subject).to eq([
-          [nil, nil, 1, 2, 3, 4, 5],
-          [6, 7, 8, 9, 10, 11, 12],
-          [13, 14, 15, 16, 17, 18, 19],
-          [20, 21, 22, 23, 24, 25, 26],
-          [27, 28, nil, nil, nil, nil, nil],
-          [nil, nil, nil, nil, nil, nil, nil],
-        ])
+                                [nil, nil, 1, 2, 3, 4, 5],
+                                [6, 7, 8, 9, 10, 11, 12],
+                                [13, 14, 15, 16, 17, 18, 19],
+                                [20, 21, 22, 23, 24, 25, 26],
+                                [27, 28, nil, nil, nil, nil, nil],
+                                [nil, nil, nil, nil, nil, nil, nil]
+                              ])
       end
     end
   end
