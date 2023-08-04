@@ -1,10 +1,18 @@
 <p>
-calendar: <%= @calendar.id %>
+カレンダー: <%= @calendar.name %>
 </p>
 
 <p>
-  今月の時間入力をする
+<ul>
+  <% @calendar.calendar_months.each do |calendar_month| %>
+    <li>
+      <%= link_to "#{calendar_month.year}年#{calendar_month.month}月", calendar_calendar_month_path(@calendar, calendar_month) %>
+    </li>
+  <% end %>
+
   <p>
-    <%= link_to '今月の時間入力', calendar_calendar_months_path(@calendar), method: :post %>
+  <% unless @calendar.calendar_months.exists_current_month? %>
+    <%= link_to '今月分を作成する', calendar_calendar_months_path(@calendar), method: :post %>
+  <% end %>
   </p>
 </p>

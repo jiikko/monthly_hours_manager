@@ -9,6 +9,10 @@ class CalendarMonth < ApplicationRecord
 
   has_many :days, dependent: :destroy, class_name: 'CalendarDay'
 
+  def self.exists_current_month?
+    exists?(year: Date.today.year, month: Date.today.month)
+  end
+
   # @return [void]
   def create_days!
     Date.new(year, month, 1).end_of_month.day.times do |day|
