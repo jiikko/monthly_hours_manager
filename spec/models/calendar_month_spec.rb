@@ -50,7 +50,7 @@ RSpec.describe CalendarMonth, type: :model do
           subject
           expect(calendar_month.days.sum(&:scheduled).floor(1).to_f).to eq(84)
           expect(calendar_month.days.pluck(:scheduled).map(&:to_f)).to eq(
-            [16.8, 0, 0, 0, 0, 0, 0, 16.8, 0, 0, 0, 0, 0, 0, 16.8, 0, 0, 0, 0, 0, 0, 16.8, 0, 0, 0, 0, 0, 0, 16.8, 0, 0]
+            [0.0, 16.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 16.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 16.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 16.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 16.8, 0.0]
           )
         end
       end
@@ -75,8 +75,8 @@ RSpec.describe CalendarMonth, type: :model do
 
         it '稼働曜日の曜日のscheduled_hoursが設定される' do
           subject
-          expect(calendar_month.days.pluck(:scheduled)).to eq(
-            [0, 6, 6, 6, 0, 0, 0, 0, 6, 6, 6, 0, 0, 0, 0, 6, 6, 6, 0, 0, 0, 0, 6, 6, 6, 0, 0, 0, 0, 6, 6]
+          expect(calendar_month.days.pluck(:scheduled).map(&:to_f)).to eq(
+            [0.0, 0.0, 6.4, 6.4, 6.4, 0.0, 0.0, 0.0, 0.0, 6.4, 6.4, 6.4, 0.0, 0.0, 0.0, 0.0, 6.4, 6.4, 6.4, 0.0, 0.0, 0.0, 0.0, 6.4, 6.4, 6.4, 0.0, 0.0, 0.0, 0.0, 6.4]
           )
         end
       end
@@ -98,8 +98,8 @@ RSpec.describe CalendarMonth, type: :model do
         it '稼働曜日の曜日のscheduled_hoursが設定される' do
           subject
           expect(calendar_month.days.sum(&:scheduled)).to eq(84)
-          expect(calendar_month.days.pluck(:scheduled)).to eq(
-            [0, 0, 0, 0, 7, 7, 7, 0, 0, 0, 0, 7, 7, 7, 0, 0, 0, 0, 7, 7, 7, 0, 0, 0, 0, 7, 7, 7]
+          expect(calendar_month.days.pluck(:scheduled).map(&:to_f)).to eq(
+            [7.0, 0.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0, 0.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0, 0.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0, 0.0, 0.0, 0.0, 0.0, 7.0, 7.0]
           )
         end
       end

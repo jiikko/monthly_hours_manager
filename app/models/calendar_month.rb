@@ -16,12 +16,12 @@ class CalendarMonth < ApplicationRecord
   # @return [void]
   def create_days!
     current_day = Date.new(year, month, 1)
-    scheduled_working_days_length = current_day.all_month.select { |d| calendar.working_wday_bits_as_no.include?(d.wday) }.size
+    scheduled_working_days_length = current_day.all_month.select { |d| calendar.working_wday_bits_as_no.include?(d.wday_as_start_monday) }.size
     # TODO: stepを指定できるようにしたい
     scheduled_working_hours_per_day = (calendar.base_hours / scheduled_working_days_length.to_f).floor(1)
 
     Date.new(year, month, 1).all_month.each do |date|
-      if calendar.working_wday_bits_as_no.include?(date.wday)
+      if calendar.working_wday_bits_as_no.include?(date.wday_as_start_monday)
         days.create!(day: date.day, scheduled: scheduled_working_hours_per_day)
       else
         days.create!(day: date.day, scheduled: 0)
