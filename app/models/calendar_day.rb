@@ -13,6 +13,11 @@ class CalendarDay < ApplicationRecord
     days_of_week_jp[wday_as_start_monday]
   end
 
+  # @return [Integer]
+  def wday_as_start_monday
+    to_date.wday_as_start_monday
+  end
+
   # @return [Boolean]
   def not_scheduled_working_day?
     calendar_month.calendar.working_wday_bits_as_no.exclude?(to_date.wday_as_start_monday)
@@ -35,7 +40,7 @@ class CalendarDay < ApplicationRecord
   def clear_values_if_special_holiday
     return unless special_holiday.present?
 
-    self.scheduled = 0
-    self.result = 0
+    self.scheduled = nil
+    self.result = nil
   end
 end
