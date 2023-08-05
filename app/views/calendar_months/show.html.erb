@@ -15,20 +15,20 @@
   <% @calendar_month.weeks.each do |week| %>
     <tr>
       <% week.each do |day_instance| %>
-        <td>
+        <td <%= "style=background-color:silver" if day_instance&.special_holiday %>>
           <% if day_instance %>
             <%= day_instance.day %>日
-            <%= form_for day_instance do |f| %>
+            <%= form_for day_instance, data: { controller: "immediately-submit-form" } do |f| %>
               <%= f.label :scheduled, '予定' %>
-              <%= f.text_field :scheduled, size: 3 %>
+              <%= f.text_field :scheduled, size: 3, data: { action: "blur->immediately-submit-form#submit" }, disabled: f.object.special_holiday %>
             <% end %>
-            <%= form_for day_instance do |f| %>
+            <%= form_for day_instance, data: { controller: "immediately-submit-form" } do |f| %>
               <%= f.label :result, '実績' %>
-              <%= f.text_field :result, size: 3 %>
+              <%= f.text_field :result, size: 3, data: { action: "blur->immediately-submit-form#submit" }, disabled: f.object.special_holiday %>
             <% end %>
 
-            <%= form_for day_instance do |f| %>
-              <%= f.check_box :special_holiday, id: dom_id(day_instance) %>
+            <%= form_for day_instance, data: { controller: "immediately-submit-form" } do |f| %>
+               <%= f.check_box :special_holiday, id: dom_id(day_instance), data: { action: "change->immediately-submit-form#submit" } %>
               <%= f.label :special_holiday, '稼働対象外日', for: dom_id(day_instance) %>
             <% end %>
           <% end %>
