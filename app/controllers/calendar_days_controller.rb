@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CalendarDaysController < ApplicationController
   def update
     # TODO: current_user.calendars.find(params[:calendar_id]) みたいにする
