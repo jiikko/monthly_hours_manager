@@ -15,7 +15,7 @@
   <% @calendar_month.weeks.each do |week| %>
     <tr>
       <% week.each do |day_instance| %>
-        <td <%= "style=background-color:gray" if day_instance&.special_holiday %> <%= "style=background-color:silver" if day_instance&.not_scheduled_working_day? %>  <%= "style=background-color:lime" if day_instance&.worked? %> >
+        <td <%= "style=#{get_calendar_month_table_td_style(day_instance)}" %> >
           <% if day_instance %>
             <%= day_instance.day %>日
             <%= form_for day_instance, data: { controller: "immediately-submit-form" } do |f| %>
