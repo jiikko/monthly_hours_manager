@@ -12,4 +12,9 @@ class CalendarMonthsController < ApplicationController
   def show
     @calendar_month = Calendar.find(params[:calendar_id]).calendar_months.find(params[:id])
   end
+
+  def recalculate
+    @calendar_month = Calendar.find(params[:calendar_id]).calendar_months.find(params[:id])
+    redirect_to calendar_calendar_month_path(@calendar_month.calendar, @calendar_month), notice: '再計算しました'
+  end
 end
