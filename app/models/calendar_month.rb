@@ -51,4 +51,14 @@ class CalendarMonth < ApplicationRecord
       WDAYS.map { |wday| grouped_days[wday][week_no] }
     end
   end
+
+  # @return [Integer]
+  def scheduled_sum
+    days.select(&:scheduled).sum(&:scheduled)
+  end
+
+  # @return [Integer]
+  def result_sum
+    days.select(&:result).sum(&:result)
+  end
 end

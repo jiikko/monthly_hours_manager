@@ -26,9 +26,27 @@
               <%= f.label :result, '実績' %>
               <%= f.text_field :result, size: 3 %>
             <% end %>
+
           <% end %>
         </td>
       <% end %>
     </tr>
   <% end %>
 </table>
+
+<p>
+  基準時間: <%= @calendar_month.calendar.base_hours %>時間
+</p>
+<p>
+<!-- TODO: 基準を超えていないときは赤くする. 超えているときは緑色にする -->
+  予定の合計: <%= @calendar_month.scheduled_sum %>時間
+</p>
+<p>
+  実績の合計: <%= @calendar_month.result_sum %>時間
+</p>
+
+<hr>
+
+<p>
+  実績が未入力の予定を再計算する
+</p>
