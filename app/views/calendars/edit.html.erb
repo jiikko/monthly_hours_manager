@@ -1,13 +1,5 @@
 <h1>カレンダーを編集する</h1>
-<% if @calendar.errors.any? %>
-  <div class = "alert">
-    <ul>
-      <% @calendar.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
+<%= render 'shared/error_validations', instance: @calendar %>
 
 <%= form_for @calendar do |f| %>
   <p>
