@@ -1,12 +1,24 @@
 <%= form_for @calendar do |f| %>
   <p>
     <%= f.label :name %>
-  <%= f.text_field :name %>
+    <%= f.text_field :name %>
   </p>
 
   <p>
     <%= f.label :base_hours, '基準時間' %>
-  <%= f.text_field :base_hours %>
+    <%= f.text_field :base_hours %>
   </p>
+
+  <p>
+  稼働曜日<br>
+
+  <% CalendarMonth::WDAYS.each_with_index do |v, i| %>
+    <%= f.label "working_wday_bits_#{2**i}" do %>
+      <%= f.check_box :working_wday_bits, { multiple: true, checked: !f.object.working_wday_bits.nil? && (f.object.working_wday_bits & 2**i != 0) }, 2**i %>
+      <%= v %>
+    <% end %>
+  <% end %>
+  </p>
+
   <%= f.submit %>
 <% end %>

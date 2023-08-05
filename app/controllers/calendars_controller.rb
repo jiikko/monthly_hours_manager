@@ -41,6 +41,6 @@ class CalendarsController < ApplicationController
   private
 
   def calendar_params
-    params.require(:calendar).permit(:user_id, :name, :base_hours)
+    params.require(:calendar).permit(:user_id, :name, :base_hours, working_wday_bits: [])
   end
 end
