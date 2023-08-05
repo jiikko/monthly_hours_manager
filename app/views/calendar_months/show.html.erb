@@ -14,23 +14,28 @@
   </tr>
   <% @calendar_month.weeks.each do |week| %>
     <tr>
-      <% week.each do |day_instance| %>
-        <td <%= "style=#{get_calendar_month_table_td_style(day_instance)}" %> >
-          <% if day_instance %>
-            <%= day_instance.day %>日
-            <%= form_for day_instance, data: { controller: "immediately-submit-form" } do |f| %>
+      <% week.each do |calendar_day| %>
+        <td <%= "style=#{get_calendar_month_table_td_style(calendar_day)}" %> >
+          <% if calendar_day %>
+            <%= calendar_day.day %>日
+
+            <%= form_for calendar_day, data: { controller: "immediately-submit-form" } do |f| %>
               <%= f.label :scheduled, '予定' %>
               <%= f.text_field :scheduled, size: 3, data: { action: "blur->immediately-submit-form#submit" }, disabled: f.object.special_holiday %>
             <% end %>
-            <%= form_for day_instance, data: { controller: "immediately-submit-form" } do |f| %>
+
+            <%= form_for calendar_day, data: { controller: "immediately-submit-form" } do |f| %>
               <%= f.label :result, '実績' %>
               <%= f.text_field :result, size: 3, data: { action: "blur->immediately-submit-form#submit" }, disabled: f.object.special_holiday %>
             <% end %>
 
-            <%= form_for day_instance, data: { controller: "immediately-submit-form" } do |f| %>
-               <%= f.check_box :special_holiday, id: dom_id(day_instance), data: { action: "change->immediately-submit-form#submit" } %>
-              <%= f.label :special_holiday, '稼働対象外日', for: dom_id(day_instance) %>
+            <% if not calendar_day.worked? %>
+              <%= form_for calendar_day, data: { controller: "immediately-submit-form" } do |f| %>
+                <%= f.check_box :special_holiday, id: dom_id(calendar_day), data: { action: "change->immediately-submit-form#submit" } %>
+                <%= f.label :special_holiday, '稼働対象外日', for: dom_id(calendar_day) %>
+              <% end %>
             <% end %>
+
           <% end %>
         </td>
       <% end %>
