@@ -10,7 +10,8 @@ class CalendarMonth < ApplicationRecord
   has_many :days, dependent: :destroy, class_name: 'CalendarDay'
 
   def self.exists_current_month?
-    exists?(year: Date.today.year, month: Date.today.month)
+    today = Date.today
+    exists?(year: today.year, month: today.month)
   end
 
   # @return [void]

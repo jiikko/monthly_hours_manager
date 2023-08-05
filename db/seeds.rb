@@ -1,7 +1,14 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
+calendar = Calendar.find_or_create_by!(name: '取引先A') do |c|
+  c.user_id = 0 # TODO: あとで修正する
+  c.base_hours = 84
+  c.working_wday_bits = WorkingWdayBitsGenerator.new(%w[月 火 水]).execute
+end
+
+if calendar.calendar_months.exists_current_month?
+  puts 'already created calendar_month and days!'
+else
+  now = Time.zone.now
+  calendar_month = calendar.calendar_months.find_or_create_by!(year: now.year, month: now.month, )
+  calendar_month.create_days!
+  puts 'created calendar_month and days!'
+end

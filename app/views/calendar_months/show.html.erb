@@ -27,6 +27,10 @@
               <%= f.text_field :result, size: 3 %>
             <% end %>
 
+            <%= form_for day_instance do |f| %>
+              <%= f.label :temporary_holiday, '稼働対象外日' %>
+              <%= f.check_box :temporary_holiday %>
+            <% end %>
           <% end %>
         </td>
       <% end %>
