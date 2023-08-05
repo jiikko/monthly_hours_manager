@@ -11,7 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2023_08_03_121234) do
-  create_table "calendar_days", charset: "utf8mb4", force: :cascade do |t|
+  create_table "calendar_days", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "calendar_month_id", null: false
     t.integer "day", null: false
     t.integer "scheduled"
@@ -22,7 +22,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_03_121234) do
     t.index ["calendar_month_id"], name: "index_calendar_days_on_calendar_month_id"
   end
 
-  create_table "calendar_months", charset: "utf8mb4", force: :cascade do |t|
+  create_table "calendar_months", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "calendar_id", null: false
     t.integer "month", null: false
     t.integer "year", null: false
@@ -33,7 +33,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_03_121234) do
     t.index ["calendar_id"], name: "index_calendar_months_on_calendar_id"
   end
 
-  create_table "calendars", charset: "utf8mb4", force: :cascade do |t|
+  create_table "calendars", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "name", null: false
     t.integer "base_hours", null: false
@@ -42,7 +42,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_03_121234) do
     t.index ["user_id"], name: "index_calendars_on_user_id"
   end
 
-  create_table "users", charset: "utf8mb4", force: :cascade do |t|
+  create_table "users", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

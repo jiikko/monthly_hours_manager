@@ -1,5 +1,7 @@
+<ul>
 <% @calendars.each do |calender| %>
-  <%= link_to calender.name, calender_path(calender) %>
+  <li><%= link_to calender.name, calendar_path(calender) %></li>
 <% end %>
+</ul>
 
 <%= link_to "New Calendar", new_calendar_path %>
