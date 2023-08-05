@@ -1,0 +1,12 @@
+<%= form_for @calendar do |f| %>
+  <p>
+    <%= f.label :name %>
+  <%= f.text_field :name %>
+  </p>
+
+  <p>
+    <%= f.label :base_hours, '基準時間' %>
+  <%= f.text_field :base_hours %>
+  </p>
+  <%= f.submit %>
+<% end %>
