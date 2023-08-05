@@ -1,24 +1,11 @@
 # README
+業務委託の精算幅契約での稼働時間の計算をするカレンダーWEBアプリケーション
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## TODO
+* ユーザ認証をする
+* 再計算ボタンを実装する
+* 本番デプロイをする
+* bootstrap的なやつを入れる
+* バリデーションエラーのメッセージを日本語にする
+* request specを書く
+* パスパラメータをulidにする
