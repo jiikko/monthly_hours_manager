@@ -16,7 +16,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_03_121234) do
     t.integer "day", null: false
     t.decimal "scheduled", precision: 3, scale: 1
     t.decimal "result", precision: 3, scale: 1
-    t.boolean "temporary_holiday", default: false, null: false
+    t.boolean "special_holiday", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["calendar_month_id", "day"], name: "index_calendar_days_on_calendar_month_id_and_day", unique: true

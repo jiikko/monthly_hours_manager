@@ -28,8 +28,8 @@
             <% end %>
 
             <%= form_for day_instance do |f| %>
-              <%= f.check_box :temporary_holiday, id: dom_id(day_instance) %>
-              <%= f.label :temporary_holiday, '稼働対象外日', for: dom_id(day_instance) %>
+              <%= f.check_box :special_holiday, id: dom_id(day_instance) %>
+              <%= f.label :special_holiday, '稼働対象外日', for: dom_id(day_instance) %>
             <% end %>
           <% end %>
         </td>
