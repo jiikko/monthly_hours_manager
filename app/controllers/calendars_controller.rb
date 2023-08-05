@@ -10,6 +10,19 @@ class CalendarsController < ApplicationController
     @calendar = Calendar.new
   end
 
+  def edit
+    @calendar = Calendar.find(params[:id])
+  end
+
+  def update
+    @calendar = Calendar.find(params[:id])
+    if @calendar.update(calendar_params)
+      redirect_to calendar_path(@calendar), notice: 'カレンダーを更新しました'
+    else
+      render :edit
+    end
+  end
+
   def create
     @calendar = Calendar.new(calendar_params)
     @calendar.user_id = 0 # TODO: あとで修正する
