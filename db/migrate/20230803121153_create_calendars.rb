@@ -7,7 +7,7 @@ class CreateCalendars < ActiveRecord::Migration[7.0]
       t.integer :base_hours, null: false, limit: 2
       t.integer :working_wday_bits, null: false, limit: 1
 
-      t.index [:unique_key], unique: true
+      t.index [:user_id, :unique_key], unique: true
       t.timestamps
     end
   end

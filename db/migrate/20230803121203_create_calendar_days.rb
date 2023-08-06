@@ -8,7 +8,7 @@ class CreateCalendarDays < ActiveRecord::Migration[7.0]
       t.decimal :result, null: true, precision: 3, scale: 1
       t.boolean :special_holiday, null: false, default: false
 
-      t.index [:unique_key], unique: true
+      t.index [:calendar_month_id, :unique_key], unique: true
       t.index [:calendar_month_id, :day], unique: true
       t.timestamps
     end

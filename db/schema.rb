@@ -21,8 +21,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_03_121234) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["calendar_month_id", "day"], name: "index_calendar_days_on_calendar_month_id_and_day", unique: true
+    t.index ["calendar_month_id", "unique_key"], name: "index_calendar_days_on_calendar_month_id_and_unique_key", unique: true
     t.index ["calendar_month_id"], name: "index_calendar_days_on_calendar_month_id"
-    t.index ["unique_key"], name: "index_calendar_days_on_unique_key", unique: true
   end
 
   create_table "calendar_months", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -33,8 +33,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_03_121234) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["calendar_id", "month", "year"], name: "index_calendar_months_on_calendar_id_and_month_and_year", unique: true
+    t.index ["calendar_id", "unique_key"], name: "index_calendar_months_on_calendar_id_and_unique_key", unique: true
     t.index ["calendar_id"], name: "index_calendar_months_on_calendar_id"
-    t.index ["unique_key"], name: "index_calendar_months_on_unique_key", unique: true
   end
 
   create_table "calendars", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -45,7 +45,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_03_121234) do
     t.integer "working_wday_bits", limit: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["unique_key"], name: "index_calendars_on_unique_key", unique: true
+    t.index ["user_id", "unique_key"], name: "index_calendars_on_user_id_and_unique_key", unique: true
     t.index ["user_id"], name: "index_calendars_on_user_id"
   end
 
