@@ -137,4 +137,27 @@ RSpec.describe CalendarMonth, type: :model do
       end
     end
   end
+
+  describe '#recalculate_in_future' do
+    subject { calendar_month.recalculate_in_future }
+
+    let(:calender) { FactoryBot.create(:calendar, base_hours: 84, working_wday_bits: WorkingWdayBitsGenerator.new(%w[月 火 水]).execute) }
+
+    context 'year is 2023, month is 8' do
+      let(:calendar_month) { FactoryBot.create(:calendar_month, :with_days, year: 2023, month: 8, calendar: calender) }
+
+      before do
+        calendar_month.days.where(day: [1, 2]).each { |x| x.update!(scheduled: 10, result: 10) }
+        calendar_month.days.where(day: [14]).each { |x| x.update!(special_holiday: true) }
+      end
+
+      it do
+        subject
+        expect(calendar_month.days.find_by(day: [14])).to have_attributes(scheduled: nil, result: nil)
+        expect(calendar_month.days.map(&:scheduled).map(&:to_f)).to eq(
+          [10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 5.8, 5.8, 5.8, 0.0, 0.0, 0.0, 0.0, 0.0, 5.8, 5.8, 0.0, 0.0, 0.0, 0.0, 5.8, 5.8, 5.8, 0.0, 0.0, 0.0, 0.0, 5.8, 5.8, 5.8, 0.0]
+        )
+      end
+    end
+  end
 end
