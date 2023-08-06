@@ -2,30 +2,15 @@
 
 class CalendarsController < ApplicationController
   def index
-    # TODO: current_user.calendars みたいにする
-    @calendars = Calendar.all
+    @calendars = current_user.calendars
   end
 
   def new
-    @calendar = Calendar.new
-  end
-
-  def edit
-    @calendar = Calendar.find(params[:id])
-  end
-
-  def update
-    @calendar = Calendar.find(params[:id])
-    if @calendar.update(calendar_params)
-      redirect_to calendar_path(@calendar), notice: 'カレンダーを更新しました'
-    else
-      render :edit
-    end
+    @calendar = build_calendar
   end
 
   def create
-    @calendar = Calendar.new(calendar_params)
-    @calendar.user_id = 0 # TODO: あとで修正する
+    @calendar = build_calendar
     if @calendar.save
       redirect_to calendar_path(@calendar), notice: 'カレンダーを作成しました'
     else
@@ -33,14 +18,39 @@ class CalendarsController < ApplicationController
     end
   end
 
+  def edit
+    @calendar = find_calendar
+  end
+
+  def update
+    @calendar = find_calendar
+    if @calendar.update(calendar_params)
+      redirect_to calendar_path(@calendar), notice: 'カレンダーを更新しました'
+    else
+      render :edit
+    end
+  end
+
   def show
-    # TODO: current_user.calendars.find(params[:id]) みたいにする
-    @calendar = Calendar.find(params[:id])
+    @calendar = find_calendar
   end
 
   private
 
   def calendar_params
-    params.require(:calendar).permit(:user_id, :name, :base_hours, working_wday_bits: [])
+    params.fetch(:calendar, {}).permit(:user_id, :name, :base_hours, working_wday_bits: [])
+  end
+
+  # @return [Calendar]
+  def build_calendar
+    calendar = Calendar.new(calendar_params)
+    calendar.user_id = 0 # TODO: あとで修正する
+    calendar
+  end
+
+  # @return [Calendar]
+  def find_calendar
+    # TODO: current_user.calendars.find(params[:id]) みたいにする
+    Calendar.find(params[:id])
   end
 end
