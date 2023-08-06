@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class CalendarDay < ApplicationRecord
+  include HasUniqueKey
+
   belongs_to :calendar_month
 
   before_save :clear_values_if_special_holiday

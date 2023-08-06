@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class CalendarMonth < ApplicationRecord
+  include HasUniqueKey
+
   WDAYS = %w[月 火 水 木 金 土 日].freeze
   PREV_WDAYS = { '月' => '日', '火' => '月', '水' => '火', '木' => '水', '金' => '木', '土' => '金', '日' => '土' }.freeze
   MAX_WEEK_SIZE = 6

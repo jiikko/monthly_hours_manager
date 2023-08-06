@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 gem 'bootsnap', require: false
+gem 'holiday_jp'
 gem 'importmap-rails'
 gem 'jbuilder'
 gem 'mysql2'
@@ -12,7 +13,7 @@ gem 'rails', '~> 7.0.6'
 gem 'sprockets-rails'
 gem 'stimulus-rails'
 gem 'turbo-rails'
-gem 'holiday_jp'
+gem 'ulid'
 
 group :development, :test do
   gem 'factory_bot_rails'

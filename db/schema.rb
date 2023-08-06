@@ -12,6 +12,7 @@
 
 ActiveRecord::Schema[7.0].define(version: 2023_08_03_121234) do
   create_table "calendar_days", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "unique_key", null: false
     t.bigint "calendar_month_id", null: false
     t.integer "day", null: false
     t.decimal "scheduled", precision: 3, scale: 1
@@ -21,9 +22,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_03_121234) do
     t.datetime "updated_at", null: false
     t.index ["calendar_month_id", "day"], name: "index_calendar_days_on_calendar_month_id_and_day", unique: true
     t.index ["calendar_month_id"], name: "index_calendar_days_on_calendar_month_id"
+    t.index ["unique_key"], name: "index_calendar_days_on_unique_key", unique: true
   end
 
   create_table "calendar_months", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "unique_key", null: false
     t.bigint "calendar_id", null: false
     t.integer "month", limit: 1, null: false
     t.integer "year", limit: 2, null: false
@@ -31,15 +34,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_03_121234) do
     t.datetime "updated_at", null: false
     t.index ["calendar_id", "month", "year"], name: "index_calendar_months_on_calendar_id_and_month_and_year", unique: true
     t.index ["calendar_id"], name: "index_calendar_months_on_calendar_id"
+    t.index ["unique_key"], name: "index_calendar_months_on_unique_key", unique: true
   end
 
   create_table "calendars", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "unique_key", null: false
     t.bigint "user_id", null: false
     t.string "name", null: false
     t.integer "base_hours", limit: 2, null: false
     t.integer "working_wday_bits", limit: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["unique_key"], name: "index_calendars_on_unique_key", unique: true
     t.index ["user_id"], name: "index_calendars_on_user_id"
   end
 
