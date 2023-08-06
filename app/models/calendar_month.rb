@@ -75,7 +75,7 @@ class CalendarMonth < ApplicationRecord
     scheduled_working_hours_per_day = ((calendar.base_hours - scheduled_sum_with_done) / working_available_working_days_in_future.to_f).floor(1)
 
     days.each do |calendar_day|
-      next if calendar_day.special_holiday? || (calendar_day.result && calendar_day.result >= 0.1)
+      next if calendar_day.special_holiday? || calendar_day.result?
 
       calendar_day.update!(scheduled: scheduled_working_hours_per_day) if calendar.working_wday_bits_as_no.include?(calendar_day.wday_as_start_monday)
     end

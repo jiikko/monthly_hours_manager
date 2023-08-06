@@ -23,7 +23,17 @@ class CalendarDay < ApplicationRecord
   # @return [Boolean]
   def worked?
     # NOTE: 0.0.present?はtrueになるので0.1以上で判定する
-    (scheduled && scheduled >= 0.1) && (result && result >= 0.1)
+    scheduled? && result?
+  end
+
+  # @return [Boolean]
+  def scheduled?
+    scheduled && scheduled >= 0.1
+  end
+
+  # @return [Boolean]
+  def result?
+    result && result >= 0.1
   end
 
   private

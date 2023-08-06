@@ -28,4 +28,42 @@ RSpec.describe CalendarDay, type: :model do
       it { is_expected.to eq(1) }
     end
   end
+
+  describe '#scheduled?' do
+    subject { calendar_day.scheduled? }
+
+    context 'scheduledが0.1のとき' do
+      let(:calendar_day) { CalendarDay.new(scheduled: 0.1) }
+      it 'trueを返す' do
+        expect(subject).to eq(true)
+      end
+    end
+
+    context 'scheduledが0.0のとき' do
+      let(:calendar_day) { CalendarDay.new(scheduled: 0.0) }
+
+      it 'falseを返す' do
+        expect(subject).to eq(false)
+      end
+    end
+  end
+
+  describe '#result?' do
+    subject { calendar_day.result? }
+
+    context 'resultが0.1のとき' do
+      let(:calendar_day) { CalendarDay.new(result: 0.1) }
+      it 'trueを返す' do
+        expect(subject).to eq(true)
+      end
+    end
+
+    context 'resultが0.0のとき' do
+      let(:calendar_day) { CalendarDay.new(result: 0.0) }
+
+      it 'falseを返す' do
+        expect(subject).to eq(false)
+      end
+    end
+  end
 end
