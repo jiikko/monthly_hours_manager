@@ -72,10 +72,10 @@ class CalendarMonth < ApplicationRecord
     current_day = Date.new(year, month, 1)
     scheduled_working_days_length = current_day.all_month.select { |d| calendar.working_wday_bits_as_no.include?(d.wday_as_start_monday) }.size
     working_available_working_days_in_future = scheduled_working_days_length - filled_days_size - special_holiday_size
-    scheduled_working_hours_per_day = ((calendar.base_hours - scheduled_sum_with_done) / (working_available_working_days_in_future).to_f).floor(1)
+    scheduled_working_hours_per_day = ((calendar.base_hours - scheduled_sum_with_done) / working_available_working_days_in_future.to_f).floor(1)
 
     days.each do |calendar_day|
-      next if calendar_day.special_holiday? or (calendar_day.result && calendar_day.result >= 0.1)
+      next if calendar_day.special_holiday? || (calendar_day.result && calendar_day.result >= 0.1)
 
       calendar_day.update!(scheduled: scheduled_working_hours_per_day) if calendar.working_wday_bits_as_no.include?(calendar_day.wday_as_start_monday)
     end
