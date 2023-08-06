@@ -13,7 +13,7 @@
 
   <p>
   <% unless @calendar.calendar_months.exists_current_month? %>
-    <%= link_to '今月分を作成する', calendar_calendar_months_path(@calendar), method: :post %>
+    <%= link_to '今月分を作成する', calendar_calendar_months_path(@calendar), method: :post, data: { test: 'create_calendar_months' } %>
   <% end %>
   </p>
 </p>

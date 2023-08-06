@@ -1,12 +1,12 @@
 <%= form_for @calendar do |f| %>
   <p>
     <%= f.label :name %>
-    <%= f.text_field :name %>
+    <%= f.text_field :name, data: { test: 'name' } %>
   </p>
 
   <p>
     <%= f.label :base_hours, '基準時間' %>
-    <%= f.text_field :base_hours %>
+    <%= f.text_field :base_hours, data: { test: 'base_hours' } %>
   </p>
 
   <p>
@@ -20,5 +20,5 @@
   <% end %>
   </p>
 
-  <%= f.submit %>
+  <%= f.submit nil, data: { test: 'submit' } %>
 <% end %>
