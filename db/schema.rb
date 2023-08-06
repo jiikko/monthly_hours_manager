@@ -36,7 +36,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_03_121234) do
   create_table "calendars", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "name", null: false
-    t.integer "base_hours", null: false
+    t.integer "base_hours", limit: 2, null: false
     t.integer "working_wday_bits", limit: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
