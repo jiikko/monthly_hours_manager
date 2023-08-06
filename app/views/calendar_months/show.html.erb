@@ -17,7 +17,7 @@
       <% week.each do |calendar_day| %>
         <td <%= "style=#{get_calendar_month_table_td_style(calendar_day)}" %> >
           <% if calendar_day %>
-            <%= calendar_day.day %>日
+            <%= calendar_day.day %>日<%= '(祝日)' if calendar_day.holiday? %>
 
             <%= form_for calendar_day, data: { controller: "immediately-submit-form" } do |f| %>
               <%= f.label :scheduled, '予定' %>

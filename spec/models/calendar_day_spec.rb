@@ -34,6 +34,7 @@ RSpec.describe CalendarDay, type: :model do
 
     context 'scheduledが0.1のとき' do
       let(:calendar_day) { CalendarDay.new(scheduled: 0.1) }
+
       it 'trueを返す' do
         expect(subject).to eq(true)
       end
@@ -53,6 +54,7 @@ RSpec.describe CalendarDay, type: :model do
 
     context 'resultが0.1のとき' do
       let(:calendar_day) { CalendarDay.new(result: 0.1) }
+
       it 'trueを返す' do
         expect(subject).to eq(true)
       end

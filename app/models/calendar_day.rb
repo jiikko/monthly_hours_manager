@@ -21,6 +21,11 @@ class CalendarDay < ApplicationRecord
   end
 
   # @return [Boolean]
+  def holiday?
+    HolidayJp.holiday?(to_date)
+  end
+
+  # @return [Boolean]
   def worked?
     # NOTE: 0.0.present?はtrueになるので0.1以上で判定する
     scheduled? && result?
