@@ -16,12 +16,11 @@ class CalendarMonth < ApplicationRecord
 
   # @return [void]
   def create_days!
-    current_day = Date.new(year, month, 1)
-    scheduled_working_days_length = current_day.all_month.select { |d| calendar.working_wday_bits_as_no.include?(d.wday_as_start_monday) }.size
+    scheduled_working_days_length = beginning_date_of_month.all_month.select { |d| calendar.working_wday_bits_as_no.include?(d.wday_as_start_monday) }.size
     # TODO: stepを指定できるようにしたい
     scheduled_working_hours_per_day = (calendar.base_hours / scheduled_working_days_length.to_f).floor(1)
 
-    Date.new(year, month, 1).all_month.each do |date|
+    beginning_date_of_month.all_month.each do |date|
       if calendar.working_wday_bits_as_no.include?(date.wday_as_start_monday)
         days.create!(day: date.day, scheduled: scheduled_working_hours_per_day)
       else
@@ -55,29 +54,35 @@ class CalendarMonth < ApplicationRecord
 
   # @return [Integer]
   def scheduled_sum
-    days.select(&:scheduled).sum(&:scheduled)
+    days.select(&:scheduled?).sum(&:scheduled)
   end
 
   # @return [Integer]
   def result_sum
-    days.select(&:result).sum(&:result)
+    days.select(&:result?).sum(&:result)
   end
 
   # @return [void]
   def recalculate_in_future
-    scheduled_sum_with_done = days.select(&:result).sum(&:scheduled)
-    filled_days_size = days.select(&:result).size
-    special_holiday_size = days.select(&:special_holiday).size
+    scheduled_sum_with_done = days.select(&:worked?).sum(&:scheduled)
+    filled_days_size = days.select(&:worked?).size
+    special_holiday_size = days.select(&:special_holiday?).size
 
-    current_day = Date.new(year, month, 1)
-    scheduled_working_days_length = current_day.all_month.select { |d| calendar.working_wday_bits_as_no.include?(d.wday_as_start_monday) }.size
+    scheduled_working_days_length = beginning_date_of_month.all_month.select { |d| calendar.working_wday_bits_as_no.include?(d.wday_as_start_monday) }.size
     working_available_working_days_in_future = scheduled_working_days_length - filled_days_size - special_holiday_size
-    scheduled_working_hours_per_day = ((calendar.base_hours - scheduled_sum_with_done) / working_available_working_days_in_future.to_f).floor(1)
+    scheduled_working_hours_per_day = (calendar.base_hours - scheduled_sum_with_done) / working_available_working_days_in_future
 
     days.each do |calendar_day|
-      next if calendar_day.special_holiday? || calendar_day.result?
+      next if calendar_day.special_holiday? || calendar_day.worked?
 
-      calendar_day.update!(scheduled: scheduled_working_hours_per_day) if calendar.working_wday_bits_as_no.include?(calendar_day.wday_as_start_monday)
+      calendar_day.update!(scheduled: scheduled_working_hours_per_day.floor(1)) if calendar.working_wday_bits_as_no.include?(calendar_day.wday_as_start_monday)
     end
+  end
+
+  private
+
+  # @return [Date]
+  def beginning_date_of_month
+    @beginning_date_of_month ||= Date.new(year, month, 1)
   end
 end
