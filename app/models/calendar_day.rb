@@ -5,12 +5,9 @@ class CalendarDay < ApplicationRecord
 
   before_save :clear_values_if_special_holiday
 
-  # @return [Integer]
-  def wday
-    cm = calendar_month
-    wday_as_start_monday = Date.new(cm.year, cm.month, day).wday_as_start_monday
-    days_of_week_jp = %w[月 火 水 木 金 土 日]
-    days_of_week_jp[wday_as_start_monday]
+  # @return [String]
+  def wday_ja
+    CalendarMonth::WDAYS[wday_as_start_monday]
   end
 
   # @return [Integer]
@@ -20,7 +17,7 @@ class CalendarDay < ApplicationRecord
 
   # @return [Boolean]
   def not_scheduled_working_day?
-    calendar_month.calendar.working_wday_bits_as_no.exclude?(to_date.wday_as_start_monday)
+    calendar_month.calendar.working_wday_bits_as_no.exclude?(wday_as_start_monday)
   end
 
   # @return [Boolean]

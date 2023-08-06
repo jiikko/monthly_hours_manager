@@ -32,7 +32,7 @@ class CalendarMonth < ApplicationRecord
 
   # @return [Array<Array<CalendarDay>>]
   def weeks
-    grouped_days = days.group_by(&:wday)
+    grouped_days = days.group_by(&:wday_ja)
 
     WDAYS.inject(nil) do |previous, wday|
       current = grouped_days[wday][0]
