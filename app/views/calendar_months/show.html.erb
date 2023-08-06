@@ -16,10 +16,10 @@
     <tr>
       <% week.each do |calendar_day| %>
         <td <%= "style=#{get_calendar_month_table_td_style(calendar_day)}" %> >
-          <% if calendar_day %>
+          <% if calendar_day.present? %>
             <%= calendar_day.day %>日<%= '(祝日)' if calendar_day.holiday? %>
 
-            <% if not calendar_day.special_holiday? %>
+            <% if can_render_hours_text_field?(calendar_day) %>
               <%= form_for calendar_day, data: { controller: "immediately-submit-form" } do |f| %>
                 <%= f.label :scheduled, '予定' %>
                 <%= f.text_field :scheduled, size: 3, data: { action: "blur->immediately-submit-form#submit" } %>
@@ -31,13 +31,12 @@
               <% end %>
             <% end %>
 
-            <% if not calendar_day.worked? %>
+            <% if can_render_special_holiday_checkbox?(calendar_day) %>
               <%= form_for calendar_day, data: { controller: "immediately-submit-form" } do |f| %>
                 <%= f.check_box :special_holiday, id: dom_id(calendar_day), data: { action: "change->immediately-submit-form#submit" } %>
                 <%= f.label :special_holiday, '稼働対象外日', for: dom_id(calendar_day) %>
               <% end %>
             <% end %>
-
           <% end %>
         </td>
       <% end %>
