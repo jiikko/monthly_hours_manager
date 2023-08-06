@@ -25,9 +25,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_03_121234) do
 
   create_table "calendar_months", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "calendar_id", null: false
-    t.integer "month", null: false
-    t.integer "year", null: false
-    t.integer "scheduled"
+    t.integer "month", limit: 1, null: false
+    t.integer "year", limit: 2, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["calendar_id", "month", "year"], name: "index_calendar_months_on_calendar_id_and_month_and_year", unique: true
