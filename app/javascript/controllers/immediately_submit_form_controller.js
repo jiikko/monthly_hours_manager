@@ -12,10 +12,11 @@ export default class extends Controller {
     }
   }
 
-  submit() {
+  submit(event) {
     // NOTE: checkboxのときはpreviousValueを持たないので.本当だったらcontrollerを分けるべき
     if(!this.previousValue) {
-      this.element.submit()
+      // タブでフォーカスしたときにsubmitされないようにする
+      event.type == 'blur' ? null: this.element.submit()
       return
     }
 
