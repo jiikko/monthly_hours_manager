@@ -12,6 +12,7 @@ gem 'rails', '~> 7.0.6'
 gem 'sprockets-rails'
 gem 'stimulus-rails'
 gem 'turbo-rails'
+gem 'holiday_jp'
 
 group :development, :test do
   gem 'factory_bot_rails'

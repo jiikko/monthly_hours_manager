@@ -86,6 +86,7 @@ GEM
       railties (>= 5.0.0)
     globalid (1.1.0)
       activesupport (>= 5.0)
+    holiday_jp (0.8.1)
     i18n (1.13.0)
       concurrent-ruby (~> 1.0)
     importmap-rails (1.1.6)
@@ -266,6 +267,7 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   factory_bot_rails
+  holiday_jp
   importmap-rails
   jbuilder
   mysql2
