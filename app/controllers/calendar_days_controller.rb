@@ -5,7 +5,7 @@ class CalendarDaysController < ApplicationController
     # TODO: current_user.calendars.find(params[:calendar_id]) みたいにする
     calendar_day = find_calendar_day
     calendar_day.update!(calendar_day_params)
-    redirect_to calendar_calendar_month_path(calendar_day.calendar_month.calendar, calendar_day.calendar_month), notice: '日付を更新しました'
+    redirect_to calendar_month_path(calendar_day.calendar_month), notice: '日付を更新しました'
   end
 
   private

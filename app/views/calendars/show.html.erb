@@ -7,7 +7,7 @@
 <ul>
   <% @calendar.calendar_months.each do |calendar_month| %>
     <li>
-      <%= link_to "#{calendar_month.year}年#{calendar_month.month}月", calendar_calendar_month_path(@calendar, calendar_month) %>
+      <%= link_to "#{calendar_month.year}年#{calendar_month.month}月", calendar_month_path(calendar_month) %>
     </li>
   <% end %>
 

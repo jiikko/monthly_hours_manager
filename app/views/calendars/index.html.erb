@@ -1,6 +1,6 @@
 <ul>
 <% @calendars.each do |calender| %>
-  <li><%= link_to calender.name, calendar_path(calender) %></li>
+  <li><%= link_to calender.name, calendar_path(calender), data: { test_id: calender.unique_key } %></li>
 <% end %>
 </ul>
 

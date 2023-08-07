@@ -3,7 +3,7 @@
 Rails.application.routes.draw do
   root 'calendars#index'
   resources :calendars do
-    resources :calendar_months, only: %i[create show] do
+    resources :calendar_months, only: %i[create show], shallow: true do
       post :recalculate, on: :member
     end
   end
