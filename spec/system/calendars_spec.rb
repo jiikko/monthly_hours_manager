@@ -17,7 +17,7 @@ RSpec.describe 'Calendars', type: :system do
     check '月'
     check '火'
     check '水'
-    find("input[data-test='submit']").click
+    find("input[data-test-id='submit']").click
 
     # カレンダー詳細画面
     expect(page).to have_content 'カレンダーを作成しました'
@@ -37,7 +37,7 @@ RSpec.describe 'Calendars', type: :system do
       click_on '編集'
 
       # 編集画面
-      find("input[data-test='submit']").click
+      find("input[data-test-id='submit']").click
       expect(page).to have_content 'カレンダーを更新しました'
     end
   end
