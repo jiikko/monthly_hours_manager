@@ -13,13 +13,6 @@ export default class extends Controller {
   }
 
   submit(event) {
-    // NOTE: checkboxのときはpreviousValueを持たないので.本当だったらcontrollerを分けるべき
-    if(!this.previousValue) {
-      // タブでフォーカスしたときにsubmitされないようにする
-      event.type == 'blur' ? null: this.element.submit()
-      return
-    }
-
     const current = this.element.querySelector('input[type="text"]').value
     if (current !== this.previousValue) {
       this.element.submit()
