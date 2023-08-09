@@ -7,14 +7,18 @@ type LayoutProps = {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className={styles.container}>
+    <>
       <Head>
         <title>精算幅の時間管理くん</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        {children}
-      </main>
-    </div>
+
+      <div className={styles.container}>
+        <main>
+          精算幅の時間管理くん(ヘッダーに移動する)
+          {children}
+        </main>
+      </div>
+    </>
   )
 }
