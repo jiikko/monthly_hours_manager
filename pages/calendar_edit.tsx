@@ -1,16 +1,17 @@
 import type { NextPageWithLayout } from './_app'
-import styles from '../styles/Home.module.css';
 import Layout from '../components/layout'
+import { Container, Row } from 'react-bootstrap';
 
 const CalendarEdit: NextPageWithLayout = () => {
   return (
-    <div>
-      <h1>
-        カレンダーの編集
-      </h1>
-      ここに、名前、基準時間、稼働曜日を入力するフォームを作成する。
-    </div>
-
+    <Container>
+      <Row className="justify-content-md-between">
+        <h1>
+          カレンダーの編集
+        </h1>
+        ここに、名前、基準時間、稼働曜日を入力するフォームを作成する。
+      </Row>
+    </Container>
   )
 }
 
