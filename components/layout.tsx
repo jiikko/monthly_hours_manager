@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import styles from '../styles/Home.module.css';
 
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
@@ -8,6 +9,9 @@ type LayoutProps = {
 }
 
 export default function Layout({ children }: LayoutProps) {
+  const router = useRouter();
+  const queryParameters = new URLSearchParams(router.query).toString();
+
   return (
     <>
       <Head>
@@ -17,11 +21,11 @@ export default function Layout({ children }: LayoutProps) {
 
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand href="/">精算幅時間管理くん</Navbar.Brand>
+        <Navbar.Brand href={`/?${queryParameters}`}>精算幅時間管理くん</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="/calendar_edit">カレンダーを編集する</Nav.Link>
+        <Nav className="me-auto">
+            <Nav.Link href={`/calendar_edit?${queryParameters}`}>カレンダーを編集する</Nav.Link>
             <Nav.Link href="#">今月を表示する</Nav.Link>
             <Nav.Link href="#">来月を表示する</Nav.Link>
           </Nav>

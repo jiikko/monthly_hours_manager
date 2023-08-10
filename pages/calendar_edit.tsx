@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 
 const CalendarEdit: NextPageWithLayout = () => {
   const router = useRouter();
-  const [name, setName] = useState('ほげ');
+  const [name, setName] = useState('');
   const [standardTime, setStandardTime] = useState(0);
   const [workingDays, setWorkingDays] = useState({
     mon: false,
@@ -35,8 +35,10 @@ const CalendarEdit: NextPageWithLayout = () => {
   };
 
   useEffect(() => {
-    setName(router.query['name'] as string);
-    setStandardTime(router.query['standardTime'] as string);
+    const queryName = router.query['name'] || '';
+    setName(queryName);
+    const queryStandardTime = router.query['standardTime'] || 84;
+    setStandardTime(queryStandardTime);
 
     setWorkingDays({
       mon: router.query['mon'] == 'true',
