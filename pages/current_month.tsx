@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import type { NextPageWithLayout } from './_app'
 import Layout from '../components/layout'
-import { Table, Row, Form, Button } from 'react-bootstrap';
+import { Table, Row, Form, Button, Col, FloatingLabel } from 'react-bootstrap';
 import JsonParameter from '../lib/json_parameter';
 
 type Props = {
@@ -9,6 +9,11 @@ type Props = {
 }
 
 const Calendar: React.FC = ({ workingDays }: Props) => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('submit')
+  };
+
   const today = new Date();
   const year = today.getFullYear();
   const month = today.getMonth(); // 0から11の値
@@ -33,9 +38,20 @@ const Calendar: React.FC = ({ workingDays }: Props) => {
         const date = new Date(year, month, dayNo);
         const dayOfWeek = date.getDay();
         const youbi = days[dayOfWeek]
-        week.push(
-          workingDays[youbi] ? <td key={j} className="bg-info">{dayNo}</td> : <td key={j} className='bg-secondary'>{dayNo}</td>
-        );
+        const className = (workingDays[youbi]) ? 'bg-info' : 'bg-secondary';
+
+        var row = <td key={j} className={className}>
+          {dayNo}日<br />
+          <Form onSubmit={handleSubmit}>
+            <FloatingLabel controlId="floatingInput" label="予定" className='mb-2' >
+              <Form.Control type="name" defaultValue={''} onChange={(e) => e} />
+            </FloatingLabel>
+            <FloatingLabel controlId="floatingInput" label="実績" >
+              <Form.Control type="name" defaultValue={''} onChange={(e) => e} />
+            </FloatingLabel>
+          </Form>
+        </td>
+      week.push(row)
       }
     }
 
