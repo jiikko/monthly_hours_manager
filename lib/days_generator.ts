@@ -1,17 +1,4 @@
-type WeekData = {
-  mon: boolean;
-  tue: boolean;
-  wed: boolean;
-  thu: boolean;
-  fri: boolean;
-  sat: boolean;
-  sun: boolean;
-}
-
-type DayData = {
-  scheduled: number;
-  actual: number;
-}
+import { WeekData, DayData } from '../types';
 
 class DaysGenerator {
   static execute(year: number, month: number, standardTime: number, workingDays: WeekData): Array<DayData> {
