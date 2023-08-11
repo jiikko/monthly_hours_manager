@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import styles from '../styles/Home.module.css';
 
-import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { Container, Row, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -26,13 +26,18 @@ export default function Layout({ children }: LayoutProps) {
         <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
             <Nav.Link href={`/calendar_edit?${queryParameters}`}>カレンダーを編集する</Nav.Link>
-            <Nav.Link href="#">今月を表示する</Nav.Link>
+            <Nav.Link href={`/current_month?${queryParameters}`}>今月を表示する</Nav.Link>
             <Nav.Link href="#">来月を表示する</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
-    {children}
+
+    <Container>
+      <Row className="justify-content-md-between">
+        {children}
+      </Row>
+    </Container>
     </>
   )
 }
