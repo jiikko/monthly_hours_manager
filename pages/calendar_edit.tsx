@@ -3,11 +3,13 @@ import Layout from '../components/layout'
 import { Container, Row, Form, Button } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import JsonParameter from '../lib/json_parameter';
 
 const CalendarEdit: NextPageWithLayout = () => {
+  const defaultStandardTime = 84;
   const router = useRouter();
   const [name, setName] = useState('');
-  const [standardTime, setStandardTime] = useState(0);
+  const [standardTime, setStandardTime] = useState(defaultStandardTime);
   const [workingDays, setWorkingDays] = useState({
     mon: false,
     tue: false,
@@ -28,29 +30,26 @@ const CalendarEdit: NextPageWithLayout = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // TODO: jsonで保存する
-    const queryParams = new URLSearchParams({ name, standardTime, mon: workingDays.mon, tue: workingDays.tue, wed: workingDays.wed, thu: workingDays.thu, fri: workingDays.fri, sat: workingDays.sat, sun: workingDays.sun });
-    router.push(`/calendar_edit?${queryParams.toString()}`);
+    const jsonQueryParams = JsonParameter.serialize({ name, standardTime, week: workingDays })
+    router.push(`/calendar_edit?${jsonQueryParams}`);
     // TODO: 保存できたらトーストを表示する
   };
 
   useEffect(() => {
-    const queryName = router.query['name'] || '';
-    setName(queryName);
-    const queryStandardTime = router.query['standardTime'] || 84;
-    setStandardTime(queryStandardTime);
+    const jsonObject = JsonParameter.parse(router.query);
+    setName(jsonObject['name'] || '');
+    setStandardTime(jsonObject['standardTime'] || defaultStandardTime);
 
-    setWorkingDays({
-      mon: router.query['mon'] == 'true',
-      tue: router.query['tue'] == 'true',
-      wed: router.query['wed'] == 'true',
-      thu: router.query['thu'] == 'true',
-      fri: router.query['fri'] == 'true',
-      sat: router.query['sat'] == 'true',
-      sun: router.query['sun'] == 'true',
-    });
+    setWorkingDays(jsonObject.week || {
+      mon: false,
+      tue: false,
+      wed: false,
+      thu: false,
+      fri: false,
+      sat: false,
+      sun: false,
+    })
   }, [router.query]);
-
 
   return (
     <Container>
