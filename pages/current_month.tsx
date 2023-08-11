@@ -67,7 +67,11 @@ const CurrentMonth: NextPageWithLayout = () => {
   const today = new Date();
   const year = today.getFullYear();
   const month = today.getMonth() + 1;
-  if(jsonObject.week == undefined) { return <></> }
+  if(jsonObject.week == undefined) {
+    return(
+      <div className="alert alert-danger" role="alert">カレンダーの設定情報がありません。設定してください。</div>
+    )
+  }
 
   return(
     <>

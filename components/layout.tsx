@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import styles from '../styles/Home.module.css';
 
-import { Container, Row, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { Container, Col, Row, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -34,10 +34,10 @@ export default function Layout({ children }: LayoutProps) {
     </Navbar>
 
     <Container>
-      <Row className="justify-content-md-between">
+      <Row className="justify-content-md-between p-3">
         {children}
       </Row>
-    </Container>
+      </Container>
     </>
   )
 }
