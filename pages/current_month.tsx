@@ -3,6 +3,7 @@ import type { NextPageWithLayout } from './_app'
 import Layout from '../components/layout'
 import { Table, Row, Form, Button, Col, FloatingLabel } from 'react-bootstrap';
 import JsonParameter from '../lib/json_parameter';
+import DaysGenerator from '../lib/days_generator';
 
 type Props = {
   workingDays: any;
@@ -87,6 +88,12 @@ const CurrentMonth: NextPageWithLayout = () => {
     return(
       <div className="alert alert-danger" role="alert">カレンダーの設定情報がありません。設定してください。</div>
     )
+  }
+
+  if(jsonObject.currentMonth == undefined) {
+    jsonObject.currentMonth = DaysGenerator.execute(year, month, jsonObject.standardTime, jsonObject.week);
+    const jsonQueryParams = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, currentMonth: jsonObject.currentMonth })
+    router.push(`/current_month?${jsonQueryParams}`);
   }
 
   return(

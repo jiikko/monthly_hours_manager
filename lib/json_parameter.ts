@@ -7,10 +7,17 @@ type WeekData = {
   sat: boolean;
   sun: boolean;
 }
+
+type DayData = {
+  scheduled: number;
+  actual: number;
+}
+
 type ParameterType = {
-  name: string;
-  standardTime: number;
-  week: WeekData;
+  name?: string;
+  standardTime?: number;
+  week?: WeekData;
+  currentMonth?: Array<DayData>;
 }
 
 class JsonParameter {
