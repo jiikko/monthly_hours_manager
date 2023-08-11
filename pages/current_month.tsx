@@ -38,7 +38,7 @@ const Calendar: React.FC = ({ workingDays }: Props) => {
         const date = new Date(year, month, dayNo);
         const dayOfWeek = date.getDay();
         const youbi = days[dayOfWeek]
-        const className = (workingDays[youbi]) ? 'bg-info' : 'bg-secondary';
+        const className = (workingDays[youbi]) ? 'bg-info' : 'bg-secondary text-light';
 
         var row = <td key={j} className={className}>
           {dayNo}日<br />
