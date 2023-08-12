@@ -116,7 +116,7 @@ const Page: NextPageWithLayout = () => {
   return (
     <>
       <h1>{year}年{month}月</h1>
-      <Month workingDays={jsonObject.week} year={year} month={month} days={jsonObject.months[monthKey]} onDayUpdate={onDayUpdate} />
+      <Month workingDays={jsonObject.week} year={Number(year)} month={Number(month)} days={jsonObject.months[monthKey]} onDayUpdate={onDayUpdate} />
     </>
   );
 }
