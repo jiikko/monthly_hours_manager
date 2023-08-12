@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import type { NextPageWithLayout } from './_app'
-import { WeekData, DayData, MonthTable } from '../lib/calendar';
+import { WeekData, DayData, MonthTable } from '../types/calendar';
 import Layout from '../components/layout'
 import { Table, Row, Form, Button, Col, FloatingLabel } from 'react-bootstrap';
 import JsonParameter from '../lib/json_parameter';
@@ -77,7 +77,7 @@ const Month: React.FC<MonthProps>= ({ workingDays, days, onDayUpdate }) => {
 
 const CurrentMonth: NextPageWithLayout = () => {
   const router = useRouter();
-  const jsonObject = JsonParameter.parse(router.query);
+  const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
 
   if(jsonObject.week == undefined) {
     return(
@@ -102,7 +102,7 @@ const CurrentMonth: NextPageWithLayout = () => {
     const year = today.getFullYear();
     const month = today.getMonth() + 2; // 今月
     const monthKey = `${year}-${month}`;
-    const jsonObject = JsonParameter.parse(router.query);
+    const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
     const days = jsonObject.months[monthKey];
     const attribute_name = e.target.name.split('-')[0];
     const dayIndex = e.target.name.split('-')[1];

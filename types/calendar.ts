@@ -1,8 +1,8 @@
 export type ParameterType = {
-  name?: string;
-  standardTime?: number;
-  week?: WeekData;
-  months: MonthTable,
+  name: string;
+  standardTime: number;
+  week: WeekData;
+  months?: MonthTable,
 }
 
 export type WeekData = {

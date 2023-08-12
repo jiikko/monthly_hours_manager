@@ -36,7 +36,7 @@ const CalendarEdit: NextPageWithLayout = () => {
   };
 
   useEffect(() => {
-    const jsonObject = JsonParameter.parse(router.query);
+    const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
     setName(jsonObject['name'] || '');
     setStandardTime(jsonObject['standardTime'] || defaultStandardTime);
 

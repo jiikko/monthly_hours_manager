@@ -10,7 +10,8 @@ type LayoutProps = {
 
 export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
-  const queryParameters = new URLSearchParams(router.query).toString();
+  // NOTE: const queryParameters = new URLSearchParams(router.query).toString()だとtype errorになるので
+  const queryParameters = new URLSearchParams(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)]))).toString();
 
   return (
     <>
