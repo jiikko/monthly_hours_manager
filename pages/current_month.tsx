@@ -5,6 +5,7 @@ import Layout from '../components/layout'
 import { Table, Row, Form, Button, Col, FloatingLabel } from 'react-bootstrap';
 import JsonParameter from '../lib/json_parameter';
 import DaysGenerator from '../lib/days_generator';
+import { CalendarDate } from '../lib/calendar_date';
 
 type MonthProps = {
   workingDays: WeekData;
@@ -13,12 +14,11 @@ type MonthProps = {
 }
 
 const Month: React.FC<MonthProps>= ({ workingDays, days, onDayUpdate }) => {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth(); // 0から11の値
-
-  const firstDayOfMonth = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate(); // 月の最終日の日付を取得
+  const date = CalendarDate();
+  const year = date.year();
+  const month = date.month();
+  const firstDayOfMonth = date.firstWeekDayOfMonth(); // 当月の最初の曜日を取得
+  const daysInMonth = date.lastDayOfMonth(); // 当月の最終日の日付を取得
   const calendarRows = [];
   const weekDays = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 
@@ -33,8 +33,8 @@ const Month: React.FC<MonthProps>= ({ workingDays, days, onDayUpdate }) => {
       } else {
         const dayNo = dayCount++; // 1スタート
         const dayIndex = dayNo - 1;
-        const date = new Date(year, month, dayNo);
-        const dayOfWeek = date.getDay();
+        const date = CalendarDate(year, month, dayNo);
+        const dayOfWeek = date.weekDay()
         const youbi = weekDays[dayOfWeek]
         const className = (workingDays[youbi]) ? 'bg-info' : 'bg-secondary text-light';
         const dayObject = days[dayIndex]
@@ -85,23 +85,17 @@ const Page: NextPageWithLayout = () => {
     )
   }
 
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth() + 2; // TODO: 今月の表現が間接的すぎるのでなんとかしたい
-  const monthKey = `${year}-${month}`;
+  const date = CalendarDate();
+  const monthKey = date.monthlyKey();
 
   if(jsonObject.months == undefined) { jsonObject.months = {} as MonthTable; }
   if(jsonObject.months[monthKey] == undefined) {
-    jsonObject.months[monthKey] = DaysGenerator.execute(year, month, jsonObject.standardTime, jsonObject.week);
+    jsonObject.months[monthKey] = DaysGenerator.execute(date.year(), date.month(), jsonObject.standardTime, jsonObject.week);
     const jsonQueryParams = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
     router.push(`/current_month?${jsonQueryParams}`);
   }
 
   const onDayUpdate = (e: any, dayObject: any) => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth() + 2; // 今月
-    const monthKey = `${year}-${month}`;
     const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
     const days = jsonObject.months[monthKey];
     const attribute_name = e.target.name.split('-')[0];
@@ -117,7 +111,7 @@ const Page: NextPageWithLayout = () => {
 
   return(
     <>
-      <h1>{year}年{month - 1}月の稼働表</h1>
+      <h1>{date.year()}年{date.month()}月の稼働表</h1>
       <Month workingDays={jsonObject.week} days={jsonObject.months[monthKey]} onDayUpdate={onDayUpdate} />
     </>
   )

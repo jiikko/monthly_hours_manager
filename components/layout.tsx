@@ -2,7 +2,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import styles from '../styles/Home.module.css';
 import { CalendarDate } from '../lib/calendar_date';
-
 import { Container, Col, Row, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 
 type LayoutProps = {
