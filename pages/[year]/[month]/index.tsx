@@ -1,10 +1,10 @@
 import DaysGenerator from '../../../lib/days_generator';
 import JsonParameter from '../../../lib/json_parameter';
 import Layout from '../../../components/layout';
-import type { NextPageWithLayout } from './_app'
+import type { NextPageWithLayout } from './../../_app'
 import { CalendarDate } from '../../../lib/calendar_date';
 import { Table, Row, Form, Button, Col, FloatingLabel } from 'react-bootstrap';
-import { WeekData, DayData, MonthTable } from '../types/calendar';
+import { WeekData, DayData, MonthTable } from '../../../types/calendar';
 import { useRouter } from 'next/router';
 
 type MonthProps = {

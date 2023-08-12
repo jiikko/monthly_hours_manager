@@ -1,13 +1,12 @@
 // new Dateから月を取得すると0~11で取得されるため、処理しやすい値で返すDateクラスのラッパー
 const CalendarDate = (() => {
-  return function (argYear, getMonth, getDay) {
+  return function (argYear?, getMonth?, getDay?) {
     let date;
 
     if (argYear && getMonth && getDay) {
       date = new Date(argYear, getMonth - 1, getDay);
     } else {
-      const preDate = new Date();
-      date = new Date(preDate.getFullYear(), preDate.getMonth(), preDate.getDate());
+      date = new Date();
     }
 
     function year() {
