@@ -1,10 +1,13 @@
 import { WeekData, DayData } from '../types/calendar';
+type MonthTable = {
+  [key: string]: Array<DayData>;
+}
 
 type ParameterType = {
   name?: string;
   standardTime?: number;
   week?: WeekData;
-  currentMonth?: Array<DayData>;
+  months: MonthTable,
 }
 
 class JsonParameter {

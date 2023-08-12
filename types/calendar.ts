@@ -9,6 +9,11 @@ export type WeekData = {
 }
 
 export type DayData = {
+  day: number;
   scheduled: number;
   actual: number;
+}
+
+type MonthTable = {
+  [key: string]: Array<DayData>;
 }

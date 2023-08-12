@@ -1,15 +1,16 @@
 import { useRouter } from 'next/router';
-import type { NextPageWithLayout } from './_app'
+import type { NextPageWithLayout, MonthTable, DayData } from './_app'
 import Layout from '../components/layout'
 import { Table, Row, Form, Button, Col, FloatingLabel } from 'react-bootstrap';
 import JsonParameter from '../lib/json_parameter';
 import DaysGenerator from '../lib/days_generator';
 
 type Props = {
-  workingDays: any;
+  workingDays: any; // TODO: type
+  days: Array<DayData>;
 }
 
-const Calendar: React.FC = ({ workingDays }: Props) => {
+const Calendar: React.FC = ({ workingDays, days }: Props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('submit')
@@ -24,7 +25,7 @@ const Calendar: React.FC = ({ workingDays }: Props) => {
 
   const calendarRows = [];
 
-  const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+  const weekDays = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 
   let dayCount = 1;
 
@@ -38,7 +39,7 @@ const Calendar: React.FC = ({ workingDays }: Props) => {
         const dayNo = dayCount++
         const date = new Date(year, month, dayNo);
         const dayOfWeek = date.getDay();
-        const youbi = days[dayOfWeek]
+        const youbi = weekDays[dayOfWeek]
         const className = (workingDays[youbi]) ? 'bg-info' : 'bg-secondary text-light';
 
         var row = <td key={j} className={className}>
@@ -81,25 +82,30 @@ const CurrentMonth: NextPageWithLayout = () => {
   const router = useRouter();
   const jsonObject = JsonParameter.parse(router.query);
 
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth() + 1;
   if(jsonObject.week == undefined) {
     return(
       <div className="alert alert-danger" role="alert">カレンダーの設定情報がありません。設定してください。</div>
     )
   }
 
-  if(jsonObject.currentMonth == undefined) {
-    jsonObject.currentMonth = DaysGenerator.execute(year, month, jsonObject.standardTime, jsonObject.week);
-    const jsonQueryParams = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, currentMonth: jsonObject.currentMonth })
+  const today = new Date();
+  const year = today.getFullYear();
+  // TODO: 今月の表現が間接的すぎるのでなんとかしたい
+  const month = today.getMonth() + 2; // 今月
+  const monthKey = `${year}-${month}`;
+
+  if(jsonObject.months == undefined) { jsonObject.months = {} as MonthTable; }
+  if(jsonObject.months[monthKey] == undefined) {
+    jsonObject.months[monthKey] = DaysGenerator.execute(year, month, jsonObject.standardTime, jsonObject.week);
+    const jsonQueryParams = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
     router.push(`/current_month?${jsonQueryParams}`);
   }
+  // TODO: cleanup
 
   return(
     <>
-      <h1>{year}年{month}月の稼働表</h1>
-      <Calendar workingDays={jsonObject.week}/>
+      <h1>{year}年{month - 1}月の稼働表</h1>
+      <Calendar workingDays={jsonObject.week} days={jsonObject.months[monthKey]} />
     </>
   )
 }
