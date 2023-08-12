@@ -26,7 +26,7 @@ export default function Layout({ children }: LayoutProps) {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
-            <Nav.Link href={`/calendar_edit?${queryParameters}`}>カレンダーを編集する</Nav.Link>
+            <Nav.Link href={`/edit?${queryParameters}`}>カレンダーを編集する</Nav.Link>
             <Nav.Link href={`/current_month?${queryParameters}`}>今月を表示する</Nav.Link>
             <Nav.Link href="#">来月を表示する</Nav.Link>
           </Nav>
