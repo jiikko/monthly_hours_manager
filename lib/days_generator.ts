@@ -1,6 +1,16 @@
 import { WeekData, DayData } from '../types/calendar';
-import { allDaysInMonth } from './calendar';
 import { CalendarDate } from './calendar_date';
+
+function allDaysInMonth(year, month) {
+  let days = [];
+  const date = CalendarDate(year, month, 1)
+
+  for (let i = 1; i <= date.lastDayOfMonth(); i++) {
+    days.push(new Date(year, month -1, i));
+  }
+
+  return days;
+}
 
 class DaysGenerator {
   static execute(year: number, month: number, standardTime: number, workingDays: WeekData): Array<DayData> {
