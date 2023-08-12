@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import JsonParameter from '../lib/json_parameter';
 
-const CalendarEdit: NextPageWithLayout = () => {
+const Page: NextPageWithLayout = () => {
   const defaultStandardTime = 84;
   const defaultWeek = {
     mon: false,
@@ -83,9 +83,9 @@ const CalendarEdit: NextPageWithLayout = () => {
   )
 }
 
-export default CalendarEdit
+export default Page
 
-CalendarEdit.getLayout = function getLayout(page: React.ReactElement) {
+Page.getLayout = function getLayout(page: React.ReactElement) {
   return (
     <Layout>{page}</Layout>
   )

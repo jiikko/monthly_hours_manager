@@ -95,7 +95,7 @@ const Page: NextPageWithLayout = () => {
     router.push(`/current_month?${jsonQueryParams}`);
   }
 
-  const onDayUpdate = (e: any, dayObject: any) => {
+  const onDayUpdate = (e: any, dayObject: DayData) => {
     const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
     const days = jsonObject.months[monthKey];
     const attribute_name = e.target.name.split('-')[0];
