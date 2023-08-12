@@ -4,6 +4,7 @@ import { Form, Button } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import JsonParameter from '../lib/json_parameter';
+import { PathGenerator } from '../lib/path_generator';
 
 const Page: NextPageWithLayout = () => {
   const defaultStandardTime = 84;
@@ -39,7 +40,8 @@ const Page: NextPageWithLayout = () => {
       jsonQuery = JsonParameter.serialize({ name, standardTime, week: workingWeek })
     }
 
-    router.push(`/edit?${jsonQuery}`);
+    const editPath = PathGenerator().editPath(jsonQuery)
+    router.push(editPath);
     console.log('this calendar has been saved!'); // トーストで表示したい
   };
 

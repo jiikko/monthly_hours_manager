@@ -6,17 +6,18 @@ import { CalendarDate } from '../../../lib/calendar_date';
 import { Table, Row, Form, Button, Col, FloatingLabel } from 'react-bootstrap';
 import { WeekData, DayData, MonthTable } from '../../../types/calendar';
 import { useRouter } from 'next/router';
+import { PathGenerator } from '../../../lib/path_generator';
 
 type MonthProps = {
   workingDays: WeekData;
+  year: number;
+  month: number;
   days: Array<DayData>;
   onDayUpdate: (e: any, dayObject: DayData) => void;
 }
 
-const Month: React.FC<MonthProps>= ({ workingDays, days, onDayUpdate }) => {
-  const date = CalendarDate();
-  const year = date.year();
-  const month = date.month();
+const Month: React.FC<MonthProps>= ({ workingDays, year, month, days, onDayUpdate }) => {
+  const date = CalendarDate(year, month, 1);
   const firstDayOfMonth = date.firstWeekDayOfMonth(); // 当月の最初の曜日を取得
   const daysInMonth = date.lastDayOfMonth(); // 当月の最終日の日付を取得
   const calendarRows = [];
@@ -31,7 +32,7 @@ const Month: React.FC<MonthProps>= ({ workingDays, days, onDayUpdate }) => {
       if ((i === 0 && j < firstDayOfMonth) || dayCount > daysInMonth) {
         week.push(<td key={j}></td>);
       } else {
-        const dayNo = dayCount++; // 1スタート
+        const dayNo = dayCount++; // 1から始まる
         const dayIndex = dayNo - 1;
         const date = CalendarDate(year, month, dayNo);
         const dayOfWeek = date.weekDay()
@@ -90,11 +91,13 @@ const Page: NextPageWithLayout = () => {
   const date = CalendarDate(year, month, 1);
   const monthKey = date.monthlyKey();
 
+
   if(jsonObject.months == undefined) { jsonObject.months = {} as MonthTable; }
   if(jsonObject.months[monthKey] == undefined) {
     jsonObject.months[monthKey] = DaysGenerator.execute(date.year(), date.month(), jsonObject.standardTime, jsonObject.week);
     const jsonQuery = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
-    router.push(`/${year}/${month}?${jsonQuery}`) // TODO: pathメソッドで置き換える
+    const monthPath = PathGenerator().monthPath(date.year(), date.month(), jsonQuery)
+    router.push(monthPath);
   }
 
   const onDayUpdate = (e: any, dayObject: DayData) => {
@@ -105,14 +108,15 @@ const Page: NextPageWithLayout = () => {
 
     days[dayIndex][attribute_name] = Number(e.target.value);
     const jsonQuery = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
-    router.push(`/${date.year()}/${date.month()}?${jsonQuery}`);
+    const monthPath = PathGenerator().monthPath(date.year(), date.month(), jsonQuery)
+    router.push(monthPath);
     console.log('the day has been updated') // トーストで表示したい
   }
 
   return (
     <>
       <h1>{year}年{month}月</h1>
-      <Month workingDays={jsonObject.week} days={jsonObject.months[monthKey]} onDayUpdate={onDayUpdate} />
+      <Month workingDays={jsonObject.week} year={year} month={month} days={jsonObject.months[monthKey]} onDayUpdate={onDayUpdate} />
     </>
   );
 }
