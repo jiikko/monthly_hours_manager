@@ -6,7 +6,7 @@ import { Container, Row } from 'react-bootstrap';
 export default function Home() {
   return (
     <Layout>
-      ここになんらかを表示する
+      精算幅の時間管理を行うアプリケーションです。<br />
     </Layout>
   )
 }

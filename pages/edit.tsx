@@ -33,14 +33,9 @@ const Page: NextPageWithLayout = () => {
     e.preventDefault();
 
     const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
-    let jsonQuery;
-    if(jsonObject.months) {
-      jsonQuery = JsonParameter.serialize({ name, standardTime, week: workingWeek, months: jsonObject.months})
-    } else {
-      jsonQuery = JsonParameter.serialize({ name, standardTime, week: workingWeek })
-    }
-
+    const jsonQuery = JsonParameter.serialize({ name, standardTime, week: workingWeek, months: jsonObject.months})
     const editPath = PathGenerator().editPath(jsonQuery)
+
     router.push(editPath);
     console.log('this calendar has been saved!'); // トーストで表示したい
   };

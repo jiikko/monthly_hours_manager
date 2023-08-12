@@ -2,9 +2,12 @@ import { WeekData, DayData, ParameterType, MonthTable } from '../types/calendar'
 
 class JsonParameter {
   static serialize(obj: ParameterType): string {
-    return Object.entries(obj) .map(([key, value]) => {
-      return `${encodeURIComponent(key)}=${encodeURIComponent(JSON.stringify(value))}`;
-    }).join('&');
+    return Object.entries(obj)
+      .filter(([key, value]) => value !== undefined )
+      .map(([key, value]) => {
+        return `${encodeURIComponent(key)}=${encodeURIComponent(JSON.stringify(value))}`;
+      })
+      .join('&');
   }
 
   static parse(query: { [key: string]: string }): ParameterType {
