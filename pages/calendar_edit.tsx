@@ -32,7 +32,7 @@ const CalendarEdit: NextPageWithLayout = () => {
 
     const jsonQueryParams = JsonParameter.serialize({ name, standardTime, week: workingDays })
     router.push(`/calendar_edit?${jsonQueryParams}`);
-    // TODO: 保存できたらトーストを表示する
+    console.log('this calendar has been saved!'); // トーストで表示したい
   };
 
   useEffect(() => {
