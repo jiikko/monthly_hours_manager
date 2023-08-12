@@ -114,9 +114,12 @@ const Page: NextPageWithLayout = () => {
     }
     return;
   }
-  const totalScheduled = jsonObject.months[monthKey].reduce((sum, day) => sum + day.scheduled, 0) - jsonObject.standardTime;
+  const totalScheduled = jsonObject.months[monthKey].reduce((sum, day) => sum + day.scheduled, 0);
+  const diffScheduled = totalScheduled - jsonObject.standardTime;
   const totalScheduledClassName = (totalScheduled >= jsonObject.standardTime) ? 'text-white bg-success' : 'text-white bg-danger'; 
-  const totalActual = jsonObject.months[monthKey].reduce((sum, day) => sum + day.actual, 0) - jsonObject.standardTime;
+  const totalActual = jsonObject.months[monthKey].reduce((sum, day) => sum + day.actual, 0);
+  const diffActual = totalActual - jsonObject.standardTime;
+
   const totalActualClassName = (totalActual >= jsonObject.standardTime) ? 'text-white bg-success' : 'text-white bg-danger'; 
 
   return (
@@ -137,10 +140,10 @@ const Page: NextPageWithLayout = () => {
         <tbody>
           <tr>
             <td>{jsonObject.standardTime}時間</td>
-            <td>{jsonObject.months[monthKey].reduce((sum, day) => sum + day.scheduled, 0)}時間</td>
-            <td className={totalScheduledClassName}>{totalScheduled}時間</td>
+            <td>{totalScheduled}時間</td>
+            <td className={totalScheduledClassName}>{diffScheduled}時間</td>
             <td>{totalActual}時間</td>
-            <td className={totalActualClassName}>{jsonObject.months[monthKey].reduce((sum, day) => sum + day.actual, 0) - jsonObject.standardTime}時間</td>
+            <td className={totalActualClassName}>{diffActual}時間</td>
           </tr>
         </tbody>
       </Table>
