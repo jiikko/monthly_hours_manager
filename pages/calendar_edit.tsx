@@ -19,11 +19,11 @@ const CalendarEdit: NextPageWithLayout = () => {
   const router = useRouter();
   const [name, setName] = useState('');
   const [standardTime, setStandardTime] = useState(defaultStandardTime);
-  const [workingDays, setWorkingDays] = useState(defaultWeek);
+  const [workingWeek, setWorkingWeek] = useState(defaultWeek);
 
   const handleWorkingDaysChange = (e) => {
-    setWorkingDays({
-      ...workingDays,
+    setWorkingWeek({
+      ...workingWeek,
       [e.target.name]: e.target.checked,
     });
   };
@@ -32,10 +32,11 @@ const CalendarEdit: NextPageWithLayout = () => {
     e.preventDefault();
 
     const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
+    let jsonQuery;
     if(jsonObject.months) {
-      const jsonQuery = JsonParameter.serialize({ name, standardTime, week: workingDays, months: jsonObject.months})
+      jsonQuery = JsonParameter.serialize({ name, standardTime, week: workingWeek, months: jsonObject.months})
     } else {
-      const jsonQuery = JsonParameter.serialize({ name, standardTime, week: workingDays })
+      jsonQuery = JsonParameter.serialize({ name, standardTime, week: workingWeek })
     }
 
     router.push(`/calendar_edit?${jsonQuery}`);
@@ -47,7 +48,7 @@ const CalendarEdit: NextPageWithLayout = () => {
     setName(jsonObject['name'] || '');
     setStandardTime(jsonObject['standardTime'] || defaultStandardTime);
 
-    setWorkingDays(jsonObject.week || defaultWeek);
+    setWorkingWeek(jsonObject.week || defaultWeek);
   }, [router.query]);
 
   return (
@@ -68,13 +69,13 @@ const CalendarEdit: NextPageWithLayout = () => {
         </Form.Group>
 
         <Form.Label>稼働曜日</Form.Label>
-        <Form.Check type="switch" name="mon" label="月" checked={workingDays.mon} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" name="tue" label="火" checked={workingDays.tue} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" name="wed" label="水" checked={workingDays.wed} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" name="thu" label="木" checked={workingDays.thu} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" name="fri" label="金" checked={workingDays.fri} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" name="sat" label="土" checked={workingDays.sat} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" name="sun" label="日" checked={workingDays.sun} onChange={handleWorkingDaysChange} />
+        <Form.Check type="switch" name="mon" label="月" checked={workingWeek.mon} onChange={handleWorkingDaysChange} />
+        <Form.Check type="switch" name="tue" label="火" checked={workingWeek.tue} onChange={handleWorkingDaysChange} />
+        <Form.Check type="switch" name="wed" label="水" checked={workingWeek.wed} onChange={handleWorkingDaysChange} />
+        <Form.Check type="switch" name="thu" label="木" checked={workingWeek.thu} onChange={handleWorkingDaysChange} />
+        <Form.Check type="switch" name="fri" label="金" checked={workingWeek.fri} onChange={handleWorkingDaysChange} />
+        <Form.Check type="switch" name="sat" label="土" checked={workingWeek.sat} onChange={handleWorkingDaysChange} />
+        <Form.Check type="switch" name="sun" label="日" checked={workingWeek.sun} onChange={handleWorkingDaysChange} />
 
         <Button variant="primary" type="submit">保存する</Button>
       </Form>
