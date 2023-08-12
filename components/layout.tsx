@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import styles from '../styles/Home.module.css';
+import { CalendarDate } from '../lib/calendar_date';
 
 import { Container, Col, Row, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 
@@ -10,12 +11,10 @@ type LayoutProps = {
 
 export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
+  const { year, month, ...rest } = router.query; // パスパラメータは除外する
   // NOTE: const queryParameters = new URLSearchParams(router.query).toString()だとtype errorになるので
-  const queryParameters = new URLSearchParams(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)]))).toString();
-
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth() + 2; // TODO: 今月の表現が間接的すぎるのでなんとかしたい
+  const queryParameters = new URLSearchParams(Object.fromEntries(Object.entries(rest).map(([key, val]) => [key, String(val)]))).toString();
+  const date = CalendarDate();
 
   return (
     <>
@@ -32,8 +31,8 @@ export default function Layout({ children }: LayoutProps) {
         <Nav className="me-auto">
             <Nav.Link href={`/edit?${queryParameters}`}>カレンダーを編集する</Nav.Link>
             <Nav.Link href={`/current_month?${queryParameters}`}>今月を表示する</Nav.Link>
-            <Nav.Link href={`/${year}/${month}?${queryParameters}`}>今月を表示する(2)</Nav.Link>
-            <Nav.Link href="#">来月を表示する</Nav.Link>
+            <Nav.Link href={`/${date.year()}/${date.month()}?${queryParameters}`}>今月を表示する(2)</Nav.Link>
+            <Nav.Link href={`/${date.year()}/${date.nextMonth()}?${queryParameters}`}>来月を表示する(2)</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
