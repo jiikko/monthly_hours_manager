@@ -29,9 +29,8 @@ export default function Layout({ children }: LayoutProps) {
         <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
             <Nav.Link href={`/edit?${queryParameters}`}>カレンダーを編集する</Nav.Link>
-            <Nav.Link href={`/current_month?${queryParameters}`}>今月を表示する</Nav.Link>
-            <Nav.Link href={`/${date.year()}/${date.month()}?${queryParameters}`}>今月を表示する(2)</Nav.Link>
-            <Nav.Link href={`/${date.year()}/${date.nextMonth()}?${queryParameters}`}>来月を表示する(2)</Nav.Link>
+            <Nav.Link href={`/${date.year()}/${date.month()}?${queryParameters}`}>今月を表示する</Nav.Link>
+            <Nav.Link href={`/${date.year()}/${date.nextMonth()}?${queryParameters}`}>来月を表示する</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

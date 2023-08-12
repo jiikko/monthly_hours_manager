@@ -14,6 +14,19 @@ describe('CalendarDate', () => {
     })
   })
 
+  describe('引数に2023,9を与えるとき', () => {
+    it('new Date(2023, 8, 1)を作る', () => {
+      const calendarDate = CalendarDate(2023, 9, 1);
+      expect(calendarDate.year()).toBe(2023);
+      expect(calendarDate.month()).toBe(9);
+      expect(calendarDate.day()).toBe(1);
+      expect(calendarDate.nextMonth()).toBe(10);
+      expect(calendarDate.lastDayOfMonth()).toBe(30);
+      expect(calendarDate.firstWeekDayOfMonth()).toBe(5);
+      expect(calendarDate.monthlyKey()).toBe('2023-9');
+    })
+  })
+
   describe('引数に2023,11を与えるとき', () => {
     it('new Date(2023, 10, 1)を作る', () => {
       const calendarDate = CalendarDate(2023, 11, 1);
