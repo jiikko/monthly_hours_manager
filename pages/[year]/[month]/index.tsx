@@ -104,14 +104,12 @@ const Page: NextPageWithLayout = () => {
     console.log('the day has been updated') // トーストで表示したい
   }
 
-  if(jsonObject.months == undefined) {
-    jsonObject.months = {} as MonthTable;
-    if(jsonObject.months[monthKey] == undefined) {
-      jsonObject.months[monthKey] = DaysGenerator.execute(date.year(), date.month(), jsonObject.standardTime, jsonObject.week);
-      const jsonQuery = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
-      const monthPath = PathGenerator().monthPath(date.year(), date.month(), jsonQuery)
-      router.push(monthPath);
-    }
+  if(jsonObject.months == undefined) { jsonObject.months = {} as MonthTable; }
+  if(jsonObject.months[monthKey] == undefined) {
+    jsonObject.months[monthKey] = DaysGenerator.execute(date.year(), date.month(), jsonObject.standardTime, jsonObject.week);
+    const jsonQuery = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
+    const monthPath = PathGenerator().monthPath(date.year(), date.month(), jsonQuery)
+    router.push(monthPath);
     return;
   }
 
