@@ -6,6 +6,7 @@ import { CalendarDate } from '../../../lib/calendar_date';
 import { Table, Row, Form, Button, Col, FloatingLabel } from 'react-bootstrap';
 import { WeekData, DayData, MonthTable } from '../../../types/calendar';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { PathGenerator } from '../../../lib/path_generator';
 
 type MonthProps = {
@@ -34,13 +35,12 @@ const Month: React.FC<MonthProps>= ({ workingDays, year, month, days, onDayUpdat
       } else {
         const dayNo = dayCount++; // 1から始まる
         const dayIndex = dayNo - 1;
-        const date = CalendarDate(year, month, dayNo);
-        const dayOfWeek = date.weekDay()
-        const youbi = weekDays[dayOfWeek]
-        const className = (workingDays[youbi]) ? 'bg-info' : 'bg-secondary text-light';
+        const dayOfWeek = CalendarDate(year, month, dayNo).weekDay();
+        const weekDay = weekDays[dayOfWeek]
+        const tdClassName = (workingDays[weekDay]) ? 'bg-info' : 'bg-secondary text-light';
         const dayObject = days[dayIndex]
 
-        var row = <td key={j} className={className}>
+        var row = <td key={j} className={tdClassName}>
           {dayNo}日<br />
           <Form>
             <FloatingLabel controlId="floatingInput" label="予定" className='mb-2' >
@@ -91,16 +91,7 @@ const Page: NextPageWithLayout = () => {
   const date = CalendarDate(year, month, 1);
   const monthKey = date.monthlyKey();
 
-
-  if(jsonObject.months == undefined) { jsonObject.months = {} as MonthTable; }
-  if(jsonObject.months[monthKey] == undefined) {
-    jsonObject.months[monthKey] = DaysGenerator.execute(date.year(), date.month(), jsonObject.standardTime, jsonObject.week);
-    const jsonQuery = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
-    const monthPath = PathGenerator().monthPath(date.year(), date.month(), jsonQuery)
-    router.push(monthPath);
-  }
-
-  const onDayUpdate = (e: any, dayObject: DayData) => {
+  const onDayUpdate = (e: React.ChangeEvent<HTMLInputElement>, dayObject: DayData) => {
     const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
     const days = jsonObject.months[monthKey];
     const attribute_name = e.target.name.split('-')[0];
@@ -111,6 +102,17 @@ const Page: NextPageWithLayout = () => {
     const monthPath = PathGenerator().monthPath(date.year(), date.month(), jsonQuery)
     router.push(monthPath);
     console.log('the day has been updated') // トーストで表示したい
+  }
+
+  if(jsonObject.months == undefined) {
+    jsonObject.months = {} as MonthTable;
+    if(jsonObject.months[monthKey] == undefined) {
+      jsonObject.months[monthKey] = DaysGenerator.execute(date.year(), date.month(), jsonObject.standardTime, jsonObject.week);
+      const jsonQuery = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
+      const monthPath = PathGenerator().monthPath(date.year(), date.month(), jsonQuery)
+      router.push(monthPath);
+    }
+    return;
   }
 
   return (
