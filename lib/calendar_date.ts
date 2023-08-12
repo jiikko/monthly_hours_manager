@@ -4,10 +4,10 @@ const CalendarDate = (() => {
     let date;
 
     if (argYear && getMonth && getDay) {
-      date = new Date(argYear, getMonth, getDay);
+      date = new Date(argYear, getMonth - 1, getDay);
     } else {
       const preDate = new Date();
-      date = new Date(preDate.getFullYear(), preDate.getMonth() + 1, preDate.getDate());
+      date = new Date(preDate.getFullYear(), preDate.getMonth(), preDate.getDate());
     }
 
     function year() {
@@ -15,11 +15,15 @@ const CalendarDate = (() => {
     }
 
     function month() {
-      return date.getMonth(); // NOTE: 0~11で取得されるため、1~12で返す
+      return date.getMonth() + 1; // NOTE: 0~11で取得されるため、1~12で返す
     }
 
     function nextMonth() {
-      return date.getMonth() + 1;
+      if (month() === 12) { // 12月の次は1月
+        return 1;
+      } else {
+        return month() + 1;
+      }
     }
 
     function day() {
@@ -42,7 +46,7 @@ const CalendarDate = (() => {
 
     //  当月の最終日の日付を取得
     function lastDayOfMonth() {
-      return new Date(year(), month() -1, 0).getDate();
+      return new Date(year(), month(), 0).getDate();
     }
 
     return { day, month, nextMonth, year, monthlyKey, weekDay, firstWeekDayOfMonth, lastDayOfMonth };
