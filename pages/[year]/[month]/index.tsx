@@ -91,25 +91,26 @@ const Page: NextPageWithLayout = () => {
   const date = CalendarDate(year, month, 1);
   const monthKey = date.monthlyKey();
 
-  const onDayUpdate = (e: React.ChangeEvent<HTMLInputElement>, dayObject: DayData) => {
-    const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
-    const days = jsonObject.months[monthKey];
-    const attribute_name = e.target.name.split('-')[0];
-    const dayIndex = e.target.name.split('-')[1];
-
-    days[dayIndex][attribute_name] = Number(e.target.value);
+  const saveQueryParam = (jsonObject: any) => {
     const jsonQuery = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
     const monthPath = PathGenerator().monthPath(date.year(), date.month(), jsonQuery)
     router.push(monthPath);
+  }
+
+  const onDayUpdate = (e: React.ChangeEvent<HTMLInputElement>, dayObject: DayData) => {
+    const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
+    const days = jsonObject.months[monthKey];
+    const attributeName = e.target.name.split('-')[0];
+    const dayIndex = e.target.name.split('-')[1];
+    days[dayIndex][attributeName] = Number(e.target.value);
+    saveQueryParam(jsonObject);
     console.log('the day has been updated') // トーストで表示したい
   }
 
   if(jsonObject.months == undefined) { jsonObject.months = {} as MonthTable; }
   if(jsonObject.months[monthKey] == undefined) {
     jsonObject.months[monthKey] = DaysGenerator.execute(date.year(), date.month(), jsonObject.standardTime, jsonObject.week);
-    const jsonQuery = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
-    const monthPath = PathGenerator().monthPath(date.year(), date.month(), jsonQuery)
-    router.push(monthPath);
+    saveQueryParam(jsonObject);
     return;
   }
 
