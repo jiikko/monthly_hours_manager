@@ -30,8 +30,9 @@ const CalendarEdit: NextPageWithLayout = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const jsonQueryParams = JsonParameter.serialize({ name, standardTime, week: workingDays })
-    router.push(`/calendar_edit?${jsonQueryParams}`);
+    const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
+    const jsonQuery = JsonParameter.serialize({ name, standardTime, week: workingDays, months: jsonObject.months})
+    router.push(`/calendar_edit?${jsonQuery}`);
     console.log('this calendar has been saved!'); // トーストで表示したい
   };
 
