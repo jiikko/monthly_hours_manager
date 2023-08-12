@@ -7,10 +7,7 @@ import JsonParameter from '../lib/json_parameter';
 
 const CalendarEdit: NextPageWithLayout = () => {
   const defaultStandardTime = 84;
-  const router = useRouter();
-  const [name, setName] = useState('');
-  const [standardTime, setStandardTime] = useState(defaultStandardTime);
-  const [workingDays, setWorkingDays] = useState({
+  const defaultWeek = {
     mon: false,
     tue: false,
     wed: false,
@@ -18,7 +15,11 @@ const CalendarEdit: NextPageWithLayout = () => {
     fri: false,
     sat: false,
     sun: false,
-  });
+    }
+  const router = useRouter();
+  const [name, setName] = useState('');
+  const [standardTime, setStandardTime] = useState(defaultStandardTime);
+  const [workingDays, setWorkingDays] = useState(defaultWeek);
 
   const handleWorkingDaysChange = (e) => {
     setWorkingDays({
@@ -31,7 +32,12 @@ const CalendarEdit: NextPageWithLayout = () => {
     e.preventDefault();
 
     const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
-    const jsonQuery = JsonParameter.serialize({ name, standardTime, week: workingDays, months: jsonObject.months})
+    if(jsonObject.months) {
+      const jsonQuery = JsonParameter.serialize({ name, standardTime, week: workingDays, months: jsonObject.months})
+    } else {
+      const jsonQuery = JsonParameter.serialize({ name, standardTime, week: workingDays })
+    }
+
     router.push(`/calendar_edit?${jsonQuery}`);
     console.log('this calendar has been saved!'); // トーストで表示したい
   };
@@ -41,15 +47,7 @@ const CalendarEdit: NextPageWithLayout = () => {
     setName(jsonObject['name'] || '');
     setStandardTime(jsonObject['standardTime'] || defaultStandardTime);
 
-    setWorkingDays(jsonObject.week || {
-      mon: false,
-      tue: false,
-      wed: false,
-      thu: false,
-      fri: false,
-      sat: false,
-      sun: false,
-    })
+    setWorkingDays(jsonObject.week || defaultWeek);
   }, [router.query]);
 
   return (
