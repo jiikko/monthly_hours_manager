@@ -104,8 +104,8 @@ const Page: NextPageWithLayout = () => {
     const dayIndex = e.target.name.split('-')[1];
 
     days[dayIndex][attribute_name] = Number(e.target.value);
-    const jsonQueryParams = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
-    router.push(`/current_month?${jsonQueryParams}`);
+    const jsonQuery = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
+    router.push(`/${date.year()}/${date.month()}?${jsonQuery}`);
     console.log('the day has been updated') // トーストで表示したい
   }
 
