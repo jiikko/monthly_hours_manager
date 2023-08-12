@@ -79,6 +79,11 @@ const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
 
+
+  if (!router.isReady) {
+    return null; // またはローディング表示など、必要に応じて変更
+  }
+
   if(jsonObject.week == undefined) {
     return(
       <div className="alert alert-danger" role="alert">カレンダーの設定情報がありません。設定してください。</div>

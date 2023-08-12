@@ -51,6 +51,10 @@ const CalendarEdit: NextPageWithLayout = () => {
     setWorkingWeek(jsonObject.week || defaultWeek);
   }, [router.query]);
 
+  if (!router.isReady) {
+    return null; // またはローディング表示など、必要に応じて変更
+  }
+
   return (
     <>
       <h1>
