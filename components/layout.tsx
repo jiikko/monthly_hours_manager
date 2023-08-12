@@ -13,6 +13,10 @@ export default function Layout({ children }: LayoutProps) {
   // NOTE: const queryParameters = new URLSearchParams(router.query).toString()だとtype errorになるので
   const queryParameters = new URLSearchParams(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)]))).toString();
 
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth() + 2; // TODO: 今月の表現が間接的すぎるのでなんとかしたい
+
   return (
     <>
       <Head>
@@ -28,6 +32,7 @@ export default function Layout({ children }: LayoutProps) {
         <Nav className="me-auto">
             <Nav.Link href={`/edit?${queryParameters}`}>カレンダーを編集する</Nav.Link>
             <Nav.Link href={`/current_month?${queryParameters}`}>今月を表示する</Nav.Link>
+            <Nav.Link href={`/${year}/${month}?${queryParameters}`}>今月を表示する(2)</Nav.Link>
             <Nav.Link href="#">来月を表示する</Nav.Link>
           </Nav>
         </Navbar.Collapse>

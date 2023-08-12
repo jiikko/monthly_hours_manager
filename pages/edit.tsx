@@ -39,7 +39,7 @@ const CalendarEdit: NextPageWithLayout = () => {
       jsonQuery = JsonParameter.serialize({ name, standardTime, week: workingWeek })
     }
 
-    router.push(`/calendar_edit?${jsonQuery}`);
+    router.push(`/edit?${jsonQuery}`);
     console.log('this calendar has been saved!'); // トーストで表示したい
   };
 
@@ -50,10 +50,6 @@ const CalendarEdit: NextPageWithLayout = () => {
 
     setWorkingWeek(jsonObject.week || defaultWeek);
   }, [router.query]);
-
-  if (!router.isReady) {
-    return null; // またはローディング表示など、必要に応じて変更
-  }
 
   return (
     <>
