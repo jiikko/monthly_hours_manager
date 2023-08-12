@@ -1,3 +1,10 @@
+export type ParameterType = {
+  name?: string;
+  standardTime?: number;
+  week?: WeekData;
+  months: MonthTable,
+}
+
 export type WeekData = {
   mon: boolean;
   tue: boolean;
@@ -14,6 +21,6 @@ export type DayData = {
   actual: number;
 }
 
-type MonthTable = {
+export type MonthTable = {
   [key: string]: Array<DayData>;
 }

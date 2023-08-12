@@ -1,17 +1,18 @@
 import { useRouter } from 'next/router';
-import type { NextPageWithLayout, MonthTable, DayData } from './_app'
+import type { NextPageWithLayout } from './_app'
+import { WeekData, DayData, MonthTable } from '../lib/calendar';
 import Layout from '../components/layout'
 import { Table, Row, Form, Button, Col, FloatingLabel } from 'react-bootstrap';
 import JsonParameter from '../lib/json_parameter';
 import DaysGenerator from '../lib/days_generator';
 
-type Props = {
-  workingDays: any; // TODO: type
+type MonthProps = {
+  workingDays: WeekData;
   days: Array<DayData>;
-  onDayUpdate: (dayObject: DayData) => void;
+  onDayUpdate: (e: any, dayObject: DayData) => void;
 }
 
-const Month: React.FC = ({ workingDays, days, onDayUpdate }: Props) => {
+const Month: React.FC<MonthProps>= ({ workingDays, days, onDayUpdate }) => {
   const today = new Date();
   const year = today.getFullYear();
   const month = today.getMonth(); // 0から11の値
@@ -96,7 +97,7 @@ const CurrentMonth: NextPageWithLayout = () => {
     router.push(`/current_month?${jsonQueryParams}`);
   }
 
-  const onDayUpdate = (e, dayObject) => {
+  const onDayUpdate = (e: any, dayObject: any) => {
     const today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth() + 2; // 今月
