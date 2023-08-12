@@ -6,11 +6,7 @@ import { Container, Row } from 'react-bootstrap';
 export default function Home() {
   return (
     <Layout>
-      <Container>
-        <Row className="justify-content-md-between">
-          ここになんらかを表示する
-        </Row>
-      </Container>
+      ここになんらかを表示する
     </Layout>
   )
 }
