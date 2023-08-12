@@ -75,7 +75,7 @@ const Month: React.FC<MonthProps>= ({ workingDays, days, onDayUpdate }) => {
   );
 };
 
-const CurrentMonth: NextPageWithLayout = () => {
+const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
 
@@ -113,7 +113,7 @@ const CurrentMonth: NextPageWithLayout = () => {
     console.log('the day has been updated') // トーストで表示したい
   }
 
-  // TODO: cleanup
+  // TODO: 過去の月のパラメータを削除する
 
   return(
     <>
@@ -122,9 +122,9 @@ const CurrentMonth: NextPageWithLayout = () => {
     </>
   )
 }
-export default CurrentMonth
+export default Page
 
-CurrentMonth.getLayout = function getLayout(page: React.ReactElement) {
+Page.getLayout = function getLayout(page: React.ReactElement) {
   return (
     <Layout>{page}</Layout>
   )
