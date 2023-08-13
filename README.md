@@ -5,7 +5,7 @@
 
 
 # TODO
-* type check on runtime
 * lint
 * formatter
 * github ribon
+* 祝日の判定をする

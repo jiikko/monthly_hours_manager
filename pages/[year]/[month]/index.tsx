@@ -100,10 +100,10 @@ type SummaryProps = {
 
 const Summary: React.FC<SummaryProps> = ({ days, standardTime }) => {
   const daysWithoutHoliday =  days.filter(day => !day.isHoliday);
-  const totalScheduled = Number(daysWithoutHoliday.reduce((sum, day) => sum + day.scheduled, 0).toFixed(1));
+  const totalScheduled = Number(daysWithoutHoliday.reduce((sum, day) => sum + Number(day.scheduled), 0).toFixed(1));
   const diffScheduled = Number((totalScheduled - standardTime).toFixed(1));
   const totalScheduledClassName = (totalScheduled >= standardTime) ? 'text-white bg-success' : 'text-white bg-danger';
-  const totalActual = daysWithoutHoliday.reduce((sum, day) => sum + day.actual, 0);
+  const totalActual = daysWithoutHoliday.reduce((sum, day) => sum + Number(day.actual), 0);
   const diffActual = totalActual - standardTime;
   const totalActualClassName = (totalActual >= standardTime) ? 'text-white bg-success' : '';
 
@@ -170,7 +170,7 @@ const Page: NextPageWithLayout = () => {
     if(e.target.type === 'checkbox') {
       days[dayIndex][attributeName] = e.target.checked;
     } else {
-      days[dayIndex][attributeName] = Number(e.target.value)
+      days[dayIndex][attributeName] = e.target.value
     }
     saveQueryParam(jsonObject);
     toastProps.notify('時間を更新しました')
