@@ -6,7 +6,7 @@ import { CalendarDate } from '../../../lib/calendar_date';
 import { Table, Row, Form, Button, Col, FloatingLabel } from 'react-bootstrap';
 import { WeekData, DayData, MonthTable, ParameterType } from '../../../types/calendar';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { PathGenerator } from '../../../lib/path_generator';
 
 type MonthProps = {
@@ -80,11 +80,15 @@ const Month: React.FC<MonthProps>= ({ workingDays, year, month, days, onDayUpdat
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { year, month } = router.query;
+  const [display, setDisplay] = useState(false);
+
+  useEffect(() => { if(router.isReady) { setDisplay(true); } }, [router.isReady]);
+
   const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
 
   if(jsonObject.week == undefined) {
     return(
-      <div className="alert alert-danger" role="alert">カレンダーの設定情報がありません。設定してください。</div>
+      display && <div className="alert alert-danger" role="alert">カレンダーの設定情報がありません。設定してください。</div>
     )
   }
 
