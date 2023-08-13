@@ -8,6 +8,8 @@ import { WeekData, DayData, MonthTable, ParameterType } from '../../../types/cal
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { PathGenerator } from '../../../lib/path_generator';
+import { useToast } from '../../../hooks/useToast';
+import { ToastComponent } from '../../../components/toast';
 
 type MonthProps = {
   workingWeek: WeekData;
@@ -64,7 +66,7 @@ const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdat
             </Form>
           </td>
         )
-      week.push(row)
+        week.push(row)
       }
     }
 
@@ -72,20 +74,22 @@ const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdat
   }
 
   return (
-    <Table striped bordered hover>
-      <thead>
-        <tr>
-          <th>日</th>
-          <th>月</th>
-          <th>火</th>
-          <th>水</th>
-          <th>木</th>
-          <th>金</th>
-          <th>土</th>
-        </tr>
-      </thead>
-      <tbody>{calendarRows}</tbody>
-    </Table>
+    <>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>日</th>
+            <th>月</th>
+            <th>火</th>
+            <th>水</th>
+            <th>木</th>
+            <th>金</th>
+            <th>土</th>
+          </tr>
+        </thead>
+        <tbody>{calendarRows}</tbody>
+      </Table>
+    </>
   );
 };
 
@@ -132,6 +136,7 @@ const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { year, month } = router.query;
   const [display, setDisplay] = useState(false);
+  const { showToastFunction, toastMessage, showToast, hideToast } = useToast();
 
   useEffect(() => {
     if(router.isReady) { setDisplay(true); }
@@ -168,19 +173,19 @@ const Page: NextPageWithLayout = () => {
       days[dayIndex][attributeName] = Number(e.target.value)
     }
     saveQueryParam(jsonObject);
-    console.log('the day has been updated') // トーストで表示したい
+    showToastFunction('時間を更新しました')
   }
 
   const initializeDays = (): void => {
     jsonObject.months[monthKey] = DaysGenerator.execute(Number(year), Number(month), jsonObject.standardTime, jsonObject.week);
     saveQueryParam(jsonObject);
-    console.log('days has been initialized') // トーストで表示したい
+    showToastFunction('初期化しました')
   }
 
   const recalculateDays = (days: Array<DayData>): void => {
     jsonObject.months[monthKey] = DaysGenerator.executeWithDays(Number(year), Number(month), jsonObject.standardTime, jsonObject.week, days);
     saveQueryParam(jsonObject);
-    console.log('days has been recalculated') // トーストで表示したい
+    showToastFunction('再計算しました')
   }
 
   if(jsonObject.months == undefined) { jsonObject.months = {} as MonthTable; }
@@ -219,6 +224,8 @@ const Page: NextPageWithLayout = () => {
       <Col>
         <Button variant="primary" onClick={(() => recalculateDays(days)) }>未稼働日の予定を再計算する</Button>
       </Col>
+
+      <ToastComponent message={toastMessage} showToast={showToast} hideToast={hideToast} />
     </>
   );
 }
