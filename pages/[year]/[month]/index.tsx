@@ -84,8 +84,8 @@ type SummaryProps = {
 }
 
 const Summary: React.FC<SummaryProps> = ({ days, standardTime }) => {
-  const totalScheduled = days.reduce((sum, day) => sum + day.scheduled, 0);
-  const diffScheduled = totalScheduled - standardTime;
+  const totalScheduled = Number(days.reduce((sum, day) => sum + day.scheduled, 0)).toFixed(1);
+  const diffScheduled = Number((totalScheduled - standardTime).toFixed(1));
   const totalScheduledClassName = (totalScheduled >= standardTime) ? 'text-white bg-success' : 'text-white bg-danger';
   const totalActual = days.reduce((sum, day) => sum + day.actual, 0);
   const diffActual = totalActual - standardTime;
@@ -157,7 +157,9 @@ const Page: NextPageWithLayout = () => {
   }
 
   const recalculateDays = (days: Array<DayData>): void => {
-    console.log('recalculateDays')
+    jsonObject.months[monthKey] = DaysGenerator.executeWithDays(Number(year), Number(month), jsonObject.standardTime, jsonObject.week, days);
+    saveQueryParam(jsonObject);
+    console.log('days has been recalculated') // トーストで表示したい
   }
 
   if(jsonObject.months == undefined) { jsonObject.months = {} as MonthTable; }
@@ -168,6 +170,7 @@ const Page: NextPageWithLayout = () => {
   }
 
   const days = jsonObject.months[monthKey]
+  console.log(days)
 
   return (
     <>

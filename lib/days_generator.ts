@@ -27,6 +27,24 @@ class DaysGenerator {
       }
     });
   }
+
+  static executeWithDays(year: number, month: number, standardTime: number, workingWeek: WeekData, days: Array<DayData>): Array<DayData> {
+    const date = CalendarDate(year, month, 1)
+    const datesInMonth = allDaysInMonth(date.year(), date.month());
+    const workingDays = datesInMonth.filter((date) => { return workingWeek[date.weekDayName()]; });
+    const workedDays = days.filter((day) => { return(day.actual > 0); });
+    const remain = standardTime - workedDays.reduce((sum, day) => { return sum + day.actual }, 0);
+    const avgHour = Number((remain / (workingDays.length - workedDays.length)).toFixed(1));
+
+    return datesInMonth.map((date) => {
+      if(workingWeek[date.weekDayName()]) {
+        const day = days.find((day) => { return day.day === date.day(); });
+        return { scheduled: avgHour, actual: day.actual, day: date.day() }
+      } else {
+        return { scheduled: 0, actual: 0, day: date.day() }
+      }
+    });
+  }
 }
 
 export default DaysGenerator;
