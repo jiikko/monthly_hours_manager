@@ -10,14 +10,14 @@ import { useEffect, useState } from 'react';
 import { PathGenerator } from '../../../lib/path_generator';
 
 type MonthProps = {
-  workingDays: WeekData;
+  workingWeek: WeekData;
   year: number;
   month: number;
   days: Array<DayData>;
   onDayUpdate: (e: any, dayObject: DayData) => void;
 }
 
-const Month: React.FC<MonthProps>= ({ workingDays, year, month, days, onDayUpdate }) => {
+const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdate }) => {
   const date = CalendarDate(year, month, 1);
   const firstDayOfMonth = date.firstWeekDayOfMonth(); // 当月の最初の曜日を取得
   const daysInMonth = date.lastDayOfMonth(); // 当月の最終日の日付を取得
@@ -37,20 +37,22 @@ const Month: React.FC<MonthProps>= ({ workingDays, year, month, days, onDayUpdat
         const dayIndex = dayNo - 1;
         const dayOfWeek = CalendarDate(year, month, dayNo).weekDay();
         const weekDay = weekDays[dayOfWeek]
-        const tdClassName = (workingDays[weekDay]) ? 'bg-info' : 'bg-secondary text-light';
+        const tdClassName = (workingWeek[weekDay]) ? 'bg-info' : 'bg-secondary text-light';
         const dayObject = days[dayIndex]
 
-        var row = <td key={j} className={tdClassName}>
-          {dayNo}日<br />
-          <Form>
-            <FloatingLabel controlId="floatingInput" label="予定" className='mb-2' >
-              <Form.Control type="name" defaultValue={dayObject.scheduled} name={`scheduled-${dayIndex}`} onChange={(e) => onDayUpdate(e, dayObject)} />
-            </FloatingLabel>
-            <FloatingLabel controlId="floatingInput" label="実績" >
-              <Form.Control type="name" defaultValue={dayObject.actual} name={`actual-${dayIndex}`} onChange={(e) => onDayUpdate(e, dayObject)} />
-            </FloatingLabel>
-          </Form>
-        </td>
+        var row = (
+          <td key={j} className={tdClassName}>
+            {dayNo}日<br />
+            <Form>
+              <FloatingLabel controlId="floatingInput" label="予定" className='mb-2' >
+                <Form.Control type="name" defaultValue={dayObject.scheduled} name={`scheduled-${dayIndex}`} onChange={(e) => onDayUpdate(e, dayObject)} />
+              </FloatingLabel>
+              <FloatingLabel controlId="floatingInput" label="実績" >
+                <Form.Control type="name" defaultValue={dayObject.actual} name={`actual-${dayIndex}`} onChange={(e) => onDayUpdate(e, dayObject)} />
+              </FloatingLabel>
+            </Form>
+          </td>
+        )
       week.push(row)
       }
     }
@@ -124,7 +126,6 @@ const Page: NextPageWithLayout = () => {
   const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
   const date = CalendarDate(year, month, 1);
   const monthKey = date.monthlyKey();
-  const days = jsonObject.months[monthKey]
 
   if(jsonObject.week == undefined) {
     return(
@@ -132,14 +133,14 @@ const Page: NextPageWithLayout = () => {
     )
   }
 
-  const saveQueryParam = (jsonObject: ParameterType) => {
+  const saveQueryParam = (jsonObject: ParameterType): string => {
     const jsonQuery = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
     const monthPath = PathGenerator().monthPath(date.year(), date.month(), jsonQuery)
     router.push(monthPath);
     return monthPath;
   }
 
-  const onDayUpdate = (e: React.ChangeEvent<HTMLInputElement>, dayObject: DayData) => {
+  const onDayUpdate = (e: React.ChangeEvent<HTMLInputElement>, dayObject: DayData): void => {
     const attributeName = e.target.name.split('-')[0];
     const dayIndex = e.target.name.split('-')[1];
     days[dayIndex][attributeName] = Number(e.target.value);
@@ -147,7 +148,7 @@ const Page: NextPageWithLayout = () => {
     console.log('the day has been updated') // トーストで表示したい
   }
 
-  const recalculateDays = () => {
+  const recalculateDays = (): void => {
     jsonObject.months[monthKey] = DaysGenerator.execute(Number(year), Number(month), jsonObject.standardTime, jsonObject.week);
     const path = saveQueryParam(jsonObject);
     document.location = path;
@@ -160,10 +161,12 @@ const Page: NextPageWithLayout = () => {
     return;
   }
 
+  const days = jsonObject.months[monthKey]
+
   return (
     <>
       <h1>{year}年{month}月</h1>
-      <Month workingDays={jsonObject.week} year={Number(year)} month={Number(month)} days={days} onDayUpdate={onDayUpdate} />
+      <Month workingWeek={jsonObject.week} year={Number(year)} month={Number(month)} days={days} onDayUpdate={onDayUpdate} />
       <Summary days={days} standardTime={jsonObject.standardTime} />
       <Col>
         <Button variant="primary" onClick={recalculateDays}>時間を再計算する</Button>
