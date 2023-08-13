@@ -1,23 +1,33 @@
 import { WeekData, DayData } from '../types/calendar';
-import { CalendarDate } from './calendar_date';
+import { CalendarDate, CalendarDateType } from './calendar_date';
 
-function allDaysInMonth(year, month) {
+function allDaysInMonth(year: number, month: number): Array<CalendarDateType> {
   let days = [];
   const date = CalendarDate(year, month, 1)
 
   for (let i = 1; i <= date.lastDayOfMonth(); i++) {
-    days.push(new Date(year, month -1, i));
+    days.push(CalendarDate(year, month, i));
   }
 
   return days;
 }
 
 class DaysGenerator {
-  static execute(year: number, month: number, standardTime: number, workingDays: WeekData): Array<DayData> {
+  static execute(year: number, month: number, standardTime: number, workingWeek: WeekData): Array<DayData> {
     const date = CalendarDate(year, month, 1)
-    const days = allDaysInMonth(date.year(), date.month());
-    return days.map((day) => {
-      return { scheduled: 0, actual: 0, day: day.getDate() }
+    const datesInMonth = allDaysInMonth(date.year(), date.month());
+    const workingDays = datesInMonth.filter((date) => {
+      return workingWeek[date.weekDayName()]
+    });
+
+    const avgHour = standardTime / workingDays.length;
+
+    return datesInMonth.map((date) => {
+      if(workingWeek[date.weekDayName()]) {
+        return { scheduled: avgHour, actual: 0, day: date.day() }
+      } else {
+        return { scheduled: 0, actual: 0, day: date.day() }
+      }
     });
   }
 }

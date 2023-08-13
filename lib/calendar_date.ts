@@ -1,6 +1,18 @@
+type CalendarDateType = {
+  day: () => number;
+  month: () => number;
+  nextMonth: () => number;
+  year: () => number;
+  monthlyKey: () => string;
+  weekDay: () => number;
+  firstWeekDayOfMonth: () => number;
+  lastDayOfMonth: () => number;
+  weekDayName: () => string;
+}
+
 // new Dateから月を取得すると0~11で取得されるため、処理しやすい値で返すDateクラスのラッパー
-const CalendarDate = (() => {
-  return function (argYear?, getMonth?, getDay?) {
+const CalendarDate = (()  => {
+  return function (argYear?, getMonth?, getDay?): CalendarDateType {
     let date;
 
     if (argYear && getMonth && getDay) {
@@ -38,6 +50,11 @@ const CalendarDate = (() => {
       return date.getDay();
     }
 
+    function weekDayName(): string {
+      const weekDayNames = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+      return weekDayNames[weekDay()];
+    }
+
     // NOTE: 月の最初の日の曜日を取得する
     function firstWeekDayOfMonth() {
       return new Date(year(), month() - 1, 1).getDay();
@@ -48,8 +65,9 @@ const CalendarDate = (() => {
       return new Date(year(), month(), 0).getDate();
     }
 
-    return { day, month, nextMonth, year, monthlyKey, weekDay, firstWeekDayOfMonth, lastDayOfMonth };
+    return { day, month, nextMonth, year, monthlyKey, weekDay, firstWeekDayOfMonth, lastDayOfMonth, weekDayName };
   };
 })();
 
 export { CalendarDate };
+export type { CalendarDateType };
