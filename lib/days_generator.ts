@@ -21,9 +21,9 @@ class DaysGenerator {
 
     return datesInMonth.map((date) => {
       if(workingWeek[date.weekDayName()]) {
-        return { scheduled: avgHour, actual: 0, day: date.day() }
+        return { scheduled: avgHour, actual: 0, day: date.day(), isHoliday: false }
       } else {
-        return { scheduled: 0, actual: 0, day: date.day() }
+        return { scheduled: 0, actual: 0, day: date.day(), isHoliday: false }
       }
     });
   }
@@ -38,10 +38,14 @@ class DaysGenerator {
 
     return datesInMonth.map((date) => {
       if(workingWeek[date.weekDayName()]) {
-        const day = days.find((day) => { return day.day === date.day(); });
-        return { scheduled: avgHour, actual: day.actual, day: date.day() }
+        const dayObject = days.find((day) => { return day.day === date.day(); });
+        if(dayObject.actual && dayObject.actual > 0) {
+          return { scheduled: dayObject.scheduled, actual: dayObject.actual, day: date.day(), isHoliday: dayObject.isHoliday }
+        }
+
+        return { scheduled: avgHour, actual: dayObject.actual, day: date.day(), isHoliday: dayObject.isHoliday }
       } else {
-        return { scheduled: 0, actual: 0, day: date.day() }
+        return { scheduled: 0, actual: 0, day: date.day(), isHoliday: false }
       }
     });
   }

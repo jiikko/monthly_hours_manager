@@ -19,6 +19,7 @@ export type DayData = {
   day: number;
   scheduled: number;
   actual: number;
+  isHoliday: boolean;
 }
 
 export type MonthTable = {

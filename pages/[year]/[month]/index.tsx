@@ -26,6 +26,20 @@ const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdat
 
   let dayCount = 1;
 
+  const renderTextFields = (day: DayData, dayIndex: number) => {
+    return(
+      <>
+        <FloatingLabel controlId="floatingInput" label="予定" className='mb-2' >
+          <Form.Control type="name" value={day.scheduled} name={`scheduled-${dayIndex}`} onChange={(e) => onDayUpdate(e, day)} />
+        </FloatingLabel>
+        <FloatingLabel controlId="floatingInput" label="実績" >
+          <Form.Control type="name" value={day.actual} name={`actual-${dayIndex}`} onChange={(e) => onDayUpdate(e, day)} />
+        </FloatingLabel>
+      </>
+    )
+  }
+
+
   for (let i = 0; i < 6; i++) { // 最大6週間
     const week = [];
 
@@ -39,17 +53,14 @@ const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdat
         const day = days[dayIndex];
         let tdClassName = (workingWeek[weekDay]) ? 'bg-info' : 'bg-secondary text-light';
         if(day.scheduled && day.actual) { tdClassName = 'bg-success text-light' }
+        if(day.isHoliday) { tdClassName = 'bg-secondary text-light' }
 
         const row = (
           <td key={j} className={tdClassName}>
             {dayNo}日<br />
             <Form>
-              <FloatingLabel controlId="floatingInput" label="予定" className='mb-2' >
-                <Form.Control type="name" value={day.scheduled} name={`scheduled-${dayIndex}`} onChange={(e) => onDayUpdate(e, day)} />
-              </FloatingLabel>
-              <FloatingLabel controlId="floatingInput" label="実績" >
-                <Form.Control type="name" value={day.actual} name={`actual-${dayIndex}`} onChange={(e) => onDayUpdate(e, day)} />
-              </FloatingLabel>
+              {!day.isHoliday && renderTextFields(day, dayIndex, 'scheduled')}
+              <Form.Check type="switch" checked={!!day.isHoliday} name={`isHoliday-${dayIndex}`}  label="稼働対象外" className='m-1' onChange={(e) => onDayUpdate(e, day)} />
             </Form>
           </td>
         )
@@ -84,10 +95,11 @@ type SummaryProps = {
 }
 
 const Summary: React.FC<SummaryProps> = ({ days, standardTime }) => {
-  const totalScheduled = Number(days.reduce((sum, day) => sum + day.scheduled, 0).toFixed(1));
+  const daysWithoutHoliday =  days.filter(day => !day.isHoliday);
+  const totalScheduled = Number(daysWithoutHoliday.reduce((sum, day) => sum + day.scheduled, 0).toFixed(1));
   const diffScheduled = Number((totalScheduled - standardTime).toFixed(1));
   const totalScheduledClassName = (totalScheduled >= standardTime) ? 'text-white bg-success' : 'text-white bg-danger';
-  const totalActual = days.reduce((sum, day) => sum + day.actual, 0);
+  const totalActual = daysWithoutHoliday.reduce((sum, day) => sum + day.actual, 0);
   const diffActual = totalActual - standardTime;
   const totalActualClassName = (totalActual >= standardTime) ? 'text-white bg-success' : 'text-white bg-danger';
 
@@ -145,7 +157,11 @@ const Page: NextPageWithLayout = () => {
   const onDayUpdate = (e: React.ChangeEvent<HTMLInputElement>, day: DayData): void => {
     const attributeName = e.target.name.split('-')[0];
     const dayIndex = e.target.name.split('-')[1];
-    days[dayIndex][attributeName] = Number(e.target.value);
+    if(e.target.type === 'checkbox') {
+      days[dayIndex][attributeName] = e.target.checked;
+    } else {
+      days[dayIndex][attributeName] = Number(e.target.value)
+    }
     saveQueryParam(jsonObject);
     console.log('the day has been updated') // トーストで表示したい
   }
@@ -170,7 +186,6 @@ const Page: NextPageWithLayout = () => {
   }
 
   const days = jsonObject.months[monthKey]
-  console.log(days)
 
   return (
     <>
@@ -182,7 +197,7 @@ const Page: NextPageWithLayout = () => {
         <Button variant="secondary" onClick={initializeDays}>時間を初期状態にする</Button>
       </Col>
       <Col>
-        <Button variant="primary" onClick={(() => recalculateDays(days)) }>時間を再計算する</Button>
+        <Button variant="primary" onClick={(() => recalculateDays(days)) }>未稼働日の予定を再計算する</Button>
       </Col>
     </>
   );
