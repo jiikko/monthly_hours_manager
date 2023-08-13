@@ -136,7 +136,7 @@ const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { year, month } = router.query;
   const [display, setDisplay] = useState(false);
-  const { showToastFunction, toastMessage, showToast, hideToast } = useToast();
+  const toastProps = useToast();
 
   useEffect(() => {
     if(router.isReady) { setDisplay(true); }
@@ -173,19 +173,19 @@ const Page: NextPageWithLayout = () => {
       days[dayIndex][attributeName] = Number(e.target.value)
     }
     saveQueryParam(jsonObject);
-    showToastFunction('時間を更新しました')
+    toastProps.showToastFunction('時間を更新しました')
   }
 
   const initializeDays = (): void => {
     jsonObject.months[monthKey] = DaysGenerator.execute(Number(year), Number(month), jsonObject.standardTime, jsonObject.week);
     saveQueryParam(jsonObject);
-    showToastFunction('初期化しました')
+    toastProps.showToastFunction('初期化しました')
   }
 
   const recalculateDays = (days: Array<DayData>): void => {
     jsonObject.months[monthKey] = DaysGenerator.executeWithDays(Number(year), Number(month), jsonObject.standardTime, jsonObject.week, days);
     saveQueryParam(jsonObject);
-    showToastFunction('再計算しました')
+    toastProps.showToastFunction('再計算しました')
   }
 
   if(jsonObject.months == undefined) { jsonObject.months = {} as MonthTable; }
@@ -225,7 +225,7 @@ const Page: NextPageWithLayout = () => {
         <Button variant="primary" onClick={(() => recalculateDays(days)) }>未稼働日の予定を再計算する</Button>
       </Col>
 
-      <ToastComponent message={toastMessage} showToast={showToast} hideToast={hideToast} />
+      <ToastComponent {...toastProps} />
     </>
   );
 }

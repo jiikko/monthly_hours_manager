@@ -1,18 +1,18 @@
 import { useState } from 'react';
 
 export const useToast = () => {
-  const [toastMessage, setToastMessage] = useState('');
+  const [message, setMessage] = useState('');
   const [showToast, setToast] = useState(false);
 
   const showToastFunction = (message) => {
-    setToastMessage(message);
+    setMessage(message);
     setToast(true);
   };
 
   const hideToast = () => setToast(false);
 
   return {
-    toastMessage,
+    message,
     showToast,
     hideToast,
     showToastFunction

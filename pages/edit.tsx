@@ -29,7 +29,7 @@ const Page: NextPageWithLayout = () => {
   const [name, setName] = useState('');
   const [standardTime, setStandardTime] = useState(defaultStandardTime);
   const [workingWeek, setWorkingWeek] = useState(defaultWeek);
-  const { showToastFunction, toastMessage, showToast, hideToast } = useToast();
+  const toastProps = useToast();
 
   const handleWorkingDaysChange = (e) => {
     setWorkingWeek({
@@ -46,7 +46,7 @@ const Page: NextPageWithLayout = () => {
     const editPath = PathGenerator().editPath(jsonQuery)
 
     router.push(editPath);
-    showToastFunction('カレンダー情報の変更に成功しました。')
+    toastProps.showToastFunction('カレンダー情報の変更に成功しました。')
   };
 
   useEffect(() => {
@@ -85,7 +85,7 @@ const Page: NextPageWithLayout = () => {
         <Button variant="primary" type="submit">保存する</Button>
       </Form>
 
-      <ToastComponent message={toastMessage} showToast={showToast} hideToast={hideToast} />
+      <ToastComponent {...toastProps} />
     </>
   )
 }
