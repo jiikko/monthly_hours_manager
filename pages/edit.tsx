@@ -56,7 +56,7 @@ const Page: NextPageWithLayout = () => {
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>名前</Form.Label>
-          <Form.Control type="name" defaultValue={name} onChange={(e) => setName(e.target.value)}  required />
+          <Form.Control type="name" defaultValue={name} onChange={(e) => setName(e.target.value)}  />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicEmail">

@@ -194,7 +194,8 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <>
-      <h1>{year}年{month}月</h1>
+      {jsonObject.name && <h1>{jsonObject.name}の{year}年{month}月</h1>}
+      {!jsonObject.name && <h1>{year}年{month}月</h1>}
       <Month workingWeek={jsonObject.week} year={Number(year)} month={Number(month)} days={days} onDayUpdate={onDayUpdate} />
       <Summary days={days} standardTime={jsonObject.standardTime} />
 
