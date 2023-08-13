@@ -76,6 +76,43 @@ const Month: React.FC<MonthProps>= ({ workingDays, year, month, days, onDayUpdat
   );
 };
 
+type SummaryProps = {
+  days: Array<DayData>;
+  standardTime: number;
+}
+
+const Summary: React.FC<SummaryProps> = ({ days, standardTime }) => {
+  const totalScheduled = days.reduce((sum, day) => sum + day.scheduled, 0);
+  const diffScheduled = totalScheduled - standardTime;
+  const totalScheduledClassName = (totalScheduled >= standardTime) ? 'text-white bg-success' : 'text-white bg-danger';
+  const totalActual = days.reduce((sum, day) => sum + day.actual, 0);
+  const diffActual = totalActual - standardTime;
+  const totalActualClassName = (totalActual >= standardTime) ? 'text-white bg-success' : 'text-white bg-danger';
+
+  return(
+    <Table striped bordered hover>
+      <thead>
+        <tr>
+          <th>基準時間</th>
+          <th className={totalScheduledClassName}>予定の合計</th>
+          <th className={totalScheduledClassName}>予定の差分</th>
+          <th className={totalActualClassName}>実績の合計</th>
+          <th className={totalActualClassName}>実績の差分</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{standardTime}時間</td>
+          <td className={totalScheduledClassName}>{totalScheduled}時間</td>
+          <td className={totalScheduledClassName}>{diffScheduled}時間</td>
+          <td className={totalActualClassName}>{totalActual}時間</td>
+          <td className={totalActualClassName}>{diffActual}時間</td>
+        </tr>
+      </tbody>
+    </Table>
+  )
+};
+
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -126,41 +163,13 @@ const Page: NextPageWithLayout = () => {
   }
 
   const days = jsonObject.months[monthKey]
-  const totalScheduled = days.reduce((sum, day) => sum + day.scheduled, 0);
-  const diffScheduled = totalScheduled - jsonObject.standardTime;
-  const totalScheduledClassName = (totalScheduled >= jsonObject.standardTime) ? 'text-white bg-success' : 'text-white bg-danger'; 
-  const totalActual = days.reduce((sum, day) => sum + day.actual, 0);
-  const diffActual = totalActual - jsonObject.standardTime;
-  const totalActualClassName = (totalActual >= jsonObject.standardTime) ? 'text-white bg-success' : 'text-white bg-danger'; 
-
   return (
     <>
       <h1>{year}年{month}月</h1>
       <Month workingDays={jsonObject.week} year={Number(year)} month={Number(month)} days={days} onDayUpdate={onDayUpdate} />
-
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>基準時間</th>
-            <th className={totalScheduledClassName}>予定の合計</th>
-            <th className={totalScheduledClassName}>予定の差分</th>
-            <th className={totalActualClassName}>実績の合計</th>
-            <th className={totalActualClassName}>実績の差分</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{jsonObject.standardTime}時間</td>
-            <td className={totalScheduledClassName}>{totalScheduled}時間</td>
-            <td className={totalScheduledClassName}>{diffScheduled}時間</td>
-            <td className={totalActualClassName}>{totalActual}時間</td>
-            <td className={totalActualClassName}>{diffActual}時間</td>
-          </tr>
-        </tbody>
-      </Table>
-
+      <Summary days={days} standardTime={jsonObject.standardTime} />
       <Col>
-        <Button variant="primary" onClick={recalculateDays}>日付の時間を再計算する</Button>
+        <Button variant="primary" onClick={recalculateDays}>時間を再計算する</Button>
       </Col>
     </>
   );
