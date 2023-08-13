@@ -34,16 +34,16 @@ class DaysGenerator {
     const datesInMonth = allDaysInMonth(date.year(), date.month());
     const workingDays = datesInMonth.filter((date) => { return workingWeek[date.weekDayName()]; });
     const workedDays = days.filter((day) => { return(day.actual > 0); });
-    const remain = standardTime - workedDays.reduce((sum, day) => { return sum + day.actual }, 0);
+    const remain = standardTime - workedDays.reduce((sum, day) => { return sum + Number(day.actual) }, 0);
     const avgHour = Number((remain / (workingDays.length - workedDays.length - holidays.length)).toFixed(1));
 
     return datesInMonth.map((date) => {
-      if(workingWeek[date.weekDayName()]) {
-        const dayObject = days.find((day) => { return day.day === date.day(); });
-        if(dayObject.actual && dayObject.actual > 0) {
-          return { scheduled: dayObject.scheduled, actual: dayObject.actual, day: date.day(), isHoliday: dayObject.isHoliday }
-        }
+      const dayObject = days.find((day) => { return day.day === date.day(); });
+      if(dayObject.actual > 0) {
+        return { scheduled: dayObject.scheduled, actual: dayObject.actual, day: date.day(), isHoliday: dayObject.isHoliday }
+      }
 
+      if(workingWeek[date.weekDayName()]) {
         return { scheduled: avgHour, actual: dayObject.actual, day: date.day(), isHoliday: dayObject.isHoliday }
       } else {
         return { scheduled: 0, actual: 0, day: date.day(), isHoliday: false }
