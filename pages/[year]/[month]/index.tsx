@@ -114,17 +114,18 @@ const Page: NextPageWithLayout = () => {
     return;
   }
 
-  const totalScheduled = jsonObject.months[monthKey].reduce((sum, day) => sum + day.scheduled, 0);
+  const days = jsonObject.months[monthKey]
+  const totalScheduled = days.reduce((sum, day) => sum + day.scheduled, 0);
   const diffScheduled = totalScheduled - jsonObject.standardTime;
   const totalScheduledClassName = (totalScheduled >= jsonObject.standardTime) ? 'text-white bg-success' : 'text-white bg-danger'; 
-  const totalActual = jsonObject.months[monthKey].reduce((sum, day) => sum + day.actual, 0);
+  const totalActual = days.reduce((sum, day) => sum + day.actual, 0);
   const diffActual = totalActual - jsonObject.standardTime;
   const totalActualClassName = (totalActual >= jsonObject.standardTime) ? 'text-white bg-success' : 'text-white bg-danger'; 
 
   return (
     <>
       <h1>{year}年{month}月</h1>
-      <Month workingDays={jsonObject.week} year={Number(year)} month={Number(month)} days={jsonObject.months[monthKey]} onDayUpdate={onDayUpdate} />
+      <Month workingDays={jsonObject.week} year={Number(year)} month={Number(month)} days={days} onDayUpdate={onDayUpdate} />
 
       <Table striped bordered hover>
         <thead>
