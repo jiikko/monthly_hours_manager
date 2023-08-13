@@ -32,10 +32,10 @@ const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdat
     return(
       <>
         <FloatingLabel controlId="floatingInput" label="予定" className='mb-2' >
-          <Form.Control type="name" value={day.scheduled} name={`scheduled-${dayIndex}`} onChange={(e) => onDayUpdate(e, day)} />
+          <Form.Control type="text" value={day.scheduled} name={`scheduled-${dayIndex}`} onChange={(e) => onDayUpdate(e, day)} />
         </FloatingLabel>
         <FloatingLabel controlId="floatingInput" label="実績" >
-          <Form.Control type="name" value={day.actual} name={`actual-${dayIndex}`} onChange={(e) => onDayUpdate(e, day)} />
+          <Form.Control type="text" value={day.actual} name={`actual-${dayIndex}`} onChange={(e) => onDayUpdate(e, day)} />
         </FloatingLabel>
       </>
     )
