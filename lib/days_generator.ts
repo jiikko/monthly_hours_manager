@@ -20,7 +20,7 @@ class DaysGenerator {
       return workingWeek[date.weekDayName()];
     });
 
-    const avgHour = standardTime / workingDays.length;
+    const avgHour = Number((standardTime / workingDays.length).toFixed(1));
 
     return datesInMonth.map((date) => {
       if(workingWeek[date.weekDayName()]) {

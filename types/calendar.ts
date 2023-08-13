@@ -17,8 +17,8 @@ export type WeekData = {
 
 export type DayData = {
   day: number;
-  scheduled: number;
-  actual: number;
+  scheduled: float;
+  actual: float;
 }
 
 export type MonthTable = {

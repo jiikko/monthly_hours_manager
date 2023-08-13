@@ -40,7 +40,7 @@ const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdat
         let tdClassName = (workingWeek[weekDay]) ? 'bg-info' : 'bg-secondary text-light';
         if(day.scheduled && day.actual) { tdClassName = 'bg-success text-light' }
 
-        var row = (
+        const row = (
           <td key={j} className={tdClassName}>
             {dayNo}日<br />
             <Form>
