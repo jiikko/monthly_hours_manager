@@ -105,7 +105,7 @@ const Summary: React.FC<SummaryProps> = ({ days, standardTime }) => {
   const totalScheduledClassName = (totalScheduled >= standardTime) ? 'text-white bg-success' : 'text-white bg-danger';
   const totalActual = daysWithoutHoliday.reduce((sum, day) => sum + day.actual, 0);
   const diffActual = totalActual - standardTime;
-  const totalActualClassName = (totalActual >= standardTime) ? 'text-white bg-success' : 'text-white bg-danger';
+  const totalActualClassName = (totalActual >= standardTime) ? 'text-white bg-success' : '';
 
   return(
     <Table striped bordered hover>
