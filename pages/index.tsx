@@ -47,9 +47,9 @@ export default function Page() {
             <tbody>
               <tr>
                 <td>{jsonObject.name}</td>
-                <td>{jsonObject.standardTime}時間</td>
-                <td>{display && Object.keys(jsonObject.week).filter(key => jsonObject.week[key]).join(', ')}</td>
-                <td>{display && Object.keys(jsonObject.months)}</td>
+                <td>{jsonObject.standardTime && `${jsonObject.standardTime}時間`}</td>
+                <td>{display && jsonObject.week && Object.keys(jsonObject.week).filter(key => jsonObject.week[key]).join(', ')}</td>
+                <td>{display && jsonObject.months && Object.keys(jsonObject.months)}</td>
               </tr>
             </tbody>
             </Table>

@@ -34,9 +34,9 @@ export default function Layout({ children }: LayoutProps) {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
-            <Nav.Link href={editPath}>カレンダーを編集する</Nav.Link>
-            <Nav.Link href={thisMonthPath}>今月を表示する</Nav.Link>
-            <Nav.Link href={nextMonthPath}>来月を表示する</Nav.Link>
+            <Nav.Link href={editPath}>設定を編集する</Nav.Link>
+            <Nav.Link href={thisMonthPath}>今月({date.month()}月)を表示する</Nav.Link>
+            <Nav.Link href={nextMonthPath}>来月({date.nextMonth()}月)を表示する</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
