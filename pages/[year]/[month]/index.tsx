@@ -59,7 +59,7 @@ const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdat
           <td key={j} className={tdClassName}>
             {dayNo}日<br />
             <Form>
-              {!day.isHoliday && renderTextFields(day, dayIndex, 'scheduled')}
+              {!day.isHoliday && renderTextFields(day, dayIndex)}
               <Form.Check type="switch" checked={!!day.isHoliday} name={`isHoliday-${dayIndex}`}  label="稼働対象外" className='m-1' onChange={(e) => onDayUpdate(e, day)} />
             </Form>
           </td>
