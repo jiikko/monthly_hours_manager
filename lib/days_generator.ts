@@ -17,7 +17,7 @@ class DaysGenerator {
     const date = CalendarDate(year, month, 1)
     const datesInMonth = allDaysInMonth(date.year(), date.month());
     const workingDays = datesInMonth.filter((date) => {
-      return workingWeek[date.weekDayName()]
+      return workingWeek[date.weekDayName()];
     });
 
     const avgHour = standardTime / workingDays.length;

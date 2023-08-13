@@ -14,7 +14,7 @@ type MonthProps = {
   year: number;
   month: number;
   days: Array<DayData>;
-  onDayUpdate: (e: any, dayObject: DayData) => void;
+  onDayUpdate: (e: any, day: DayData) => void;
 }
 
 const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdate }) => {
@@ -35,20 +35,20 @@ const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdat
       } else {
         const dayNo = dayCount++; // 1から始まる
         const dayIndex = dayNo - 1;
-        const dayOfWeek = CalendarDate(year, month, dayNo).weekDay();
-        const weekDay = weekDays[dayOfWeek]
-        const tdClassName = (workingWeek[weekDay]) ? 'bg-info' : 'bg-secondary text-light';
-        const dayObject = days[dayIndex]
+        const weekDay = weekDays[CalendarDate(year, month, dayNo).weekDay()];
+        const day = days[dayIndex];
+        let tdClassName = (workingWeek[weekDay]) ? 'bg-info' : 'bg-secondary text-light';
+        if(day.scheduled && day.actual) { tdClassName = 'bg-success text-light' }
 
         var row = (
           <td key={j} className={tdClassName}>
             {dayNo}日<br />
             <Form>
               <FloatingLabel controlId="floatingInput" label="予定" className='mb-2' >
-                <Form.Control type="name" defaultValue={dayObject.scheduled} name={`scheduled-${dayIndex}`} onChange={(e) => onDayUpdate(e, dayObject)} />
+                <Form.Control type="name" defaultValue={day.scheduled} name={`scheduled-${dayIndex}`} onChange={(e) => onDayUpdate(e, day)} />
               </FloatingLabel>
               <FloatingLabel controlId="floatingInput" label="実績" >
-                <Form.Control type="name" defaultValue={dayObject.actual} name={`actual-${dayIndex}`} onChange={(e) => onDayUpdate(e, dayObject)} />
+                <Form.Control type="name" defaultValue={day.actual} name={`actual-${dayIndex}`} onChange={(e) => onDayUpdate(e, day)} />
               </FloatingLabel>
             </Form>
           </td>
@@ -140,7 +140,7 @@ const Page: NextPageWithLayout = () => {
     return monthPath;
   }
 
-  const onDayUpdate = (e: React.ChangeEvent<HTMLInputElement>, dayObject: DayData): void => {
+  const onDayUpdate = (e: React.ChangeEvent<HTMLInputElement>, day: DayData): void => {
     const attributeName = e.target.name.split('-')[0];
     const dayIndex = e.target.name.split('-')[1];
     days[dayIndex][attributeName] = Number(e.target.value);
