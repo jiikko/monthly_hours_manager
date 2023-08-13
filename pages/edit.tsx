@@ -46,7 +46,7 @@ const Page: NextPageWithLayout = () => {
     const editPath = PathGenerator().editPath(jsonQuery)
 
     router.push(editPath);
-    toastProps.showToastFunction('カレンダー情報の変更に成功しました。')
+    toastProps.notify('カレンダー情報の変更に成功しました。')
   };
 
   useEffect(() => {

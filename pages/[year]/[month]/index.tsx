@@ -173,19 +173,19 @@ const Page: NextPageWithLayout = () => {
       days[dayIndex][attributeName] = Number(e.target.value)
     }
     saveQueryParam(jsonObject);
-    toastProps.showToastFunction('時間を更新しました')
+    toastProps.notify('時間を更新しました')
   }
 
   const initializeDays = (): void => {
     jsonObject.months[monthKey] = DaysGenerator.execute(Number(year), Number(month), jsonObject.standardTime, jsonObject.week);
     saveQueryParam(jsonObject);
-    toastProps.showToastFunction('初期化しました')
+    toastProps.notify('初期化しました')
   }
 
   const recalculateDays = (days: Array<DayData>): void => {
     jsonObject.months[monthKey] = DaysGenerator.executeWithDays(Number(year), Number(month), jsonObject.standardTime, jsonObject.week, days);
     saveQueryParam(jsonObject);
-    toastProps.showToastFunction('再計算しました')
+    toastProps.notify('再計算しました')
   }
 
   if(jsonObject.months == undefined) { jsonObject.months = {} as MonthTable; }
