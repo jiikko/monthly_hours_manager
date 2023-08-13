@@ -99,6 +99,7 @@ const Page: NextPageWithLayout = () => {
     const jsonQuery = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
     const monthPath = PathGenerator().monthPath(date.year(), date.month(), jsonQuery)
     router.push(monthPath);
+    return monthPath;
   }
 
   const onDayUpdate = (e: React.ChangeEvent<HTMLInputElement>, dayObject: DayData) => {
@@ -111,9 +112,15 @@ const Page: NextPageWithLayout = () => {
     console.log('the day has been updated') // トーストで表示したい
   }
 
+  const recalculateDays = () => {
+    jsonObject.months[monthKey] = DaysGenerator.execute(Number(year), Number(month), jsonObject.standardTime, jsonObject.week);
+    const path = saveQueryParam(jsonObject);
+    document.location = path;
+  }
+
   if(jsonObject.months == undefined) { jsonObject.months = {} as MonthTable; }
   if(jsonObject.months[monthKey] == undefined) {
-    jsonObject.months[monthKey] = DaysGenerator.execute(date.year(), date.month(), jsonObject.standardTime, jsonObject.week);
+    jsonObject.months[monthKey] = DaysGenerator.execute(Number(year), Number(month), jsonObject.standardTime, jsonObject.week);
     saveQueryParam(jsonObject);
     return;
   }
@@ -151,6 +158,10 @@ const Page: NextPageWithLayout = () => {
           </tr>
         </tbody>
       </Table>
+
+      <Col>
+        <Button variant="primary" onClick={recalculateDays}>日付の時間を再計算する</Button>
+      </Col>
     </>
   );
 }
