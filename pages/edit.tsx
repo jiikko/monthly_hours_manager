@@ -1,10 +1,18 @@
 import type { NextPageWithLayout } from './_app'
 import Layout from '../components/layout'
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, ToastContainer } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import JsonParameter from '../lib/json_parameter';
 import { PathGenerator } from '../lib/path_generator';
+import { useToast } from '../hooks/useToast';
+import { ToastComponent } from '../components/toast';
+
+type ToastProps = {
+  message: string;
+  showToast: boolean;
+  hideToast: () => void;
+}
 
 const Page: NextPageWithLayout = () => {
   const defaultStandardTime = 84;
@@ -21,6 +29,7 @@ const Page: NextPageWithLayout = () => {
   const [name, setName] = useState('');
   const [standardTime, setStandardTime] = useState(defaultStandardTime);
   const [workingWeek, setWorkingWeek] = useState(defaultWeek);
+  const { showToastFunction, toastMessage, showToast, hideToast } = useToast();
 
   const handleWorkingDaysChange = (e) => {
     setWorkingWeek({
@@ -37,7 +46,7 @@ const Page: NextPageWithLayout = () => {
     const editPath = PathGenerator().editPath(jsonQuery)
 
     router.push(editPath);
-    console.log('this calendar has been saved!'); // トーストで表示したい
+    showToastFunction('カレンダー情報の変更に成功しました。')
   };
 
   useEffect(() => {
@@ -75,6 +84,8 @@ const Page: NextPageWithLayout = () => {
 
         <Button variant="primary" type="submit">保存する</Button>
       </Form>
+
+      <ToastComponent message={toastMessage} showToast={showToast} hideToast={hideToast} />
     </>
   )
 }
