@@ -149,7 +149,7 @@ const Page: NextPageWithLayout = () => {
   const saveQueryParam = (jsonObject: ParameterType): string => {
     const jsonQuery = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
     const monthPath = PathGenerator().monthPath(date.year(), date.month(), jsonQuery)
-    router.push(monthPath);
+    router.push(monthPath, undefined, { scroll: false });
     return monthPath;
   }
 
@@ -165,6 +165,7 @@ const Page: NextPageWithLayout = () => {
   }
 
   const onDayUpdate = (e: React.ChangeEvent<HTMLInputElement>, day: DayData): void => {
+    e.preventDefault();
     const attributeName = e.target.name.split('-')[0];
     const dayIndex = e.target.name.split('-')[1];
     if(e.target.type === 'checkbox') {
@@ -176,13 +177,15 @@ const Page: NextPageWithLayout = () => {
     toastProps.notify('時間を更新しました')
   }
 
-  const initializeDays = (): void => {
+  const initializeDays = (e): void => {
+    e.preventDefault();
     jsonObject.months[monthKey] = DaysGenerator.execute(Number(year), Number(month), jsonObject.standardTime, jsonObject.week);
     saveQueryParam(jsonObject);
     toastProps.notify('初期化しました')
   }
 
-  const recalculateDays = (days: Array<DayData>): void => {
+  const recalculateDays = (e, days: Array<DayData>): void => {
+    e.preventDefault();
     jsonObject.months[monthKey] = DaysGenerator.executeWithDays(Number(year), Number(month), jsonObject.standardTime, jsonObject.week, days);
     saveQueryParam(jsonObject);
     toastProps.notify('再計算しました')
@@ -219,10 +222,10 @@ const Page: NextPageWithLayout = () => {
       {display && <Summary days={days} standardTime={jsonObject.standardTime} />}
 
       <Col>
-        <Button variant="secondary" onClick={initializeDays}>時間を初期状態にする</Button>
+        <Button type='button' variant="secondary" onClick={initializeDays}>時間を初期状態にする</Button>
       </Col>
       <Col>
-        <Button variant="primary" onClick={(() => recalculateDays(days)) }>未稼働日の予定を再計算する</Button>
+        <Button type='button' variant="primary" onClick={((e) => recalculateDays(e, days)) }>未稼働日の予定を再計算する</Button>
       </Col>
 
       <ToastComponent {...toastProps} />
