@@ -15,23 +15,8 @@ export default function Page() {
     if(router.isReady) { setDisplay(true); }
   }, [router.isReady]);
 
-  return (
-    <Layout>
-      <Row>
-        精算幅の時間管理を行うアプリケーションです。<br /><br />
-      </Row>
-
-      <Row>
-        <Col>
-          <h2>使い方</h2>
-          <ol>
-            <li>カレンダーの設定を入力する</li>
-            <li>月を表示する</li>
-            <li>時間を入力する</li>
-          </ol>
-        </Col>
-      </Row>
-
+  const renderSetting = () => {
+    return(
       <Row>
         <Col>
           <h2>設定情報</h2>
@@ -52,9 +37,30 @@ export default function Page() {
                 <td>{display && jsonObject.months && Object.keys(jsonObject.months)}</td>
               </tr>
             </tbody>
-            </Table>
-          </Col>
-        </Row>
-      </Layout>
+          </Table>
+        </Col>
+      </Row>
     )
+  }
+
+  return (
+    <Layout>
+      <Row>
+        精算幅の時間管理を行うアプリケーションです。<br /><br />
+      </Row>
+
+      <Row>
+        <Col>
+          <h2>使い方</h2>
+          <ol>
+            <li>カレンダーの設定を入力する</li>
+            <li>月を表示する</li>
+            <li>時間を入力する</li>
+          </ol>
+        </Col>
+      </Row>
+
+      {jsonObject.week && renderSetting()}
+    </Layout>
+  )
 }
