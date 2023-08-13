@@ -29,12 +29,13 @@ class DaysGenerator {
   }
 
   static executeWithDays(year: number, month: number, standardTime: number, workingWeek: WeekData, days: Array<DayData>): Array<DayData> {
+    const holidays = days.filter((day) => { return day.isHoliday; });
     const date = CalendarDate(year, month, 1)
     const datesInMonth = allDaysInMonth(date.year(), date.month());
     const workingDays = datesInMonth.filter((date) => { return workingWeek[date.weekDayName()]; });
     const workedDays = days.filter((day) => { return(day.actual > 0); });
     const remain = standardTime - workedDays.reduce((sum, day) => { return sum + day.actual }, 0);
-    const avgHour = Number((remain / (workingDays.length - workedDays.length)).toFixed(1));
+    const avgHour = Number((remain / (workingDays.length - workedDays.length - holidays.length)).toFixed(1));
 
     return datesInMonth.map((date) => {
       if(workingWeek[date.weekDayName()]) {

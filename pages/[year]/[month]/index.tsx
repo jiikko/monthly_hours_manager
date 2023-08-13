@@ -141,17 +141,22 @@ const Page: NextPageWithLayout = () => {
   const date = CalendarDate(year, month, 1);
   const monthKey = date.monthlyKey();
 
+  const saveQueryParam = (jsonObject: ParameterType): string => {
+    const jsonQuery = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
+    const monthPath = PathGenerator().monthPath(date.year(), date.month(), jsonQuery)
+    router.push(monthPath);
+    return monthPath;
+  }
+
   if(jsonObject.week == undefined) {
     return(
       display && <div className="alert alert-danger" role="alert">カレンダーの設定情報がありません。設定してください。</div>
     )
   }
 
-  const saveQueryParam = (jsonObject: ParameterType): string => {
-    const jsonQuery = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
-    const monthPath = PathGenerator().monthPath(date.year(), date.month(), jsonQuery)
-    router.push(monthPath);
-    return monthPath;
+  if(typeof jsonObject.months === 'string') {
+    jsonObject.months = undefined;
+    saveQueryParam(jsonObject);
   }
 
   const onDayUpdate = (e: React.ChangeEvent<HTMLInputElement>, day: DayData): void => {
