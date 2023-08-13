@@ -84,7 +84,7 @@ type SummaryProps = {
 }
 
 const Summary: React.FC<SummaryProps> = ({ days, standardTime }) => {
-  const totalScheduled = Number(days.reduce((sum, day) => sum + day.scheduled, 0)).toFixed(1);
+  const totalScheduled = Number(days.reduce((sum, day) => sum + day.scheduled, 0).toFixed(1));
   const diffScheduled = Number((totalScheduled - standardTime).toFixed(1));
   const totalScheduledClassName = (totalScheduled >= standardTime) ? 'text-white bg-success' : 'text-white bg-danger';
   const totalActual = days.reduce((sum, day) => sum + day.actual, 0);
