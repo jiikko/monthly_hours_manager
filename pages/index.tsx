@@ -19,14 +19,14 @@ export default function Page() {
     return(
       <Row>
         <Col>
-          <h2>設定情報</h2>
+          <h2 className='mb-3'>現在の設定情報</h2>
           <Table striped bordered hover>
             <thead>
               <tr>
                 <th>名前</th>
                 <th>基準時間</th>
                 <th>稼働曜日</th>
-                <th>管理中の月</th>
+                <th>管理対象の月</th>
               </tr>
             </thead>
             <tbody>
@@ -51,6 +51,13 @@ export default function Page() {
 
       <Row>
         <Col>
+          <h2>仕組み・注意点</h2>
+          <ol>
+            <li>クエリパラメータのみで情報を保持しています</li>
+            <li>外部サーバは使っていません</li>
+            <li>認証の機構がないのでURLの取り扱いには注意してください</li>
+          </ol>
+
           <h2>使い方</h2>
           <ol>
             <li>カレンダーの設定を入力する</li>
