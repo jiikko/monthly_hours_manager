@@ -184,10 +184,24 @@ const Page: NextPageWithLayout = () => {
   }
 
   if(jsonObject.months == undefined) { jsonObject.months = {} as MonthTable; }
-  if(jsonObject.months[monthKey] == undefined) {
+
+  if(jsonObject.months[monthKey] == undefined && Object.entries(jsonObject.months).length == 0) {
     jsonObject.months[monthKey] = DaysGenerator.execute(Number(year), Number(month), jsonObject.standardTime, jsonObject.week);
     saveQueryParam(jsonObject);
     return;
+  } else if(jsonObject.months[monthKey] == undefined && Object.entries(jsonObject.months).length > 0) {
+    // NOTE: 二つ月分のクエリパラメータを保持するとnextjsが500を返してしまう。文字数がデカすぎる可能性があるので、一つの月分のみ保持するようにする。
+    const result = confirm('他の月データが存在します。他の月のデータを削除しますが、操作を続けますか？')
+    if(result) {
+      jsonObject.months = {} as MonthTable;
+      jsonObject.months[monthKey] = DaysGenerator.execute(Number(year), Number(month), jsonObject.standardTime, jsonObject.week);
+      saveQueryParam(jsonObject);
+      return
+    } else {
+      const jsonQuery = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
+      document.location = PathGenerator().rootPath(jsonQuery);
+      return;
+    }
   }
 
   const days = jsonObject.months[monthKey]
