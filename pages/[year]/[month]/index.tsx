@@ -45,10 +45,10 @@ const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdat
             {dayNo}日<br />
             <Form>
               <FloatingLabel controlId="floatingInput" label="予定" className='mb-2' >
-                <Form.Control type="name" defaultValue={day.scheduled} name={`scheduled-${dayIndex}`} onChange={(e) => onDayUpdate(e, day)} />
+                <Form.Control type="name" value={day.scheduled} name={`scheduled-${dayIndex}`} onChange={(e) => onDayUpdate(e, day)} />
               </FloatingLabel>
               <FloatingLabel controlId="floatingInput" label="実績" >
-                <Form.Control type="name" defaultValue={day.actual} name={`actual-${dayIndex}`} onChange={(e) => onDayUpdate(e, day)} />
+                <Form.Control type="name" value={day.actual} name={`actual-${dayIndex}`} onChange={(e) => onDayUpdate(e, day)} />
               </FloatingLabel>
             </Form>
           </td>
@@ -121,7 +121,9 @@ const Page: NextPageWithLayout = () => {
   const { year, month } = router.query;
   const [display, setDisplay] = useState(false);
 
-  useEffect(() => { if(router.isReady) { setDisplay(true); } }, [router.isReady]);
+  useEffect(() => {
+    if(router.isReady) { setDisplay(true); }
+  }, [router.isReady]);
 
   const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
   const date = CalendarDate(year, month, 1);
@@ -148,10 +150,14 @@ const Page: NextPageWithLayout = () => {
     console.log('the day has been updated') // トーストで表示したい
   }
 
-  const recalculateDays = (): void => {
+  const initializeDays = (): void => {
     jsonObject.months[monthKey] = DaysGenerator.execute(Number(year), Number(month), jsonObject.standardTime, jsonObject.week);
-    const path = saveQueryParam(jsonObject);
-    document.location = path;
+    saveQueryParam(jsonObject);
+    console.log('days has been initialized') // トーストで表示したい
+  }
+
+  const recalculateDays = (days: Array<DayData>): void => {
+    console.log('recalculateDays')
   }
 
   if(jsonObject.months == undefined) { jsonObject.months = {} as MonthTable; }
@@ -168,8 +174,12 @@ const Page: NextPageWithLayout = () => {
       <h1>{year}年{month}月</h1>
       <Month workingWeek={jsonObject.week} year={Number(year)} month={Number(month)} days={days} onDayUpdate={onDayUpdate} />
       <Summary days={days} standardTime={jsonObject.standardTime} />
+
       <Col>
-        <Button variant="primary" onClick={recalculateDays}>時間を再計算する</Button>
+        <Button variant="secondary" onClick={initializeDays}>時間を初期状態にする</Button>
+      </Col>
+      <Col>
+        <Button variant="primary" onClick={(() => recalculateDays(days)) }>時間を再計算する</Button>
       </Col>
     </>
   );

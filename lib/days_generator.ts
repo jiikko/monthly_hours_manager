@@ -16,10 +16,7 @@ class DaysGenerator {
   static execute(year: number, month: number, standardTime: number, workingWeek: WeekData): Array<DayData> {
     const date = CalendarDate(year, month, 1)
     const datesInMonth = allDaysInMonth(date.year(), date.month());
-    const workingDays = datesInMonth.filter((date) => {
-      return workingWeek[date.weekDayName()];
-    });
-
+    const workingDays = datesInMonth.filter((date) => { return workingWeek[date.weekDayName()]; });
     const avgHour = Number((standardTime / workingDays.length).toFixed(1));
 
     return datesInMonth.map((date) => {
