@@ -4,7 +4,7 @@ import Layout from '../../../components/layout';
 import type { NextPageWithLayout } from './../../_app'
 import { CalendarDate } from '../../../lib/calendar_date';
 import { Table, Row, Form, Button, Col, FloatingLabel } from 'react-bootstrap';
-import { WeekData, DayData, MonthTable } from '../../../types/calendar';
+import { WeekData, DayData, MonthTable, ParameterType } from '../../../types/calendar';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { PathGenerator } from '../../../lib/path_generator';
@@ -91,7 +91,7 @@ const Page: NextPageWithLayout = () => {
   const date = CalendarDate(year, month, 1);
   const monthKey = date.monthlyKey();
 
-  const saveQueryParam = (jsonObject: any) => {
+  const saveQueryParam = (jsonObject: ParameterType) => {
     const jsonQuery = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
     const monthPath = PathGenerator().monthPath(date.year(), date.month(), jsonQuery)
     router.push(monthPath);
