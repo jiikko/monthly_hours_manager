@@ -122,15 +122,15 @@ const Page: NextPageWithLayout = () => {
   useEffect(() => { if(router.isReady) { setDisplay(true); } }, [router.isReady]);
 
   const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
+  const date = CalendarDate(year, month, 1);
+  const monthKey = date.monthlyKey();
+  const days = jsonObject.months[monthKey]
 
   if(jsonObject.week == undefined) {
     return(
       display && <div className="alert alert-danger" role="alert">カレンダーの設定情報がありません。設定してください。</div>
     )
   }
-
-  const date = CalendarDate(year, month, 1);
-  const monthKey = date.monthlyKey();
 
   const saveQueryParam = (jsonObject: ParameterType) => {
     const jsonQuery = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
@@ -140,8 +140,6 @@ const Page: NextPageWithLayout = () => {
   }
 
   const onDayUpdate = (e: React.ChangeEvent<HTMLInputElement>, dayObject: DayData) => {
-    const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
-    const days = jsonObject.months[monthKey];
     const attributeName = e.target.name.split('-')[0];
     const dayIndex = e.target.name.split('-')[1];
     days[dayIndex][attributeName] = Number(e.target.value);
@@ -162,7 +160,6 @@ const Page: NextPageWithLayout = () => {
     return;
   }
 
-  const days = jsonObject.months[monthKey]
   return (
     <>
       <h1>{year}年{month}月</h1>
