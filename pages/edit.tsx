@@ -27,7 +27,7 @@ const Page: NextPageWithLayout = () => {
     }
   const router = useRouter();
   const [name, setName] = useState('');
-  const [standardTime, setStandardTime] = useState(defaultStandardTime);
+  const [standardTime, setStandardTime] = useState(0);
   const [workingWeek, setWorkingWeek] = useState(defaultWeek);
   const toastProps = useToast();
 
