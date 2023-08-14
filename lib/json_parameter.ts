@@ -4,7 +4,7 @@ class JsonParameterTypeImpl implements ParameterType {
   constructor(public name: string, public standardTime: number, public week: WeekData, public months: MonthTable) {
     // Objectで入っているはずだけど、クエリパラメータを直接編集してしまったことによってjsonのデシリアライズに失敗したら破損扱いとする
     if(typeof this.week === 'string') { this.week = undefined; }
-    if(typeof this.months === 'string') { this.months = undefined; }
+    if(typeof this.months === 'string' || this.months === undefined) { this.months = {} as MonthTable; }
   }
 
   hasNoSetting(): boolean {

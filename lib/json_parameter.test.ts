@@ -43,6 +43,7 @@ describe('JsonParameter', () => {
         name: 'hoge',
         standardTime: 25,
         week: { mon: true, tue: true, wed: true, thu: true, fri: true, sat: false, sun: false },
+        months: {},
       });
     });
   });

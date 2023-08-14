@@ -146,13 +146,11 @@ const Page: NextPageWithLayout = () => {
     toastProps.notify('再計算しました')
   }
 
-  if(jsonObject.months == undefined) { jsonObject.months = {} as MonthTable; }
-
-  if(display && jsonObject.months[monthKey] == undefined && Object.entries(jsonObject.months).length == 0) {
+  if(display && jsonObject.months[monthKey] === undefined && Object.entries(jsonObject.months).length == 0) {
     jsonObject.months[monthKey] = DaysGenerator.execute(Number(year), Number(month), jsonObject.standardTime, jsonObject.week);
     saveQueryParam(jsonObject);
     return;
-  } else if(display && jsonObject.months[monthKey] == undefined && Object.entries(jsonObject.months).length > 0) {
+  } else if(display && jsonObject.months[monthKey] === undefined && Object.entries(jsonObject.months).length > 0) {
     // NOTE: 二つ月分のクエリパラメータを保持するとnextjsが500を返してしまう。文字数がデカすぎる可能性があるので、一つの月分のみ保持するようにする。
     const result = confirm('他の月データが存在します。他の月のデータを削除しますが、操作を続けますか？')
     if(result) {
