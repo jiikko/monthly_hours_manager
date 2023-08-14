@@ -12,8 +12,20 @@ function allDaysInMonth(year: number, month: number): Array<CalendarDateType> {
   return days;
 }
 
-class DaysGenerator {
-  static execute(year: number, month: number, standardTime: number, workingWeek: WeekData): Array<DayData> {
+export class DayObject implements DayData {
+  constructor(public scheduled: number, public actual: number, public day: number, public isHoliday: boolean) { }
+
+  isWorked(): boolean {
+    return this.actual > 0;
+  }
+
+  isWorkingDay(): boolean {
+    return !this.isHoliday;
+  }
+}
+
+export class DaysGenerator {
+  static execute(year: number, month: number, standardTime: number, workingWeek: WeekData): Array<DayObject> {
     const date = CalendarDate(year, month, 1)
     const datesInMonth = allDaysInMonth(date.year(), date.month());
     const workingDays = datesInMonth.filter((date) => { return workingWeek[date.weekDayName()]; });
@@ -21,35 +33,34 @@ class DaysGenerator {
 
     return datesInMonth.map((date) => {
       if(workingWeek[date.weekDayName()]) {
-        return { scheduled: avgHour, actual: 0, day: date.day(), isHoliday: false }
+        return new DayObject(avgHour, 0, date.day(), false)
       } else {
-        return { scheduled: 0, actual: 0, day: date.day(), isHoliday: false }
+        return new DayObject(0, 0, date.day(), false)
       }
     });
   }
 
-  static executeWithDays(year: number, month: number, standardTime: number, workingWeek: WeekData, days: Array<DayData>): Array<DayData> {
-    const holidays = days.filter((day) => { return day.isHoliday; });
+  static executeWithDays(year: number, month: number, standardTime: number, workingWeek: WeekData, dayObjects: Array<DayObject>): Array<DayObject> {
+    const holidays = dayObjects.filter((day) => { return day.isHoliday; });
     const date = CalendarDate(year, month, 1)
     const datesInMonth = allDaysInMonth(date.year(), date.month());
     const workingDays = datesInMonth.filter((date) => { return workingWeek[date.weekDayName()]; });
-    const workedDays = days.filter((day) => { return(Number(day.actual) > 0); });
+    const workedDays = dayObjects.filter((day) => { return day.isWorked(); });
     const remain = standardTime - workedDays.reduce((sum, day) => { return sum + Number(day.actual) }, 0);
     const avgHour = Number((remain / (workingDays.length - workedDays.length - holidays.length)).toFixed(1));
 
     return datesInMonth.map((date) => {
-      const dayObject = days.find((day) => { return day.day === date.day(); });
-      if(Number(dayObject.actual) > 0) {
-        return { scheduled: Number(dayObject.scheduled), actual: Number(dayObject.actual), day: date.day(), isHoliday: dayObject.isHoliday }
-      }
+      // NOTE: すでに登録されている日付を引っ張ってくる
+      const dayObject = dayObjects.find((day) => { return day.day === date.day(); });
 
-      if(workingWeek[date.weekDayName()]) {
-        return { scheduled: avgHour, actual: dayObject.actual, day: date.day(), isHoliday: dayObject.isHoliday }
-      } else {
-        return { scheduled: 0, actual: 0, day: date.day(), isHoliday: false }
-      }
+      // NOTE: 稼働済みの日は再計算の対象外
+      if(dayObject.isWorked()) { return dayObject; }
+
+      // NOTE: 稼働予定日は予定を埋める
+      if(workingWeek[date.weekDayName()]) { return new DayObject(avgHour, dayObject.actual, date.day(), dayObject.isHoliday) } 
+
+      // NOTE: 稼働予定ではないので0を埋める
+      return new DayObject(0, 0, date.day(), false)
     });
   }
 }
-
-export default DaysGenerator;

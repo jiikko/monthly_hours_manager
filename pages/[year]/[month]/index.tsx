@@ -1,10 +1,10 @@
-import DaysGenerator from '../../../lib/days_generator';
+import { DaysGenerator, DayObject } from '../../../lib/days_generator';
 import JsonParameter from '../../../lib/json_parameter';
 import Layout from '../../../components/layout';
 import type { NextPageWithLayout } from './../../_app'
 import { CalendarDate } from '../../../lib/calendar_date';
 import { Table, Row, Form, Button, Col, FloatingLabel } from 'react-bootstrap';
-import { WeekData, DayData, MonthTable, ParameterType } from '../../../types/calendar';
+import { WeekData, MonthTable, ParameterType } from '../../../types/calendar';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { PathGenerator } from '../../../lib/path_generator';
@@ -15,8 +15,8 @@ type MonthProps = {
   workingWeek: WeekData;
   year: number;
   month: number;
-  days: Array<DayData>;
-  onDayUpdate: (e: any, day: DayData) => void;
+  days: Array<DayObject>;
+  onDayUpdate: (e: any, day: DayObject) => void;
 }
 
 const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdate }) => {
@@ -28,7 +28,7 @@ const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdat
 
   let dayCount = 1;
 
-  const renderTextFields = (day: DayData, dayIndex: number) => {
+  const renderTextFields = (day: DayObject, dayIndex: number) => {
     return(
       <>
         <FloatingLabel controlId="floatingInput" label="予定" className='mb-2' >
@@ -94,12 +94,12 @@ const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdat
 };
 
 type SummaryProps = {
-  days: Array<DayData>;
+  days: Array<DayObject>;
   standardTime: number;
 }
 
 const Summary: React.FC<SummaryProps> = ({ days, standardTime }) => {
-  const daysWithoutHoliday =  days.filter(day => !day.isHoliday);
+  const daysWithoutHoliday =  days.filter(day => day.isWorkingDay());
   const totalScheduled = Number(daysWithoutHoliday.reduce((sum, day) => sum + Number(day.scheduled), 0).toFixed(1));
   const diffScheduled = Number((totalScheduled - standardTime).toFixed(1));
   const totalScheduledClassName = (totalScheduled >= standardTime) ? 'text-white bg-success' : 'text-white bg-danger';
@@ -164,7 +164,7 @@ const Page: NextPageWithLayout = () => {
     saveQueryParam(jsonObject);
   }
 
-  const onDayUpdate = (e: React.ChangeEvent<HTMLInputElement>, day: DayData): void => {
+  const onDayUpdate = (e: React.ChangeEvent<HTMLInputElement>, day: DayObject): void => {
     e.preventDefault();
     const attributeName = e.target.name.split('-')[0];
     const dayIndex = e.target.name.split('-')[1];
@@ -173,6 +173,7 @@ const Page: NextPageWithLayout = () => {
     } else {
       days[dayIndex][attributeName] = e.target.value
     }
+    jsonObject.months[monthKey] = days
     saveQueryParam(jsonObject);
     toastProps.notify('時間を更新しました')
   }
@@ -184,7 +185,7 @@ const Page: NextPageWithLayout = () => {
     toastProps.notify('初期化しました')
   }
 
-  const recalculateDays = (e, days: Array<DayData>): void => {
+  const recalculateDays = (e, days: Array<DayObject>): void => {
     e.preventDefault();
     jsonObject.months[monthKey] = DaysGenerator.executeWithDays(Number(year), Number(month), jsonObject.standardTime, jsonObject.week, days);
     saveQueryParam(jsonObject);
@@ -212,7 +213,10 @@ const Page: NextPageWithLayout = () => {
     }
   }
 
-  const days = jsonObject.months[monthKey]
+  // NOTE: jsonObjectを作ったばかりだとjsonObject.months[monthKey]がObjectなので
+  const days = jsonObject.months[monthKey].map((day: DayObject, index: number) => {
+    return(new DayObject(day.scheduled, day.actual, day.day, day.isHoliday))
+  })
 
   return (
     <>

@@ -1,4 +1,4 @@
-import DaysGenerator from './days_generator';
+import { DaysGenerator, DayObject } from './days_generator';
 
 describe('DaysGenerator', () => {
   describe('execute', () => {
@@ -47,7 +47,8 @@ describe('DaysGenerator', () => {
           { "scheduled": 0, "actual": 0,   "day": 30, isHoliday: false },
           { "scheduled": 0, "actual": 0,   "day": 31, isHoliday: false }
         ]
-        const actual = DaysGenerator.executeWithDays(2023, 8, 84, { mon: true, tue: true, wed: true, thu: false, fri: false, sat: false, sun: false }, days);
+        const d = days.map((dd) => { return new DayObject(dd.scheduled, dd.actual, dd.day, dd.isHoliday) });
+        const actual = DaysGenerator.executeWithDays(2023, 8, 84, { mon: true, tue: true, wed: true, thu: false, fri: false, sat: false, sun: false }, d);
         expect(actual[0]).toEqual({ day: 1, scheduled: 5.3, actual: 0.0, isHoliday: false });
         expect(actual[30]).toEqual({ day: 31, scheduled: 0.0, actual: 0.0, isHoliday: false });
       })
