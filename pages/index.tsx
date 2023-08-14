@@ -59,6 +59,6 @@ export default function Page() {
           </Col>
         </Row>
       )}
-  </Layout>
-)
+    </Layout>
+  )
 }
