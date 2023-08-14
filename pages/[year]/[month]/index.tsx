@@ -132,11 +132,11 @@ const Page: NextPageWithLayout = () => {
     toastProps.notify('時間を更新しました')
   }
 
-  const initializeDays = (): void => {
+  const initializeDays = (notify?: boolean): void => {
     jsonObject.clearMonths();
     jsonObject.months[monthKey] = DaysGenerator.execute(Number(year), Number(month), jsonObject.standardTime, jsonObject.week);
     saveQueryParam(jsonObject);
-    toastProps.notify('初期化しました')
+    if(notify) { toastProps.notify('初期化しました') }
   }
 
   const recalculateDays = (e, days: Array<DayObject>): void => {
@@ -153,9 +153,7 @@ const Page: NextPageWithLayout = () => {
     // NOTE: 二つ月分のクエリパラメータを保持するとnextjsが500を返してしまう。文字数がデカすぎる可能性があるので、一つの月分のみ保持するようにする。
     const result = confirm('他の月データが存在します。他の月のデータを削除しますが、操作を続けますか？')
     if(result) {
-      jsonObject.clearMonths();
-      jsonObject.months[monthKey] = DaysGenerator.execute(Number(year), Number(month), jsonObject.standardTime, jsonObject.week);
-      saveQueryParam(jsonObject);
+      initializeDays();
       return
     } else {
       const jsonQuery = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
@@ -179,7 +177,7 @@ const Page: NextPageWithLayout = () => {
       {display && <MonthSummary days={days} standardTime={jsonObject.standardTime} />}
 
       <Col>
-        <Button type='button' variant="secondary" onClick={initializeDays}>時間を初期状態にする</Button>
+        <Button type='button' variant="secondary" onClick={((e) => initializeDays(true))}>時間を初期状態にする</Button>
       </Col>
       <Col>
         <Button type='button' variant="primary" onClick={((e) => recalculateDays(e, days)) }>未稼働日の予定を再計算する</Button>
