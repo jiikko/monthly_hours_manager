@@ -49,7 +49,7 @@ const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdat
             {dayNo}日{calendarDate.isNationalHoliday() && '(祝)'}<br />
 
             <Form>
-              <Form.Check type="switch" checked={!!day.isHoliday} name={`isHoliday-${dayIndex}`}  label="稼働対象外" className='m-1' onChange={(e) => onDayUpdate(e, day)} />
+              <Form.Check type="switch" checked={day.isHoliday} name={`isHoliday-${dayIndex}`}  label="稼働対象外" className='m-1' onChange={(e) => onDayUpdate(e, day)} />
               {day.isWorkingDay() && (
                 <>
                   <FloatingLabel controlId="floatingInput" label="予定" className='mb-2' >
@@ -181,8 +181,7 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <>
-      {jsonObject.name && <h1>{jsonObject.name}の{year}年{month}月</h1>}
-      {!jsonObject.name && <h1>{year}年{month}月</h1>}
+      {jsonObject.name ? <h1>{jsonObject.name}の{year}年{month}月</h1> : <h1>{year}年{month}月</h1>}
       {display && <Month workingWeek={jsonObject.week} year={Number(year)} month={Number(month)} days={days} onDayUpdate={onDayUpdate} />}
       {display && <MonthSummary days={days} standardTime={jsonObject.standardTime} />}
 
