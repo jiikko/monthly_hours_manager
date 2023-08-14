@@ -146,7 +146,7 @@ const Page: NextPageWithLayout = () => {
     toastProps.notify('再計算しました')
   }
 
-  if(display && jsonObject.months[monthKey] === undefined && jsonObject.hasNoMothsSetting()) {
+  if(display && jsonObject.hasNoMothsSetting()) {
     jsonObject.months[monthKey] = DaysGenerator.execute(Number(year), Number(month), jsonObject.standardTime, jsonObject.week);
     saveQueryParam(jsonObject);
     return;
