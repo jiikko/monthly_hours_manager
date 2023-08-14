@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { PathGenerator } from '../../../lib/path_generator';
 import { useToast } from '../../../hooks/useToast';
 import { ToastComponent } from '../../../components/toast';
+import { MonthSummary } from '../../../components/month_summary';
 
 type MonthProps = {
   workingWeek: WeekData;
@@ -93,45 +94,6 @@ const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdat
     </>
   );
 };
-
-type SummaryProps = {
-  days: Array<DayObject>;
-  standardTime: number;
-}
-
-const Summary: React.FC<SummaryProps> = ({ days, standardTime }) => {
-  const daysWithoutHoliday =  days.filter(day => day.isWorkingDay());
-  const totalScheduled = Number(daysWithoutHoliday.reduce((sum, day) => sum + Number(day.scheduled), 0).toFixed(1));
-  const diffScheduled = Number((totalScheduled - standardTime).toFixed(1));
-  const totalScheduledClassName = (totalScheduled >= standardTime) ? 'text-white bg-success' : 'text-white bg-danger';
-  const totalActual = daysWithoutHoliday.reduce((sum, day) => sum + Number(day.actual), 0);
-  const diffActual = totalActual - standardTime;
-  const totalActualClassName = (totalActual >= standardTime) ? 'text-white bg-success' : '';
-
-  return(
-    <Table striped bordered hover>
-      <thead>
-        <tr>
-          <th>基準時間</th>
-          <th className={totalScheduledClassName}>予定の合計</th>
-          <th className={totalScheduledClassName}>予定の差分</th>
-          <th className={totalActualClassName}>実績の合計</th>
-          <th className={totalActualClassName}>実績の差分</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{standardTime}時間</td>
-          <td className={totalScheduledClassName}>{totalScheduled}時間</td>
-          <td className={totalScheduledClassName}>{diffScheduled}時間</td>
-          <td className={totalActualClassName}>{totalActual}時間</td>
-          <td className={totalActualClassName}>{diffActual}時間</td>
-        </tr>
-      </tbody>
-    </Table>
-  )
-};
-
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -227,7 +189,7 @@ const Page: NextPageWithLayout = () => {
       {jsonObject.name && <h1>{jsonObject.name}の{year}年{month}月</h1>}
       {!jsonObject.name && <h1>{year}年{month}月</h1>}
       {display && <Month workingWeek={jsonObject.week} year={Number(year)} month={Number(month)} days={days} onDayUpdate={onDayUpdate} />}
-      {display && <Summary days={days} standardTime={jsonObject.standardTime} />}
+      {display && <MonthSummary days={days} standardTime={jsonObject.standardTime} />}
 
       <Col>
         <Button type='button' variant="secondary" onClick={initializeDays}>時間を初期状態にする</Button>
