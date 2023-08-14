@@ -6,6 +6,10 @@ class JsonParameterTypeImpl implements ParameterType {
     if(typeof this.week === 'string') { this.week = undefined; }
     if(typeof this.months === 'string') { this.months = undefined; }
   }
+
+  hasNoSetting(): boolean {
+    return this.week === undefined;
+  }
 }
 
 export class JsonParameter {
@@ -18,7 +22,7 @@ export class JsonParameter {
       .join('&');
   }
 
-  static parse(query: { [key: string]: string }): ParameterType {
+  static parse(query: { [key: string]: string }): JsonParameterTypeImpl {
     const result = {} as ParameterType;
     Object.entries(query).forEach(([key, value]) => {
       try {

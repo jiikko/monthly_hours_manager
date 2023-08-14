@@ -112,7 +112,7 @@ const Page: NextPageWithLayout = () => {
     return monthPath;
   }
 
-  if(jsonObject.week == undefined) {
+  if(jsonObject.hasNoSetting()) {
     return(
       display && <div className="alert alert-danger" role="alert">カレンダーの設定情報がありません。設定してください。</div>
     )
