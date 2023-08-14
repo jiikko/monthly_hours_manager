@@ -119,7 +119,6 @@ const Page: NextPageWithLayout = () => {
   }
 
   const onDayUpdate = (e: React.ChangeEvent<HTMLInputElement>, day: DayObject): void => {
-    e.preventDefault();
     const attributeName = e.target.name.split('-')[0];
     const dayIndex = e.target.name.split('-')[1];
     if(e.target.type === 'checkbox') {
@@ -139,8 +138,7 @@ const Page: NextPageWithLayout = () => {
     if(notify) { toastProps.notify('初期化しました') }
   }
 
-  const recalculateDays = (e, days: Array<DayObject>): void => {
-    e.preventDefault();
+  const recalculateDays = (days: Array<DayObject>): void => {
     jsonObject.months[monthKey] = DaysGenerator.executeWithDays(Number(year), Number(month), jsonObject.standardTime, jsonObject.week, days);
     saveQueryParam(jsonObject);
     toastProps.notify('再計算しました')
@@ -180,7 +178,7 @@ const Page: NextPageWithLayout = () => {
         <Button type='button' variant="secondary" onClick={((e) => initializeDays(true))}>時間を初期状態にする</Button>
       </Col>
       <Col>
-        <Button type='button' variant="primary" onClick={((e) => recalculateDays(e, days)) }>未稼働日の予定を再計算する</Button>
+        <Button type='button' variant="primary" onClick={((e) => recalculateDays(days)) }>未稼働日の予定を再計算する</Button>
       </Col>
 
       <ToastComponent {...toastProps} />
