@@ -15,34 +15,6 @@ export default function Page() {
     if(router.isReady) { setDisplay(true); }
   }, [router.isReady]);
 
-  const renderSetting = () => {
-    return(
-      <Row>
-        <Col>
-          <h2 className='mb-3'>現在の設定情報</h2>
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>名前</th>
-                <th>基準時間</th>
-                <th>稼働曜日</th>
-                <th>管理対象の月</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{jsonObject.name}</td>
-                <td>{jsonObject.standardTime && `${jsonObject.standardTime}時間`}</td>
-                <td>{display && jsonObject.week && Object.keys(jsonObject.week).filter(key => jsonObject.week[key]).join(', ')}</td>
-                <td>{display && jsonObject.months && Object.keys(jsonObject.months)}</td>
-              </tr>
-            </tbody>
-          </Table>
-        </Col>
-      </Row>
-    )
-  }
-
   return (
     <Layout>
       <Row>
@@ -67,7 +39,31 @@ export default function Page() {
         </Col>
       </Row>
 
-      {jsonObject.week && renderSetting()}
-    </Layout>
-  )
+      {jsonObject.week && (
+        <Row>
+          <Col>
+            <h2 className='mb-3'>現在の設定情報</h2>
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th>名前</th>
+                  <th>基準時間</th>
+                  <th>稼働曜日</th>
+                  <th>管理対象の月</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{jsonObject.name}</td>
+                  <td>{jsonObject.standardTime && `${jsonObject.standardTime}時間`}</td>
+                  <td>{display && jsonObject.week && Object.keys(jsonObject.week).filter(key => jsonObject.week[key]).join(', ')}</td>
+                  <td>{display && jsonObject.months && Object.keys(jsonObject.months)}</td>
+                </tr>
+              </tbody>
+            </Table>
+          </Col>
+        </Row>
+      )}
+  </Layout>
+)
 }

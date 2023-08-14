@@ -117,6 +117,7 @@ const Page: NextPageWithLayout = () => {
     )
   }
 
+  // TODO: パラメータが破損してjsonとしてデシリアライズできなかった時のクリーンアップ処理
   if(typeof jsonObject.months === 'string') {
     jsonObject.months = undefined;
     saveQueryParam(jsonObject);
