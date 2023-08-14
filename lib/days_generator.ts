@@ -16,11 +16,23 @@ export class DayObject implements DayData {
   constructor(public scheduled: number, public actual: number, public day: number, public isHoliday: boolean) { }
 
   isWorked(): boolean {
-    return this.actual > 0;
+    return Number(this.actual) > 0;
   }
 
   isWorkingDay(): boolean {
     return !this.isHoliday;
+  }
+
+  scheduledHour(): number {
+    return Number(this.scheduled);
+  }
+
+  actualHour(): number {
+    return Number(this.actual);
+  }
+
+  isInvalid(): boolean {
+    return isNaN(this.scheduledHour()) || isNaN(this.actualHour());
   }
 }
 

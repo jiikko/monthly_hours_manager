@@ -43,6 +43,7 @@ const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdat
         let tdClassName = (workingWeek[calendarDate.weekDayName()]) ? 'bg-info' : 'bg-secondary text-light';
         if(Number(day.actual)) { tdClassName = 'bg-success text-light' }
         if(day.isHoliday) { tdClassName = 'bg-secondary text-light' }
+        if(day.isInvalid()) { tdClassName = 'bg-warning text-light' }
 
         const row = (
           <td key={j} className={tdClassName}>
