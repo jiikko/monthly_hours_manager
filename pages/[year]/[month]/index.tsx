@@ -213,10 +213,13 @@ const Page: NextPageWithLayout = () => {
     }
   }
 
-  // NOTE: jsonObjectを作ったばかりだとjsonObject.months[monthKey]がObjectなので
-  const days = jsonObject.months[monthKey].map((day: DayObject, index: number) => {
-    return(new DayObject(day.scheduled, day.actual, day.day, day.isHoliday))
-  })
+  let days = []
+  if(display) {
+    // NOTE: jsonObjectを作ったばかりだとjsonObject.months[monthKey]がObjectなので、DayObjectで埋め直す
+    days = jsonObject.months[monthKey].map((day: DayObject, index: number) => {
+      return(new DayObject(day.scheduled, day.actual, day.day, day.isHoliday))
+    })
+  }
 
   return (
     <>
