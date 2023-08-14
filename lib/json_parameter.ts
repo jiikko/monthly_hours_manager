@@ -1,5 +1,13 @@
 import { WeekData, DayData, ParameterType, MonthTable } from '../types/calendar';
 
+class JsonParameterTypeImpl implements ParameterType {
+  constructor(public name: string, public standardTime: number, public week: WeekData, public months: MonthTable) {
+    // Objectで入っているはずだけど、クエリパラメータを直接編集してしまったことによってjsonのデシリアライズに失敗したら破損扱いとする
+    if(typeof this.week === 'string') { this.week = undefined; }
+    if(typeof this.months === 'string') { this.months = undefined; }
+  }
+}
+
 export class JsonParameter {
   static serialize(obj: ParameterType): string {
     return Object.entries(obj)
@@ -19,6 +27,7 @@ export class JsonParameter {
         result[key] = decodeURIComponent(value);
       }
     });
-    return result;
+
+    return new JsonParameterTypeImpl(result.name, result.standardTime, result.week, result.months);
   }
 }

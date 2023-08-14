@@ -117,12 +117,6 @@ const Page: NextPageWithLayout = () => {
     )
   }
 
-  // TODO: パラメータが破損してjsonとしてデシリアライズできなかった時のクリーンアップ処理
-  if(typeof jsonObject.months === 'string') {
-    jsonObject.months = undefined;
-    saveQueryParam(jsonObject);
-  }
-
   const onDayUpdate = (e: React.ChangeEvent<HTMLInputElement>, day: DayObject): void => {
     e.preventDefault();
     const attributeName = e.target.name.split('-')[0];
