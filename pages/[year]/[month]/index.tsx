@@ -132,8 +132,8 @@ const Page: NextPageWithLayout = () => {
     toastProps.notify('時間を更新しました')
   }
 
-  const initializeDays = (e): void => {
-    e.preventDefault();
+  const initializeDays = (): void => {
+    jsonObject.clearMonths();
     jsonObject.months[monthKey] = DaysGenerator.execute(Number(year), Number(month), jsonObject.standardTime, jsonObject.week);
     saveQueryParam(jsonObject);
     toastProps.notify('初期化しました')
@@ -147,8 +147,7 @@ const Page: NextPageWithLayout = () => {
   }
 
   if(display && jsonObject.hasNoMothsSetting()) {
-    jsonObject.months[monthKey] = DaysGenerator.execute(Number(year), Number(month), jsonObject.standardTime, jsonObject.week);
-    saveQueryParam(jsonObject);
+    initializeDays();
     return;
   } else if(display && jsonObject.months[monthKey] === undefined && jsonObject.hasMothsSetting()) {
     // NOTE: 二つ月分のクエリパラメータを保持するとnextjsが500を返してしまう。文字数がデカすぎる可能性があるので、一つの月分のみ保持するようにする。
@@ -168,14 +167,14 @@ const Page: NextPageWithLayout = () => {
   let days = []
   if(display) {
     // NOTE: jsonObjectを作ったばかりだとjsonObject.months[monthKey]がObjectなので、DayObjectで埋め直す
-    days = jsonObject.months[monthKey].map((day: DayObject, index: number) => {
+    days = jsonObject.months[monthKey].map((day: DayObject, _: number) => {
       return(new DayObject(day.scheduled, day.actual, day.day, day.isHoliday))
     })
   }
 
   return (
     <>
-      {jsonObject.name ? <h1>{jsonObject.name}の{year}年{month}月</h1> : <h1>{year}年{month}月</h1>}
+      {jsonObject.hasName() ? <h1>{jsonObject.name}の{year}年{month}月</h1> : <h1>{year}年{month}月</h1>}
       {display && <Month workingWeek={jsonObject.week} year={Number(year)} month={Number(month)} days={days} onDayUpdate={onDayUpdate} />}
       {display && <MonthSummary days={days} standardTime={jsonObject.standardTime} />}
 
