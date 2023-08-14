@@ -74,13 +74,13 @@ const Page: NextPageWithLayout = () => {
         </Form.Group>
 
         <Form.Label>稼働曜日</Form.Label>
-        <Form.Check type="switch" name="mon" label="月" className='mb-2' checked={workingWeek.mon} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" name="tue" label="火" className='mb-2' checked={workingWeek.tue} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" name="wed" label="水" className='mb-2' checked={workingWeek.wed} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" name="thu" label="木" className='mb-2' checked={workingWeek.thu} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" name="fri" label="金" className='mb-2' checked={workingWeek.fri} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" name="sat" label="土" className='mb-2' checked={workingWeek.sat} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" name="sun" label="日" className='mb-4' checked={workingWeek.sun} onChange={handleWorkingDaysChange} />
+        <Form.Check type="switch" id='m' name="mon" label="月" className='mb-2' checked={workingWeek.mon} onChange={handleWorkingDaysChange} />
+        <Form.Check type="switch" id='t' name="tue" label="火" className='mb-2' checked={workingWeek.tue} onChange={handleWorkingDaysChange} />
+        <Form.Check type="switch" id='w' name="wed" label="水" className='mb-2' checked={workingWeek.wed} onChange={handleWorkingDaysChange} />
+        <Form.Check type="switch" id='thu' name="thu" label="木" className='mb-2' checked={workingWeek.thu} onChange={handleWorkingDaysChange} />
+        <Form.Check type="switch" id='fri' name="fri" label="金" className='mb-2' checked={workingWeek.fri} onChange={handleWorkingDaysChange} />
+        <Form.Check type="switch" id='sat' name="sat" label="土" className='mb-2' checked={workingWeek.sat} onChange={handleWorkingDaysChange} />
+        <Form.Check type="switch" id='sun' name="sun" label="日" className='mb-4' checked={workingWeek.sun} onChange={handleWorkingDaysChange} />
 
         <Button variant="primary" type="submit">保存する</Button>
       </Form>
