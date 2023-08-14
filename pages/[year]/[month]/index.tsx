@@ -25,7 +25,6 @@ const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdat
   const firstDayOfMonth = date.firstWeekDayOfMonth(); // 当月の最初の曜日を取得
   const daysInMonth = date.lastDayOfMonth(); // 当月の最終日の日付を取得
   const calendarRows = [];
-  const weekDays = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 
   let dayCount = 1;
 
@@ -52,15 +51,15 @@ const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdat
       } else {
         const dayNo = dayCount++; // 1から始まる
         const dayIndex = dayNo - 1;
-        const weekDay = weekDays[CalendarDate(year, month, dayNo).weekDay()];
         const day = days[dayIndex];
-        let tdClassName = (workingWeek[weekDay]) ? 'bg-info' : 'bg-secondary text-light';
+        const calendarDate = CalendarDate(year, month, dayNo);
+        let tdClassName = (workingWeek[calendarDate.weekDayName()]) ? 'bg-info' : 'bg-secondary text-light';
         if(Number(day.actual)) { tdClassName = 'bg-success text-light' }
         if(day.isHoliday) { tdClassName = 'bg-secondary text-light' }
 
         const row = (
           <td key={j} className={tdClassName}>
-            {dayNo}日{CalendarDate(year, month, dayNo).isNationalHoliday() && '(祝)'}<br />
+            {dayNo}日{calendarDate.isNationalHoliday() && '(祝)'}<br />
 
             <Form>
               <Form.Check type="switch" checked={!!day.isHoliday} name={`isHoliday-${dayIndex}`}  label="稼働対象外" className='m-1' onChange={(e) => onDayUpdate(e, day)} />
