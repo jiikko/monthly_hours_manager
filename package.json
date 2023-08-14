@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.1",
+    "japanese-holidays": "^1.0.10",
     "next": "latest",
     "react": "18.2.0",
     "react-bootstrap": "^2.8.0",

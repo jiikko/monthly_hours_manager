@@ -59,7 +59,8 @@ const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdat
 
         const row = (
           <td key={j} className={tdClassName}>
-            {dayNo}日<br />
+            {dayNo}日{CalendarDate(year, month, dayNo).isNationalHoliday() && '(祝)'}<br />
+
             <Form>
               <Form.Check type="switch" checked={!!day.isHoliday} name={`isHoliday-${dayIndex}`}  label="稼働対象外" className='m-1' onChange={(e) => onDayUpdate(e, day)} />
               {!day.isHoliday && renderTextFields(day, dayIndex)}

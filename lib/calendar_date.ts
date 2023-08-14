@@ -1,3 +1,5 @@
+const JapaneseHolidays = require('japanese-holidays');
+
 type CalendarDateType = {
   day: () => number;
   month: () => number;
@@ -8,6 +10,7 @@ type CalendarDateType = {
   firstWeekDayOfMonth: () => number;
   lastDayOfMonth: () => number;
   weekDayName: () => string;
+  isNationalHoliday: () => boolean;
 }
 
 // new Dateから月を取得すると0~11で取得されるため、処理しやすい値で返すDateクラスのラッパー
@@ -65,7 +68,11 @@ const CalendarDate = (()  => {
       return new Date(year(), month(), 0).getDate();
     }
 
-    return { day, month, nextMonth, year, monthlyKey, weekDay, firstWeekDayOfMonth, lastDayOfMonth, weekDayName };
+    function isNationalHoliday() {
+      return !!JapaneseHolidays.isHoliday(date);
+    }
+
+    return { day, month, nextMonth, year, monthlyKey, weekDay, firstWeekDayOfMonth, lastDayOfMonth, weekDayName, isNationalHoliday };
   };
 })();
 
