@@ -24,13 +24,13 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <>
       <Head>
-        <title>精算幅の時間管理くん</title>
+        <title>精算幅の基準時間管理くん</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand href={rootPath}>精算幅時間管理くん</Navbar.Brand>
+        <Navbar.Brand href={rootPath}>精算幅の基準時間管理くん</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">

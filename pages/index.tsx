@@ -46,7 +46,7 @@ export default function Page() {
   return (
     <Layout>
       <Row>
-        精算幅の時間管理を行うアプリケーションです。<br /><br />
+        月毎の基準時間を管理するアプリケーションです。<br /><br />
       </Row>
 
       <Row>

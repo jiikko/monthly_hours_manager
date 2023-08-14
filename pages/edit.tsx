@@ -45,7 +45,7 @@ const Page: NextPageWithLayout = () => {
     const jsonQuery = JsonParameter.serialize({ name, standardTime, week: workingWeek, months: jsonObject.months})
     const editPath = PathGenerator().editPath(jsonQuery)
 
-    router.push(editPath);
+    router.push(editPath, undefined, { scroll: false });
     toastProps.notify('カレンダー情報の変更に成功しました。')
   };
 

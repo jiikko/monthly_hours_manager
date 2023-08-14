@@ -9,7 +9,7 @@ type ToastProps = {
 
 export const ToastComponent: React.FC<ToastProps> = ({ message, showToast, hideToast }) => {
   return (
-    <ToastContainer position="top-center" className="position-fixed">
+    <ToastContainer position="top-center" className="position-fixed mt-5">
       <Toast onClose={hideToast} autohide show={showToast} delay={2000}>
         <Toast.Header>
           <strong className="mr-auto">通知</strong>
