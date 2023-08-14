@@ -10,6 +10,18 @@ class JsonParameterTypeImpl implements ParameterType {
   hasNoSetting(): boolean {
     return this.week === undefined;
   }
+
+  hasNoMothsSetting(): boolean {
+    return Object.keys(this.months).length === 0;
+  }
+
+  hasMothsSetting(): boolean {
+    return Object.keys(this.months).length > 0;
+  }
+
+  clearMonths(): void {
+    this.months = {} as MonthTable;
+  }
 }
 
 export class JsonParameter {
