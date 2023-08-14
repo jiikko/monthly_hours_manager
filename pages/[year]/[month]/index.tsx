@@ -28,20 +28,6 @@ const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdat
 
   let dayCount = 1;
 
-  const renderTextFields = (day: DayObject, dayIndex: number) => {
-    return(
-      <>
-        <FloatingLabel controlId="floatingInput" label="予定" className='mb-2' >
-          <Form.Control type="text" value={day.scheduled} name={`scheduled-${dayIndex}`} onChange={(e) => onDayUpdate(e, day)} />
-        </FloatingLabel>
-        <FloatingLabel controlId="floatingInput" label="実績" >
-          <Form.Control type="text" value={day.actual} name={`actual-${dayIndex}`} onChange={(e) => onDayUpdate(e, day)} />
-        </FloatingLabel>
-      </>
-    )
-  }
-
-
   for (let i = 0; i < 6; i++) { // 最大6週間
     const week = [];
 
@@ -53,6 +39,7 @@ const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdat
         const dayIndex = dayNo - 1;
         const day = days[dayIndex];
         const calendarDate = CalendarDate(year, month, dayNo);
+
         let tdClassName = (workingWeek[calendarDate.weekDayName()]) ? 'bg-info' : 'bg-secondary text-light';
         if(Number(day.actual)) { tdClassName = 'bg-success text-light' }
         if(day.isHoliday) { tdClassName = 'bg-secondary text-light' }
@@ -63,7 +50,16 @@ const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdat
 
             <Form>
               <Form.Check type="switch" checked={!!day.isHoliday} name={`isHoliday-${dayIndex}`}  label="稼働対象外" className='m-1' onChange={(e) => onDayUpdate(e, day)} />
-              {!day.isHoliday && renderTextFields(day, dayIndex)}
+              {day.isWorkingDay() && (
+                <>
+                  <FloatingLabel controlId="floatingInput" label="予定" className='mb-2' >
+                    <Form.Control type="text" value={day.scheduled} name={`scheduled-${dayIndex}`} onChange={(e) => onDayUpdate(e, day)} />
+                  </FloatingLabel>
+                  <FloatingLabel controlId="floatingInput" label="実績" >
+                    <Form.Control type="text" value={day.actual} name={`actual-${dayIndex}`} onChange={(e) => onDayUpdate(e, day)} />
+                  </FloatingLabel>
+                </>
+              )}
             </Form>
           </td>
         )
