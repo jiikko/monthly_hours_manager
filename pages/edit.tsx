@@ -51,8 +51,8 @@ const Page: NextPageWithLayout = () => {
 
   useEffect(() => {
     const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
-    setName(jsonObject['name'] || '');
-    setStandardTime(jsonObject['standardTime'] || defaultStandardTime);
+    setName(jsonObject.name || '');
+    setStandardTime(jsonObject.standardTime || defaultStandardTime);
     setWorkingWeek(jsonObject.week || defaultWeek);
   }, [router.query]);
 
