@@ -9,11 +9,6 @@ import { useState, useEffect } from 'react';
 export default function Page() {
   const router = useRouter();
   const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
-  const [display, setDisplay] = useState(false);
-
-  useEffect(() => {
-    if(router.isReady) { setDisplay(true); }
-  }, [router.isReady]);
 
   return (
     <Layout>
@@ -56,8 +51,8 @@ export default function Page() {
                 <tr>
                   <td>{jsonObject.name}</td>
                   <td>{jsonObject.standardTime && `${jsonObject.standardTime}時間`}</td>
-                  <td>{display && jsonObject.week && Object.keys(jsonObject.week).filter(key => jsonObject.week[key]).join(', ')}</td>
-                  <td>{display && jsonObject.months && Object.keys(jsonObject.months)}</td>
+                  <td>{Object.keys(jsonObject.week).filter(key => jsonObject.week[key]).join(', ')}</td>
+                  <td>{jsonObject.months && Object.keys(jsonObject.months)}</td>
                 </tr>
               </tbody>
             </Table>
