@@ -1,6 +1,9 @@
 import { WeekData, DayData, ParameterType, MonthTable } from '../types/calendar';
+import { DayObject } from './days_generator';
 
 class JsonParameterTypeImpl implements ParameterType {
+   public currentMonthKey: string;
+
   constructor(public name: string, public standardTime: number, public week: WeekData, public months: MonthTable) {
     // Objectで入っているはずだけど、クエリパラメータを直接編集してしまったことによってjsonのデシリアライズに失敗したら破損扱いとする
     if(typeof this.week === 'string') { this.week = undefined; }
@@ -25,6 +28,24 @@ class JsonParameterTypeImpl implements ParameterType {
 
   clearMonths(): void {
     this.months = {} as MonthTable;
+  }
+
+  selectMonth(monthKey: string): void {
+    this.currentMonthKey = monthKey;
+  }
+
+  currentDaysInMonth(): Array<DayObject> {
+    return this.months[this.currentMonthKey].map((day: DayObject, _: number) => {
+      return(new DayObject(day.scheduled, day.actual, day.day, day.isHoliday))
+    })
+  }
+
+  setDaysInMonth(days: Array<DayObject>): void {
+    this.months[this.currentMonthKey] = days;
+  }
+
+  serializeAsJson(): string {
+    return JsonParameter.serialize({ name: this.name, standardTime: this.standardTime, week: this.week, months: this.months })
   }
 }
 

@@ -104,10 +104,10 @@ const Page: NextPageWithLayout = () => {
   const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
   const date = CalendarDate(year, month, 1);
   const monthKey = date.monthlyKey();
+  jsonObject.selectMonth(monthKey);
 
   const saveQueryParam = (jsonObject: ParameterType): string => {
-    const jsonQuery = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
-    const monthPath = PathGenerator().monthPath(date.year(), date.month(), jsonQuery)
+    const monthPath = PathGenerator().monthPath(date.year(), date.month(), jsonObject.serializeAsJson())
     router.push(monthPath, undefined, { scroll: false });
     return monthPath;
   }
@@ -133,13 +133,13 @@ const Page: NextPageWithLayout = () => {
 
   const initializeDays = (notify?: boolean): void => {
     jsonObject.clearMonths();
-    jsonObject.months[monthKey] = DaysGenerator.execute(Number(year), Number(month), jsonObject.standardTime, jsonObject.week);
+    jsonObject.setDaysInMonth(DaysGenerator.execute(Number(year), Number(month), jsonObject.standardTime, jsonObject.week))
     saveQueryParam(jsonObject);
     if(notify) { toastProps.notify('初期化しました') }
   }
 
   const recalculateDays = (days: Array<DayObject>): void => {
-    jsonObject.months[monthKey] = DaysGenerator.executeWithDays(Number(year), Number(month), jsonObject.standardTime, jsonObject.week, days);
+    jsonObject.setDaysInMonth(DaysGenerator.executeWithDays(Number(year), Number(month), jsonObject.standardTime, jsonObject.week, days))
     saveQueryParam(jsonObject);
     toastProps.notify('再計算しました')
   }
@@ -154,19 +154,14 @@ const Page: NextPageWithLayout = () => {
       initializeDays();
       return
     } else {
-      const jsonQuery = JsonParameter.serialize({ name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months })
-      document.location = PathGenerator().rootPath(jsonQuery);
+      document.location = PathGenerator().rootPath(jsonObject.serializeAsJson());
       return;
     }
   }
 
   let days = []
-  if(display) {
-    // NOTE: jsonObjectを作ったばかりだとjsonObject.months[monthKey]がObjectなので、DayObjectで埋め直す
-    days = jsonObject.months[monthKey].map((day: DayObject, _: number) => {
-      return(new DayObject(day.scheduled, day.actual, day.day, day.isHoliday))
-    })
-  }
+  // NOTE: jsonObjectを作ったばかりだとjsonObject.months[monthKey]がObjectなので、DayObjectで埋め直す
+  if(display) { days = jsonObject.currentDaysInMonth() }
 
   return (
     <>
