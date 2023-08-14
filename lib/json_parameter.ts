@@ -1,6 +1,6 @@
 import { WeekData, DayData, ParameterType, MonthTable } from '../types/calendar';
 
-class JsonParameter {
+export class JsonParameter {
   static serialize(obj: ParameterType): string {
     return Object.entries(obj)
       .filter(([key, value]) => value !== undefined )
@@ -22,5 +22,3 @@ class JsonParameter {
     return result;
   }
 }
-
-export default JsonParameter;

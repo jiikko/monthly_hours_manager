@@ -2,7 +2,7 @@ import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import Layout from '../components/layout';
 import { Table, Row, Form, Button, Col, FloatingLabel } from 'react-bootstrap';
-import JsonParameter from '../lib/json_parameter';
+import { JsonParameter } from '../lib/json_parameter';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 

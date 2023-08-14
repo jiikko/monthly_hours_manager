@@ -1,4 +1,4 @@
-import JsonParameter from './json_parameter';
+import { JsonParameter } from './json_parameter';
 
 describe('JsonParameter', () => {
   describe('serialize', () => {
