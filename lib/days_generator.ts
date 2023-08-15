@@ -1,4 +1,4 @@
-import { WeekData, DayData } from '../types/calendar';
+import { Week } from './json_parameter';
 import { CalendarDate, CalendarDateType } from './calendar_date';
 
 function allDaysInMonth(year: number, month: number): Array<CalendarDateType> {
@@ -10,6 +10,17 @@ function allDaysInMonth(year: number, month: number): Array<CalendarDateType> {
   }
 
   return days;
+}
+
+export type MonthTable = {
+  [key: string]: Array<DayData>;
+}
+
+export type DayData = {
+  day: number;
+  scheduled: number;
+  actual: number;
+  isHoliday: boolean;
 }
 
 export class DayObject implements DayData {
@@ -37,7 +48,7 @@ export class DayObject implements DayData {
 }
 
 export class DaysGenerator {
-  static execute(year: number, month: number, standardTime: number, workingWeek: WeekData): Array<DayObject> {
+  static execute(year: number, month: number, standardTime: number, workingWeek: Week): Array<DayObject> {
     const date = CalendarDate(year, month, 1)
     const datesInMonth = allDaysInMonth(date.year(), date.month());
     const workingDays = datesInMonth.filter((date) => { return workingWeek[date.weekDayName()]; });
@@ -52,7 +63,7 @@ export class DaysGenerator {
     });
   }
 
-  static executeWithDays(year: number, month: number, standardTime: number, workingWeek: WeekData, dayObjects: Array<DayObject>): Array<DayObject> {
+  static executeWithDays(year: number, month: number, standardTime: number, workingWeek: Week, dayObjects: Array<DayObject>): Array<DayObject> {
     const holidays = dayObjects.filter((day) => { return day.isHoliday; });
     const date = CalendarDate(year, month, 1)
     const datesInMonth = allDaysInMonth(date.year(), date.month());

@@ -1,10 +1,32 @@
-import { WeekData, DayData, ParameterType, MonthTable } from '../types/calendar';
-import { DayObject } from './days_generator';
+import { DayObject, DayData, MonthTable } from './days_generator';
+
+export class Week {
+  constructor(
+    public mon: boolean,
+    public tue: boolean,
+    public wed: boolean,
+    public thu: boolean,
+    public fri: boolean,
+    public sat: boolean,
+    public sun: boolean
+  ) {}
+
+  static create(): Week {
+    return new Week(false, false, false, false, false, false, false);
+  }
+}
+
+export type ParameterType = {
+  name?: string;
+  standardTime?: number;
+  week?: Week;
+  months?: MonthTable,
+}
 
 class JsonParameterTypeImpl implements ParameterType {
    public currentMonthKey: string;
 
-  constructor(public name: string, public standardTime: number, public week: WeekData, public months: MonthTable) {
+  constructor(public name: string, public standardTime: number, public week: Week, public months: MonthTable) {
     // Objectで入っているはずだけど、クエリパラメータを直接編集してしまったことによってjsonのデシリアライズに失敗したら破損扱いとする
     if(typeof this.week === 'string') { this.week = undefined; }
     if(typeof this.months === 'string' || this.months === undefined) { this.months = {} as MonthTable; }

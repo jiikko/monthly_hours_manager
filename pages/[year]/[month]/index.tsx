@@ -1,10 +1,9 @@
 import { DaysGenerator, DayObject } from '../../../lib/days_generator';
-import { JsonParameter } from '../../../lib/json_parameter';
+import { JsonParameter, ParameterType, Week } from '../../../lib/json_parameter';
 import Layout from '../../../components/layout';
 import type { NextPageWithLayout } from './../../_app'
 import { CalendarDate } from '../../../lib/calendar_date';
 import { Table, Row, Form, Button, Col, FloatingLabel } from 'react-bootstrap';
-import { WeekData, MonthTable, ParameterType } from '../../../types/calendar';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { PathGenerator } from '../../../lib/path_generator';
@@ -16,7 +15,7 @@ type MonthProps = {
   year: number;
   month: number;
   days: Array<DayObject>;
-  workingWeek: WeekData;
+  workingWeek: Week;
   onDayUpdate: (e: any, day: DayObject) => void;
 }
 

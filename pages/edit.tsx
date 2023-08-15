@@ -3,11 +3,10 @@ import Layout from '../components/layout'
 import { Form, Button, ToastContainer } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { JsonParameter } from '../lib/json_parameter';
+import { JsonParameter, Week } from '../lib/json_parameter';
 import { PathGenerator } from '../lib/path_generator';
 import { useToast } from '../hooks/useToast';
 import { ToastComponent } from '../components/toast';
-import { Week } from '../types/calendar';
 
 type ToastProps = {
   message: string;
