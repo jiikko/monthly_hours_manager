@@ -106,7 +106,7 @@ const Page: NextPageWithLayout = () => {
   const monthKey = date.monthlyKey();
   jsonObject.selectMonth(monthKey);
 
-  const saveQueryParam = (jsonObject: ParameterType): string => {
+  const saveQueryParam = (jsonObject): string => {
     const monthPath = PathGenerator().monthPath(date.year(), date.month(), jsonObject.serializeAsJson())
     router.push(monthPath, undefined, { scroll: false });
     return monthPath;
