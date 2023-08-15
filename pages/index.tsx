@@ -34,7 +34,7 @@ export default function Page() {
         </Col>
       </Row>
 
-      {jsonObject.week && (
+      {jsonObject.hasSetting() && (
         <Row>
           <Col>
             <h2 className='mb-3'>現在の設定情報</h2>

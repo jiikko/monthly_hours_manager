@@ -14,6 +14,10 @@ class JsonParameterTypeImpl implements ParameterType {
     return this.week === undefined;
   }
 
+  hasSetting(): boolean {
+    return !!this.week;
+  }
+
   hasName(): boolean {
     return !!this.name;
   }
