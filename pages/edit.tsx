@@ -7,6 +7,7 @@ import { JsonParameter } from '../lib/json_parameter';
 import { PathGenerator } from '../lib/path_generator';
 import { useToast } from '../hooks/useToast';
 import { ToastComponent } from '../components/toast';
+import { Week } from '../types/calendar';
 
 type ToastProps = {
   message: string;
@@ -16,19 +17,10 @@ type ToastProps = {
 
 const Page: NextPageWithLayout = () => {
   const defaultStandardTime = 84;
-  const defaultWeek = {
-    mon: false,
-    tue: false,
-    wed: false,
-    thu: false,
-    fri: false,
-    sat: false,
-    sun: false,
-  }
   const router = useRouter();
   const [name, setName] = useState('');
   const [standardTime, setStandardTime] = useState(0);
-  const [workingWeek, setWorkingWeek] = useState(defaultWeek);
+  const [workingWeek, setWorkingWeek] = useState(Week.create());
   const toastProps = useToast();
 
   const handleWorkingDaysChange = (e) => {
@@ -55,7 +47,7 @@ const Page: NextPageWithLayout = () => {
     const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
     setName(jsonObject.name || '');
     setStandardTime(jsonObject.standardTime || defaultStandardTime);
-    setWorkingWeek(jsonObject.week || defaultWeek);
+    setWorkingWeek(jsonObject.week || Week.create());
   }, [router.query]);
 
   return (

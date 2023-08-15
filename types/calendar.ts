@@ -15,6 +15,14 @@ export type WeekData = {
   sun: boolean;
 }
 
+export class Week implements WeekData {
+  constructor(public mon: boolean, public tue: boolean, public wed: boolean, public thu: boolean, public fri: boolean, public sat: boolean, public sun: boolean) {}
+
+  static create(): Week {
+    return new Week(false, false, false, false, false, false, false);
+  }
+}
+
 export type DayData = {
   day: number;
   scheduled: number;
