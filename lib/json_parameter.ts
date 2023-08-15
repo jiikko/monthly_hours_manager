@@ -34,7 +34,9 @@ class JsonParameterTypeImpl implements ParameterType {
     this.currentMonthKey = monthKey;
   }
 
-  currentDaysInMonth(): Array<DayObject> {
+  currentDaysInMonth(): Array<DayObject> | undefined {
+    if(this.months[this.currentMonthKey] === undefined) { return undefined; }
+
     return this.months[this.currentMonthKey].map((day: DayObject, _: number) => {
       return(new DayObject(day.scheduled, day.actual, day.day, day.isHoliday))
     })

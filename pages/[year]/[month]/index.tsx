@@ -126,7 +126,7 @@ const Page: NextPageWithLayout = () => {
     } else {
       days[dayIndex][attributeName] = e.target.value
     }
-    jsonObject.months[monthKey] = days
+    jsonObject.setDaysInMonth(days)
     saveQueryParam(jsonObject);
     toastProps.notify('時間を更新しました')
   }
@@ -147,7 +147,7 @@ const Page: NextPageWithLayout = () => {
   if(display && jsonObject.hasNoMothsSetting()) {
     initializeDays();
     return;
-  } else if(display && jsonObject.months[monthKey] === undefined && jsonObject.hasMothsSetting()) {
+  } else if(display && jsonObject.currentDaysInMonth() === undefined && jsonObject.hasMothsSetting()) {
     // NOTE: 二つ月分のクエリパラメータを保持するとnextjsが500を返してしまう。文字数がデカすぎる可能性があるので、一つの月分のみ保持するようにする。
     const result = confirm('他の月データが存在します。他の月のデータを削除しますが、操作を続けますか？')
     if(result) {
@@ -160,7 +160,6 @@ const Page: NextPageWithLayout = () => {
   }
 
   let days = []
-  // NOTE: jsonObjectを作ったばかりだとjsonObject.months[monthKey]がObjectなので、DayObjectで埋め直す
   if(display) { days = jsonObject.currentDaysInMonth() }
 
   return (
