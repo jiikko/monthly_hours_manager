@@ -46,6 +46,10 @@ class JsonParameterTypeImpl implements ParameterType {
     this.months[this.currentMonthKey] = days;
   }
 
+  isNoCurrentDaysInMonth(): boolean {
+    return this.currentDaysInMonth() === undefined;
+  }
+
   serializeAsJson(): string {
     return JsonParameter.serialize({ name: this.name, standardTime: this.standardTime, week: this.week, months: this.months })
   }

@@ -13,14 +13,14 @@ import { ToastComponent } from '../../../components/toast';
 import { MonthSummary } from '../../../components/month_summary';
 
 type MonthProps = {
-  workingWeek: WeekData;
   year: number;
   month: number;
   days: Array<DayObject>;
+  workingWeek: WeekData;
   onDayUpdate: (e: any, day: DayObject) => void;
 }
 
-const Month: React.FC<MonthProps>= ({ workingWeek, year, month, days, onDayUpdate }) => {
+const Month: React.FC<MonthProps>= ({ year, month, days, workingWeek, onDayUpdate }) => {
   const date = CalendarDate(year, month, 1);
   const firstDayOfMonth = date.firstWeekDayOfMonth(); // 当月の最初の曜日を取得
   const daysInMonth = date.lastDayOfMonth(); // 当月の最終日の日付を取得
@@ -147,7 +147,7 @@ const Page: NextPageWithLayout = () => {
   if(display && jsonObject.hasNoMothsSetting()) {
     initializeDays();
     return;
-  } else if(display && jsonObject.currentDaysInMonth() === undefined && jsonObject.hasMothsSetting()) {
+  } else if(display && jsonObject.isNoCurrentDaysInMonth() && jsonObject.hasMothsSetting()) {
     // NOTE: 二つ月分のクエリパラメータを保持するとnextjsが500を返してしまう。文字数がデカすぎる可能性があるので、一つの月分のみ保持するようにする。
     const result = confirm('他の月データが存在します。他の月のデータを削除しますが、操作を続けますか？')
     if(result) {
@@ -165,8 +165,8 @@ const Page: NextPageWithLayout = () => {
   return (
     <>
       {jsonObject.hasName() ? <h1>{jsonObject.name}の{year}年{month}月</h1> : <h1>{year}年{month}月</h1>}
-      {display && <Month workingWeek={jsonObject.week} year={Number(year)} month={Number(month)} days={days} onDayUpdate={onDayUpdate} />}
-      {display && <MonthSummary days={days} standardTime={jsonObject.standardTime} />}
+      {display && <Month year={Number(year)} month={Number(month)} days={days} workingWeek={jsonObject.week} onDayUpdate={onDayUpdate} />}
+      {<MonthSummary days={days} standardTime={jsonObject.standardTime} />}
 
       <Col>
         <Button type='button' variant="secondary" onClick={((e) => initializeDays(true))}>時間を初期状態にする</Button>
