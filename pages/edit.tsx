@@ -24,7 +24,7 @@ const Page: NextPageWithLayout = () => {
     fri: false,
     sat: false,
     sun: false,
-    }
+  }
   const router = useRouter();
   const [name, setName] = useState('');
   const [standardTime, setStandardTime] = useState(0);
@@ -42,8 +42,10 @@ const Page: NextPageWithLayout = () => {
     e.preventDefault();
 
     const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
-    const jsonQuery = JsonParameter.serialize({ name, standardTime, week: workingWeek, months: jsonObject.months})
-    const editPath = PathGenerator().editPath(jsonQuery)
+    jsonObject.name = name;
+    jsonObject.standardTime = standardTime;
+    jsonObject.week = workingWeek;
+    const editPath = PathGenerator().editPath(jsonObject.serializeAsJson());
 
     router.push(editPath, undefined, { scroll: false });
     toastProps.notify('カレンダー情報の変更に成功しました。')
