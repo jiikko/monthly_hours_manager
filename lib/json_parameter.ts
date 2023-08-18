@@ -23,7 +23,7 @@ export type ParameterType = {
   months?: MonthTable,
 }
 
-class JsonParameterTypeImpl implements ParameterType {
+export class JsonParameterTypeImpl implements ParameterType {
    public currentMonthKey: string;
 
   constructor(public name: string, public standardTime: number, public week: Week, public months: MonthTable) {

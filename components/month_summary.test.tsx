@@ -15,4 +15,3 @@ describe('<MonthSummary />', () => {
     expect(container).toHaveTextContent('16時間');
   });
 });
-
