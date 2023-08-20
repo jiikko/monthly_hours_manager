@@ -1,4 +1,5 @@
 import React from 'react'
+import { JsonParameterTypeImpl } from '../lib/json_parameter';
 import '@testing-library/jest-dom'
 import { render, fireEvent, screen } from '@testing-library/react'
 import { About } from './about';
@@ -8,7 +9,7 @@ describe('About', () => {
     it('renders correctly', () => {
       const jsonObject = {
         hasSetting: () => false,
-      }
+      } as JsonParameterTypeImpl;
       render(<About jsonObject={jsonObject} />)
 
       expect(screen.queryByText('現在の設定情報')).not.toBeInTheDocument()
@@ -20,11 +21,11 @@ describe('About', () => {
       it('renders correctly', () => {
         const jsonObject = {
           hasSetting: () => true,
-          standardTime: true,
+          standardTime: 84,
           name: 'name',
           week: {},
-          months: null,
-        }
+          months: undefined,
+        } as JsonParameterTypeImpl;
         render(<About jsonObject={jsonObject} />)
 
         expect(screen.queryByText('現在の設定情報')).toBeInTheDocument()
@@ -35,11 +36,11 @@ describe('About', () => {
       it('renders correctly', () => {
         const jsonObject = {
           hasSetting: () => true,
-          standardTime: null,
+          standardTime: undefined,
           name: 'name',
           week: {},
-          months: null,
-        }
+          months: undefined,
+        } as JsonParameterTypeImpl;
         render(<About jsonObject={jsonObject} />)
 
         expect(screen.queryByText('現在の設定情報')).toBeInTheDocument()
@@ -50,11 +51,11 @@ describe('About', () => {
       it('renders correctly', () => {
         const jsonObject = {
           hasSetting: () => true,
-          standardTime: true,
+          standardTime: 84,
           name: 'name',
           week: {},
           months: {},
-        }
+        } as JsonParameterTypeImpl;
         render(<About jsonObject={jsonObject} />)
 
         expect(screen.queryByText('現在の設定情報')).toBeInTheDocument()

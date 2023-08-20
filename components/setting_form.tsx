@@ -1,4 +1,4 @@
-import type { NextPageWithLayout } from './_app'
+import type { NextPageWithLayout } from './../pages/_app'
 import Layout from '../components/layout'
 import { Form, Button, ToastContainer } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
