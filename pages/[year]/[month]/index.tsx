@@ -16,10 +16,10 @@ type MonthProps = {
   month: number;
   days: Array<DayObject>;
   workingWeek: Week;
-  onDayUpdate: (e: any, dayIndex: number) => void;
+  handleUpdateDay: (e: React.ChangeEvent<HTMLInputElement>, dayIndex: number) => void;
 }
 
-const Month: React.FC<MonthProps>= ({ year, month, days, workingWeek, onDayUpdate }) => {
+const Month: React.FC<MonthProps>= ({ year, month, days, workingWeek, handleUpdateDay }) => {
   const date = CalendarDate(year, month, 1);
   const firstDayOfMonth = date.firstWeekDayOfMonth(); // 当月の最初の曜日を取得
   const daysInMonth = date.lastDayOfMonth(); // 当月の最終日の日付を取得
@@ -49,14 +49,14 @@ const Month: React.FC<MonthProps>= ({ year, month, days, workingWeek, onDayUpdat
             {dayNo}日{calendarDate.isNationalHoliday() && '(祝)'}<br />
 
             <Form>
-              <Form.Check type="switch" checked={day.isHoliday} name={'isHoliday'}  label="稼働対象外" className='m-1' onChange={(e) => onDayUpdate(e, dayIndex)} />
+              <Form.Check type="switch" checked={day.isHoliday} name={'isHoliday'}  label="稼働対象外" className='m-1' onChange={(e) => handleUpdateDay(e as React.ChangeEvent<HTMLInputElement>, dayIndex)} />
               {day.isWorkingDay() && (
                 <>
                   <FloatingLabel controlId="floatingInput" label="予定" className='mb-2' >
-                    <Form.Control type="text" value={day.scheduled} name={'scheduled'} onChange={(e) => onDayUpdate(e, dayIndex)} />
+                    <Form.Control type="text" value={day.scheduled} name={'scheduled'} onChange={(e) => handleUpdateDay(e as React.ChangeEvent<HTMLInputElement>, dayIndex)} />
                   </FloatingLabel>
                   <FloatingLabel controlId="floatingInput" label="実績" >
-                    <Form.Control type="text" value={day.actual} name={'actual'} onChange={(e) => onDayUpdate(e, dayIndex)} />
+                    <Form.Control type="text" value={day.actual} name={'actual'} onChange={(e) => handleUpdateDay(e as React.ChangeEvent<HTMLInputElement>, dayIndex)} />
                   </FloatingLabel>
                 </>
               )}
@@ -117,7 +117,7 @@ const Page: NextPageWithLayout = () => {
     )
   }
 
-  const onDayUpdate = (e: React.ChangeEvent<HTMLInputElement>, dayIndex: number): void => {
+  const handleUpdateDay = (e: React.ChangeEvent<HTMLInputElement>, dayIndex: number): void => {
     const attributeName = e.target.name;
     if(e.target.type === 'checkbox') {
       days[dayIndex][attributeName] = e.target.checked;
@@ -163,7 +163,7 @@ const Page: NextPageWithLayout = () => {
   return (
     <>
       {jsonObject.hasName() ? <h1>{jsonObject.name}の{year}年{month}月</h1> : <h1>{year}年{month}月</h1>}
-      {display && <Month year={Number(year)} month={Number(month)} days={days} workingWeek={jsonObject.week} onDayUpdate={onDayUpdate} />}
+      {display && <Month year={Number(year)} month={Number(month)} days={days} workingWeek={jsonObject.week} handleUpdateDay={handleUpdateDay} />}
       {<MonthSummary days={days} standardTime={jsonObject.standardTime} />}
 
       <Col>
