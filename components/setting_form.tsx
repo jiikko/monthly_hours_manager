@@ -35,14 +35,14 @@ export const SettingForm: React.FC<Props> = ({ jsonObject, handleSubmit }) => {
       <h1>カレンダーの編集</h1>
 
       <Form onSubmit={(e) => e.preventDefault()}>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>名前</Form.Label>
-          <Form.Control type="name" defaultValue={name} onChange={(e) => setName(e.target.value)}  />
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="name">名前</Form.Label>
+          <Form.Control type="text" id={'name'} defaultValue={name} onChange={(e) => setName(e.target.value)}  />
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>基準時間</Form.Label>
-          <Form.Control type="name" defaultValue={standardTime} onChange={(e) => setStandardTime(Number(e.target.value))}  required />
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor={'standardTime'}>基準時間</Form.Label>
+          <Form.Control type="text" id={'standardTime'} defaultValue={standardTime} onChange={(e) => setStandardTime(Number(e.target.value))}  required />
         </Form.Group>
 
         <Form.Label>稼働曜日</Form.Label>
