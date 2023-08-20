@@ -16,7 +16,7 @@ type MonthProps = {
   month: number;
   days: Array<DayObject>;
   workingWeek: Week;
-  onDayUpdate: (e: any, day: DayObject) => void;
+  onDayUpdate: (e: any, dayIndex: number) => void;
 }
 
 const Month: React.FC<MonthProps>= ({ year, month, days, workingWeek, onDayUpdate }) => {
@@ -49,14 +49,14 @@ const Month: React.FC<MonthProps>= ({ year, month, days, workingWeek, onDayUpdat
             {dayNo}日{calendarDate.isNationalHoliday() && '(祝)'}<br />
 
             <Form>
-              <Form.Check type="switch" checked={day.isHoliday} name={`isHoliday-${dayIndex}`}  label="稼働対象外" className='m-1' onChange={(e) => onDayUpdate(e, day)} />
+              <Form.Check type="switch" checked={day.isHoliday} name={'isHoliday'}  label="稼働対象外" className='m-1' onChange={(e) => onDayUpdate(e, dayIndex)} />
               {day.isWorkingDay() && (
                 <>
                   <FloatingLabel controlId="floatingInput" label="予定" className='mb-2' >
-                    <Form.Control type="text" value={day.scheduled} name={`scheduled-${dayIndex}`} onChange={(e) => onDayUpdate(e, day)} />
+                    <Form.Control type="text" value={day.scheduled} name={'scheduled'} onChange={(e) => onDayUpdate(e, dayIndex)} />
                   </FloatingLabel>
                   <FloatingLabel controlId="floatingInput" label="実績" >
-                    <Form.Control type="text" value={day.actual} name={`actual-${dayIndex}`} onChange={(e) => onDayUpdate(e, day)} />
+                    <Form.Control type="text" value={day.actual} name={'actual'} onChange={(e) => onDayUpdate(e, dayIndex)} />
                   </FloatingLabel>
                 </>
               )}
@@ -117,9 +117,8 @@ const Page: NextPageWithLayout = () => {
     )
   }
 
-  const onDayUpdate = (e: React.ChangeEvent<HTMLInputElement>, day: DayObject): void => {
-    const attributeName = e.target.name.split('-')[0];
-    const dayIndex = e.target.name.split('-')[1];
+  const onDayUpdate = (e: React.ChangeEvent<HTMLInputElement>, dayIndex: number): void => {
+    const attributeName = e.target.name;
     if(e.target.type === 'checkbox') {
       days[dayIndex][attributeName] = e.target.checked;
     } else {
