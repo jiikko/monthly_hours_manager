@@ -15,8 +15,8 @@ type CalendarDateType = {
 
 // new Dateから月を取得すると0~11で取得されるため、処理しやすい値で返すDateクラスのラッパー
 const CalendarDate = (()  => {
-  return function (argYear?, getMonth?, getDay?): CalendarDateType {
-    let date;
+  return function (argYear?: number, getMonth?: number, getDay?: number): CalendarDateType {
+    let date: Date;
 
     if (argYear && getMonth && getDay) {
       date = new Date(argYear, getMonth - 1, getDay);

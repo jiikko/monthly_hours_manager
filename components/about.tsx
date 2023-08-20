@@ -1,4 +1,4 @@
-import { Table, Row, Form, Button, Col, FloatingLabel } from 'react-bootstrap';
+import { Table, Row, Col } from 'react-bootstrap';
 import { JsonParameterTypeImpl } from '../lib/json_parameter';
 
 type Props = {

@@ -1,4 +1,4 @@
-import { DayObject, DayData, MonthTable } from './days_generator';
+import { DayObject, MonthTable } from './days_generator';
 
 export class Week {
   constructor(

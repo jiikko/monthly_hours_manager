@@ -1,5 +1,5 @@
 import { DayObject } from '../lib/days_generator';
-import { Table, Row, Form } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 
 type SummaryProps = {
   days: Array<DayObject>;

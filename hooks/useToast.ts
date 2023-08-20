@@ -4,7 +4,7 @@ export const useToast = () => {
   const [message, setMessage] = useState('');
   const [showToast, setToast] = useState(false);
 
-  const notify = (message) => {
+  const notify = (message: string) => {
     setMessage(message);
     setToast(true);
   };

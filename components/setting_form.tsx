@@ -1,9 +1,6 @@
-import type { NextPageWithLayout } from './../pages/_app'
-import Layout from '../components/layout'
-import { Form, Button, ToastContainer } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { JsonParameter, Week } from '../lib/json_parameter';
+import { Week } from '../lib/json_parameter';
 import { useToast } from '../hooks/useToast';
 import { ToastComponent } from '../components/toast';
 import { JsonParameterTypeImpl } from '../lib/json_parameter';
@@ -20,7 +17,7 @@ export const SettingForm: React.FC<Props> = ({ jsonObject, handleSubmit }) => {
   const [workingWeek, setWorkingWeek] = useState(Week.create());
   const toastProps = useToast();
 
-  const handleWorkingDaysChange = (e) => {
+  const handleWorkingDaysChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setWorkingWeek({
       ...workingWeek,
       [e.target.name]: e.target.checked,

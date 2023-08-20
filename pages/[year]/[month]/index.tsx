@@ -1,9 +1,9 @@
 import { DaysGenerator, DayObject } from '../../../lib/days_generator';
-import { JsonParameter, ParameterType, Week } from '../../../lib/json_parameter';
+import { JsonParameter, Week } from '../../../lib/json_parameter';
 import Layout from '../../../components/layout';
 import type { NextPageWithLayout } from './../../_app'
 import { CalendarDate } from '../../../lib/calendar_date';
-import { Table, Row, Form, Button, Col, FloatingLabel } from 'react-bootstrap';
+import { Table, Form, Button, Col, FloatingLabel } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { PathGenerator } from '../../../lib/path_generator';
@@ -101,7 +101,7 @@ const Page: NextPageWithLayout = () => {
   }, [router.isReady]);
 
   const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
-  const date = CalendarDate(year, month, 1);
+  const date = CalendarDate(year && Number(year), month && Number(month), 1);
   const monthKey = date.monthlyKey();
   jsonObject.selectMonth(monthKey);
 
@@ -168,10 +168,10 @@ const Page: NextPageWithLayout = () => {
       {<MonthSummary days={days} standardTime={jsonObject.standardTime} />}
 
       <Col>
-        <Button type='button' variant="secondary" onClick={((e) => initializeDays(true))}>時間を初期状態にする</Button>
+        <Button type='button' variant="secondary" onClick={((_) => initializeDays(true))}>時間を初期状態にする</Button>
       </Col>
       <Col>
-        <Button type='button' variant="primary" onClick={((e) => recalculateDays(days)) }>未稼働日の予定を再計算する</Button>
+        <Button type='button' variant="primary" onClick={((_) => recalculateDays(days)) }>未稼働日の予定を再計算する</Button>
       </Col>
 
       <ToastComponent {...toastProps} />
