@@ -1,6 +1,4 @@
 import type { NextPageWithLayout } from './_app'
-import Head from 'next/head';
-import styles from '../styles/Home.module.css';
 import Layout from '../components/layout';
 import { JsonParameter } from '../lib/json_parameter';
 import { useRouter } from 'next/router';

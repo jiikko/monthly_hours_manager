@@ -7,7 +7,7 @@ import { JsonParameterTypeImpl } from '../lib/json_parameter';
 
 type Props = {
   jsonObject: JsonParameterTypeImpl;
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>, name: string, standardTime: number, workingWeek: Week, notify: (message: string) => void) => void;
+  handleSubmit: (name: string, standardTime: number, workingWeek: Week, notify: (message: string) => void) => void;
 }
 
 export const SettingForm: React.FC<Props> = ({ jsonObject, handleSubmit }) => {
@@ -34,7 +34,7 @@ export const SettingForm: React.FC<Props> = ({ jsonObject, handleSubmit }) => {
     <>
       <h1>カレンダーの編集</h1>
 
-      <Form onSubmit={(e) => handleSubmit(e, name, standardTime, workingWeek, toastProps.notify)}>
+      <Form onSubmit={(e) => e.preventDefault()}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>名前</Form.Label>
           <Form.Control type="name" defaultValue={name} onChange={(e) => setName(e.target.value)}  />
@@ -54,7 +54,7 @@ export const SettingForm: React.FC<Props> = ({ jsonObject, handleSubmit }) => {
         <Form.Check type="switch" id='sat' name="sat" label="土" className='mb-2' checked={workingWeek.sat} onChange={handleWorkingDaysChange} />
         <Form.Check type="switch" id='sun' name="sun" label="日" className='mb-4' checked={workingWeek.sun} onChange={handleWorkingDaysChange} />
 
-        <Button variant="primary" type="submit">保存する</Button>
+        <Button variant="primary" type="submit" onClick={(_) => handleSubmit(name, standardTime, workingWeek, toastProps.notify)}>保存する</Button>
       </Form>
 
       <ToastComponent {...toastProps} />

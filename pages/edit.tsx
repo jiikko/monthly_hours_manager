@@ -9,8 +9,7 @@ const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>, name: string, standardTime: number, workingWeek: Week, notify: (message: string) => void) => {
-    e.preventDefault();
+  const handleSubmit = (name: string, standardTime: number, workingWeek: Week, notify: (message: string) => void) => {
     jsonObject.name = name;
     jsonObject.standardTime = standardTime;
     jsonObject.week = workingWeek;
