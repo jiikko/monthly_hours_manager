@@ -16,7 +16,7 @@ type MonthProps = {
   month: number;
   days: Array<DayObject>;
   workingWeek: Week;
-  handleUpdateDay: (e: React.ChangeEvent<HTMLInputElement>, dayIndex: number) => void;
+  handleUpdateDay: (attributeName: string, value: boolean | string, dayIndex: number) => void;
 }
 
 const Month: React.FC<MonthProps>= ({ year, month, days, workingWeek, handleUpdateDay }) => {
@@ -49,14 +49,14 @@ const Month: React.FC<MonthProps>= ({ year, month, days, workingWeek, handleUpda
             {dayNo}日{calendarDate.isNationalHoliday() && '(祝)'}<br />
 
             <Form>
-              <Form.Check type="switch" checked={day.isHoliday} name={'isHoliday'}  label="稼働対象外" className='m-1' onChange={(e) => handleUpdateDay(e as React.ChangeEvent<HTMLInputElement>, dayIndex)} />
+              <Form.Check type="switch" checked={day.isHoliday} name={'isHoliday'}  label="稼働対象外" className='m-1' onChange={(e) => handleUpdateDay('isHoliday', e.target.checked, dayIndex)} />
               {day.isWorkingDay() && (
                 <>
                   <FloatingLabel controlId="floatingInput" label="予定" className='mb-2' >
-                    <Form.Control type="text" value={day.scheduled} name={'scheduled'} onChange={(e) => handleUpdateDay(e as React.ChangeEvent<HTMLInputElement>, dayIndex)} />
+                    <Form.Control type="text" value={day.scheduled} name={'scheduled'} onChange={(e) => handleUpdateDay('scheduled', e.target.value, dayIndex)} />
                   </FloatingLabel>
                   <FloatingLabel controlId="floatingInput" label="実績" >
-                    <Form.Control type="text" value={day.actual} name={'actual'} onChange={(e) => handleUpdateDay(e as React.ChangeEvent<HTMLInputElement>, dayIndex)} />
+                    <Form.Control type="text" value={day.actual} name={'actual'} onChange={(e) => handleUpdateDay('actual', e.target.value, dayIndex)} />
                   </FloatingLabel>
                 </>
               )}
@@ -117,13 +117,8 @@ const Page: NextPageWithLayout = () => {
     )
   }
 
-  const handleUpdateDay = (e: React.ChangeEvent<HTMLInputElement>, dayIndex: number): void => {
-    const attributeName = e.target.name;
-    if(e.target.type === 'checkbox') {
-      days[dayIndex][attributeName] = e.target.checked;
-    } else {
-      days[dayIndex][attributeName] = e.target.value
-    }
+  const handleUpdateDay = (attributeName: string, value: boolean | string, dayIndex: number): void => {
+    days[dayIndex][attributeName] = value
     jsonObject.setDaysInMonth(days)
     saveQueryParam(jsonObject);
     toastProps.notify('時間を更新しました')
