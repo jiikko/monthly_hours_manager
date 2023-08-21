@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { CalendarDate } from '../lib/calendar_date';
 import { Container, Row, Nav, Navbar } from 'react-bootstrap';
 import { PathGenerator } from '../lib/path_generator';
+import GitHubForkRibbon from 'react-github-fork-ribbon';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -27,24 +28,26 @@ export default function Layout({ children }: LayoutProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-    <Navbar expand="lg" className="bg-body-tertiary">
-      <Container>
-        <Navbar.Brand href={rootPath}>精算幅の基準時間管理くん</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="me-auto">
-            <Nav.Link href={editPath}>設定を編集する</Nav.Link>
-            <Nav.Link href={thisMonthPath}>今月({date.month()}月)を表示する</Nav.Link>
-            <Nav.Link href={nextMonthPath}>来月({date.nextMonth()}月)を表示する</Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+      <GitHubForkRibbon href="//github.com/jiikko/monthly_hours_manager" target="_blank" position="right-bottom">Fork me on GitHub</GitHubForkRibbon>
 
-    <Container>
-      <Row className="justify-content-md-between p-3">
-        {children}
-      </Row>
+      <Navbar expand="lg" className="bg-body-tertiary">
+        <Container>
+          <Navbar.Brand href={rootPath}>精算幅の基準時間管理くん</Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+              <Nav.Link href={editPath}>設定を編集する</Nav.Link>
+              <Nav.Link href={thisMonthPath}>今月({date.month()}月)を表示する</Nav.Link>
+              <Nav.Link href={nextMonthPath}>来月({date.nextMonth()}月)を表示する</Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+
+      <Container>
+        <Row className="justify-content-md-between p-3">
+          {children}
+        </Row>
       </Container>
     </>
   )
