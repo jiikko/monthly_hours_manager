@@ -124,6 +124,20 @@ const Page: NextPageWithLayout = () => {
     toastProps.notify('時間を更新しました')
   }
 
+  const handleInitializeDaysButton = (): void => {
+    const result = confirm('現在入力済みの時間をすべて削除しますが、操作を続けますか？');
+    if(result) {
+      initializeDays(true);
+    }
+  }
+
+  const handleRecalculateDaysButton = (days: Array<DayObject>): void => {
+    const result = confirm('実績が入力されていない時間をすべて削除しますが、操作を続けますか？');
+    if(result) {
+      recalculateDays(days);
+    }
+  }
+
   const initializeDays = (notify?: boolean): void => {
     jsonObject.clearMonths();
     jsonObject.setDaysInMonth(DaysGenerator.execute(Number(year), Number(month), jsonObject.standardTime, jsonObject.week))
@@ -162,10 +176,10 @@ const Page: NextPageWithLayout = () => {
       {<MonthSummary days={days} standardTime={jsonObject.standardTime} />}
 
       <Col>
-        <Button type='button' variant="secondary" onClick={((_) => initializeDays(true))}>時間を初期状態にする</Button>
+        <Button type='button' variant="secondary" onClick={handleInitializeDaysButton}>時間を初期状態にする</Button>
       </Col>
       <Col>
-        <Button type='button' variant="primary" onClick={((_) => recalculateDays(days)) }>未稼働日の予定を再計算する</Button>
+        <Button type='button' variant="primary" onClick={((_) => handleRecalculateDaysButton(days)) }>未稼働日の予定を再計算する</Button>
       </Col>
 
       <ToastComponent {...toastProps} />
