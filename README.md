@@ -6,7 +6,6 @@
 # TODO
 * lint
 * formatter
-* github ribon
 * キーを押すことでカーソル移動をする
 * googleログインでバックアップ機能
 * 初回ロード時にdisplayでの判定をやめたい
