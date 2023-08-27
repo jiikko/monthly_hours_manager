@@ -6,11 +6,11 @@ import { ToastComponent } from '../components/toast';
 import { JsonParameterTypeImpl } from '../lib/json_parameter';
 
 type Props = {
-  jsonObject: JsonParameterTypeImpl;
+  calendar: JsonParameterTypeImpl;
   handleSubmit: (name: string, standardTime: number, workingWeek: Week, notify: (message: string) => void) => void;
 }
 
-export const SettingForm: React.FC<Props> = ({ jsonObject, handleSubmit }) => {
+export const SettingForm: React.FC<Props> = ({ calendar, handleSubmit }) => {
   const defaultStandardTime = 84;
   const [name, setName] = useState('');
   const [standardTime, setStandardTime] = useState(0);
@@ -25,10 +25,10 @@ export const SettingForm: React.FC<Props> = ({ jsonObject, handleSubmit }) => {
   };
 
   useEffect(() => {
-    setName(jsonObject.name || '');
-    setStandardTime(jsonObject.standardTime || defaultStandardTime);
-    setWorkingWeek(jsonObject.week || Week.create());
-  }, [jsonObject]);
+    setName(calendar.name || '');
+    setStandardTime(calendar.standardTime || defaultStandardTime);
+    setWorkingWeek(calendar.week || Week.create());
+  }, [calendar]);
 
   return (
     <>
