@@ -9,7 +9,7 @@ const Page: NextPageWithLayout = () => {
   const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
 
   return (
-    <About jsonObject={jsonObject} />
+    <About calendar={jsonObject} />
   )
 }
 

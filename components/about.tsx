@@ -2,10 +2,10 @@ import { Table, Row, Col } from 'react-bootstrap';
 import { JsonParameterTypeImpl } from '../lib/json_parameter';
 
 type Props = {
-  jsonObject: JsonParameterTypeImpl;
+  calendar: JsonParameterTypeImpl;
 }
 
-export const About: React.FC<Props> = ({ jsonObject }) => {
+export const About: React.FC<Props> = ({ calendar }) => {
   return(
     <>
       <Row>
@@ -30,7 +30,7 @@ export const About: React.FC<Props> = ({ jsonObject }) => {
         </Col>
       </Row>
 
-      {jsonObject.hasSetting() && (
+      {calendar.hasSetting() && (
         <Row>
           <Col>
             <h2 className='mb-3'>現在の設定情報</h2>
@@ -45,16 +45,16 @@ export const About: React.FC<Props> = ({ jsonObject }) => {
               </thead>
               <tbody>
                 <tr>
-                  <td>{jsonObject.name}</td>
-                  <td>{jsonObject.standardTime && `${jsonObject.standardTime}時間`}</td>
-                  <td>{Object.keys(jsonObject.week).filter(key => jsonObject.week[key]).join(', ')}</td>
-                  <td>{jsonObject.months && Object.keys(jsonObject.months)}</td>
+                  <td>{calendar.name}</td>
+                  <td>{calendar.standardTime && `${calendar.standardTime}時間`}</td>
+                  <td>{Object.keys(calendar.week).filter(key => calendar.week[key]).join(', ')}</td>
+                  <td>{calendar.months && Object.keys(calendar.months)}</td>
                 </tr>
               </tbody>
             </Table>
           </Col>
         </Row>
       )}
-  </>
-)
+    </>
+  )
 }
