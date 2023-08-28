@@ -106,6 +106,7 @@ const Page: NextPageWithLayout = () => {
   const calendarStandardTime = calendarState.standardTime;
   const calendarWeek = calendarState.week;
   const calendarMonths = calendarState.months;
+  console.log('foo')
 
   useEffect(() => {
     if (router.isReady) {
@@ -161,10 +162,12 @@ const Page: NextPageWithLayout = () => {
     toastProps.notify('再計算しました')
   }
 
-  if(display && calendarMonths.months && calendarMonths.months[monthKey] === undefined) {
+  console.log(display, calendarMonths, Object.entries(calendarMonths).length, (calendarMonths.months && calendarMonths[monthKey]))
+  if(display && calendarMonths && Object.entries(calendarMonths).length == 0 && calendarMonths[monthKey] === undefined) {
     initializeDays();
     console.log('初期化しました')
-  } else if(display && calendarMonths.months && Object.entries(calendarMonths).length > 0 && Object.entries(calendarMonths[monthKey]).length) {
+  } else if(display && calendarMonths && Object.entries(calendarMonths).length > 0 && calendarMonths[monthKey] === undefined) {
+    console.log('!!!!!!!!!!!!')
     // NOTE: 2つ月分のクエリパラメータを保持するとnextjsが500を返してしまう。パラメータがデカすぎる可能性があるので、1つの月分のみ保持するようにする。
     const result = confirm('他の月データが存在します。他の月のデータを削除しますが、操作を続けますか？')
     if(result) {
@@ -173,7 +176,8 @@ const Page: NextPageWithLayout = () => {
       console.log('初期化しました2')
       return
     } else {
-      // document.location = PathGenerator().rootPath(jsonObject.serializeAsJson());
+      const json = new JsonParameterTypeImpl(calendarState.name, calendarState.standardTime, calendarState.week, calendarMonths);
+      document.location = PathGenerator().rootPath(json.serializeAsJson());
       console.log('トップページに戻ります')
       return;
     }
