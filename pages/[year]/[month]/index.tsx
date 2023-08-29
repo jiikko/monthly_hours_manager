@@ -98,7 +98,6 @@ const Page: NextPageWithLayout = () => {
   const date = CalendarDate(year && Number(year), month && Number(month), 1);
   const monthKey = date.monthlyKey();
   const toastProps = useToast();
-
   const [calendarState, dispatch] = useReducer(
     CalendarReducer, { name: '', standardTime: 0, week: {}, months: {} }
   );
@@ -126,7 +125,29 @@ const Page: NextPageWithLayout = () => {
       const monthPath = PathGenerator().monthPath(date.year(), date.month(), json.serializeAsJson())
       router.push(monthPath , undefined, { scroll: false });
     }
-  }, [display, calendarState]);
+  }, [calendarState]);
+
+  useEffect(() => {
+    if(display && calendarMonths && Object.entries(calendarMonths).length == 0 && calendarMonths[monthKey] === undefined) {
+      initializeDays();
+      console.log('初期化しました')
+    } else if(display && calendarMonths && Object.entries(calendarMonths).length > 0 && calendarMonths[monthKey] === undefined) {
+      console.log('!!!!!!!!!!!!')
+      // NOTE: 2つ月分のクエリパラメータを保持するとnextjsが500を返してしまう。パラメータがデカすぎる可能性があるので、1つの月分のみ保持するようにする。
+      const result = confirm('他の月データが存在します。他の月のデータを削除しますが、操作を続けますか？')
+      if(result) {
+        dispatch({ type: 'clearMonths', payload: {} });
+        initializeDays();
+        console.log('初期化しました2')
+        return;
+      } else {
+        const json = new JsonParameterTypeImpl(calendarState.name, calendarState.standardTime, calendarState.week, calendarMonths);
+        document.location = PathGenerator().rootPath(json.serializeAsJson());
+        console.log('トップページに戻ります')
+        return;
+      }
+    }
+  }, [calendarState]);
 
   if(calendarStandardTime === undefined) {
     return(
@@ -163,25 +184,6 @@ const Page: NextPageWithLayout = () => {
   }
 
   console.log(display, calendarMonths, Object.entries(calendarMonths).length, (calendarMonths.months && calendarMonths[monthKey]))
-  if(display && calendarMonths && Object.entries(calendarMonths).length == 0 && calendarMonths[monthKey] === undefined) {
-    initializeDays();
-    console.log('初期化しました')
-  } else if(display && calendarMonths && Object.entries(calendarMonths).length > 0 && calendarMonths[monthKey] === undefined) {
-    console.log('!!!!!!!!!!!!')
-    // NOTE: 2つ月分のクエリパラメータを保持するとnextjsが500を返してしまう。パラメータがデカすぎる可能性があるので、1つの月分のみ保持するようにする。
-    const result = confirm('他の月データが存在します。他の月のデータを削除しますが、操作を続けますか？')
-    if(result) {
-      dispatch({ type: 'clearMonths', payload: {} });
-      initializeDays();
-      console.log('初期化しました2')
-      return
-    } else {
-      const json = new JsonParameterTypeImpl(calendarState.name, calendarState.standardTime, calendarState.week, calendarMonths);
-      document.location = PathGenerator().rootPath(json.serializeAsJson());
-      console.log('トップページに戻ります')
-      return;
-    }
-  }
 
   let days = []
   if(calendarMonths[monthKey]) {
