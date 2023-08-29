@@ -85,6 +85,8 @@ const Page: NextPageWithLayout = () => {
   if(calendar.months[monthKey]) {
     days = calendar.months[monthKey].map((day: DayObject, _: number) => { return(new DayObject(day.scheduled, day.actual, day.day, day.isHoliday)) })
   }
+  // NOTE: 画面遷移中にちらつかないようにするため
+  if(!display || calendar.months[monthKey] === undefined) { return }
 
   return (
     <>
