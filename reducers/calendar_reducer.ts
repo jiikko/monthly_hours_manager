@@ -9,10 +9,10 @@ type CalendarAction =
 
 // Reducerの型も明示的に定義
 type CalendarState = {
-  name: string;
-  standardTime: number;
-  week: Week;
-  months: MonthTable;
+  name?: string;
+  standardTime?: number;
+  week?: Week;
+  months?: MonthTable;
 };
 
 export const CalendarReducer = (state: CalendarState, action: CalendarAction) => {
