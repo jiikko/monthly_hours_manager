@@ -1,18 +1,16 @@
 import { DaysGenerator, DayObject } from '../../../lib/days_generator';
-import { JsonParameter, JsonParameterTypeImpl } from '../../../lib/json_parameter';
 import Layout from '../../../components/layout';
 import type { NextPageWithLayout } from './../../_app'
 import { CalendarDate } from '../../../lib/calendar_date';
 import { Button, Col } from 'react-bootstrap';
 import { useRouter } from 'next/router';
-import { useEffect, useState, useReducer } from 'react';
+import { useEffect, useState } from 'react';
 import { PathGenerator } from '../../../lib/path_generator';
 import { useToast } from '../../../hooks/useToast';
 import { ToastComponent } from '../../../components/toast';
 import { MonthSummary } from '../../../components/month_summary';
-import { CalendarReducer } from '../../../reducers/calendar_reducer';
 import { CalendarMonth } from '../../../components/calendar_month';
-import { Calendar } from '../../../lib/calendar';
+import { useCalendarState } from '../../../hooks/use_calendar_state';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -21,27 +19,38 @@ const Page: NextPageWithLayout = () => {
   const date = CalendarDate(year && Number(year), month && Number(month), 1);
   const monthKey = date.monthlyKey();
   const toastProps = useToast();
-  const [calendarState, dispatch] = useReducer(
-    CalendarReducer, { name: '', standardTime: 0, week: {}, months: {} }
-  );
-  const calendar = new Calendar(calendarState.name, calendarState.standardTime, calendarState.week, calendarState.months);
+  const { calendarState, dispatch, calendar } = useCalendarState();
+  const handleUpdateDay = (attributeName: string, value: boolean | string, dayIndex: number): void => {
+    days[dayIndex][attributeName] = value
+    dispatch({ type: 'updateDays', payload: { monthKey: monthKey, days: days } });
+    toastProps.notify('時間を更新しました')
+  }
+  const handleInitializeDaysButton = (): void => {
+    const result = confirm('現在入力済みの時間をすべて削除しますが、操作を続けますか？');
+    if(result) { initializeDays(true); }
+  }
+  const handleRecalculateDaysButton = (days: Array<DayObject>): void => {
+    const result = confirm('実績が入力されていない時間をすべて削除しますが、操作を続けますか？');
+    if(result) { recalculateDays(days); }
+  }
+  const initializeDays = (notify?: boolean): void => {
+    const initializedDays = DaysGenerator.execute(Number(year), Number(month), calendar.standardTime, calendar.week)
+    dispatch({ type: 'updateDays', payload: { monthKey: monthKey, days: initializedDays } });
+    if(notify) { toastProps.notify('初期化しました') }
+  }
+  const recalculateDays = (days: Array<DayObject>): void => {
+    const recalculatedDays = DaysGenerator.executeWithDays(Number(year), Number(month), calendar.standardTime, calendar.week, days)
+    dispatch({ type: 'updateDays', payload: { monthKey: monthKey, days: recalculatedDays } });
+    toastProps.notify('再計算しました')
+  }
 
-  // NOTE: クエリパラメータからstateを初期化する
   useEffect(() => {
-    if (router.isReady) {
-      setDisplay(true)
-
-      const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
-      dispatch({
-        type: 'initialize',
-        payload: { name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months }
-      });
-    }
+    if (router.isReady) { setDisplay(true) }
   }, [router.isReady]);
 
   useEffect(() => {
     // NOTE: stateからクエリパラメータに反映する
-    if(display) {
+    if(router.isReady) {
       const monthPath = PathGenerator().monthPath(date.year(), date.month(), calendar.serializeAsJson())
       router.push(monthPath , undefined, { scroll: false });
     }
@@ -59,8 +68,7 @@ const Page: NextPageWithLayout = () => {
         console.log('他の月を削除した上で初期化しました')
         return;
       } else {
-        const json = new JsonParameterTypeImpl(calendarState.name, calendarState.standardTime, calendarState.week, calendar.months);
-        document.location = PathGenerator().rootPath(json.serializeAsJson());
+        document.location = PathGenerator().rootPath(calendar.serializeAsJson());
         console.log('トップページに戻ります')
         return;
       }
@@ -71,34 +79,6 @@ const Page: NextPageWithLayout = () => {
     return(
       display && <div className="alert alert-danger" role="alert">カレンダーの設定情報がありません。設定してください。</div>
     )
-  }
-
-  const handleUpdateDay = (attributeName: string, value: boolean | string, dayIndex: number): void => {
-    days[dayIndex][attributeName] = value
-    dispatch({ type: 'updateDays', payload: { monthKey: monthKey, days: days } });
-    toastProps.notify('時間を更新しました')
-  }
-
-  const handleInitializeDaysButton = (): void => {
-    const result = confirm('現在入力済みの時間をすべて削除しますが、操作を続けますか？');
-    if(result) { initializeDays(true); }
-  }
-
-  const handleRecalculateDaysButton = (days: Array<DayObject>): void => {
-    const result = confirm('実績が入力されていない時間をすべて削除しますが、操作を続けますか？');
-    if(result) { recalculateDays(days); }
-  }
-
-  const initializeDays = (notify?: boolean): void => {
-    const initializedDays = DaysGenerator.execute(Number(year), Number(month), calendar.standardTime, calendar.week)
-    dispatch({ type: 'updateDays', payload: { monthKey: monthKey, days: initializedDays } });
-    if(notify) { toastProps.notify('初期化しました') }
-  }
-
-  const recalculateDays = (days: Array<DayObject>): void => {
-    const recalculatedDays = DaysGenerator.executeWithDays(Number(year), Number(month), calendar.standardTime, calendar.week, days)
-    dispatch({ type: 'updateDays', payload: { monthKey: monthKey, days: recalculatedDays } });
-    toastProps.notify('再計算しました')
   }
 
   let days = []
