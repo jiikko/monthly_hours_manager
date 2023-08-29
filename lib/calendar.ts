@@ -1,4 +1,4 @@
-import { DayObject, MonthTable } from './days_generator';
+import { MonthTable } from './days_generator';
 import { JsonParameter } from './json_parameter';
 
 export class Week {
