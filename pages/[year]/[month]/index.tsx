@@ -24,12 +24,9 @@ const Page: NextPageWithLayout = () => {
   const [calendarState, dispatch] = useReducer(
     CalendarReducer, { name: '', standardTime: 0, week: {}, months: {} }
   );
-  const calendarName = calendarState.name;
-  const calendarStandardTime = calendarState.standardTime;
-  const calendarWeek = calendarState.week;
-  const calendarMonths = calendarState.months;
-  const calendar = new Calendar(calendarName, calendarStandardTime, calendarWeek, calendarMonths);
+  const calendar = new Calendar(calendarState.name, calendarState.standardTime, calendarState.week, calendarState.months);
 
+  // NOTE: クエリパラメータからstateを初期化する
   useEffect(() => {
     if (router.isReady) {
       setDisplay(true)
@@ -43,25 +40,23 @@ const Page: NextPageWithLayout = () => {
   }, [router.isReady]);
 
   useEffect(() => {
+    // NOTE: stateからクエリパラメータに反映する
     if(display) {
-      const json = new JsonParameterTypeImpl(calendarState.name, calendarState.standardTime, calendarState.week, calendarState.months);
-      const monthPath = PathGenerator().monthPath(date.year(), date.month(), json.serializeAsJson())
+      const monthPath = PathGenerator().monthPath(date.year(), date.month(), calendar.serializeAsJson())
       router.push(monthPath , undefined, { scroll: false });
     }
-  }, [calendarState]);
 
-  useEffect(() => {
+    // NOTE: データの初期化
     if(display && calendar.months && Object.entries(calendar.months).length == 0 && calendar.months[monthKey] === undefined) {
       initializeDays();
       console.log('初期化しました')
     } else if(display && calendar.months && Object.entries(calendar.months).length > 0 && calendar.months[monthKey] === undefined) {
-      console.log('!!!!!!!!!!!!')
       // NOTE: 2つ月分のクエリパラメータを保持するとnextjsが500を返してしまう。パラメータがデカすぎる可能性があるので、1つの月分のみ保持するようにする。
       const result = confirm('他の月データが存在します。他の月のデータを削除しますが、操作を続けますか？')
       if(result) {
         dispatch({ type: 'clearMonths', payload: {} });
         initializeDays();
-        console.log('初期化しました2')
+        console.log('他の月を削除した上で初期化しました')
         return;
       } else {
         const json = new JsonParameterTypeImpl(calendarState.name, calendarState.standardTime, calendarState.week, calendar.months);
