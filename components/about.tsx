@@ -1,8 +1,8 @@
 import { Table, Row, Col } from 'react-bootstrap';
-import { JsonParameterTypeImpl } from '../lib/json_parameter';
+import { Calendar } from '../lib/calendar';
 
 type Props = {
-  calendar: JsonParameterTypeImpl;
+  calendar: Calendar;
 }
 
 export const About: React.FC<Props> = ({ calendar }) => {

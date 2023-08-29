@@ -1,11 +1,12 @@
 import type { NextPageWithLayout } from './_app'
 import Layout from '../components/layout'
 import { useRouter } from 'next/router';
-import { JsonParameter, JsonParameterTypeImpl, Week } from '../lib/json_parameter';
+import { JsonParameter, Week } from '../lib/json_parameter';
 import { PathGenerator } from '../lib/path_generator';
 import { SettingForm } from '../components/setting_form';
 import { useReducer, useEffect } from 'react';
 import { CalendarReducer } from '../reducers/calendar_reducer';
+import { Calendar } from '../lib/calendar';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -15,10 +16,11 @@ const Page: NextPageWithLayout = () => {
   const calendarStandardTime = jsonObject.standardTime;
   const calendarWeek = jsonObject.week;
   const calendarMonths = jsonObject.months;
+  const calendar = new Calendar(calendarName, calendarStandardTime, calendarWeek, calendarMonths);
 
   const [calendarState, dispatch] = useReducer(
     CalendarReducer,
-    { name: calendarName, standardTime: calendarStandardTime, week: calendarWeek, months: calendarMonths }
+    { name: calendar.name, standardTime: calendar.standardTime, week: calendar.week, months: calendar.months }
   );
 
   const handleSubmit = (name: string, standardTime: number, week: Week, notify: (message: string) => void) => {
@@ -27,18 +29,14 @@ const Page: NextPageWithLayout = () => {
   };
 
   useEffect(() => {
-    console.log('router.isReady:', router.isReady)
-
     if(router.isReady && calendarState.standardTime) {
-      const json = new JsonParameterTypeImpl(calendarState.name, calendarState.standardTime, calendarState.week, calendarMonths);
-      console.log('json:', json)
-      const editPath = PathGenerator().editPath(json.serializeAsJson());
+      const editPath = PathGenerator().editPath(calendar.serializeAsJson());
       router.push(editPath , undefined, { scroll: false });
     }
-  }, [router.isReady, calendarState]);
+  }, [calendarState]);
 
   return (
-    <SettingForm calendar={jsonObject} handleSubmit={handleSubmit} />
+    <SettingForm calendar={calendar} handleSubmit={handleSubmit} />
   )
 }
 

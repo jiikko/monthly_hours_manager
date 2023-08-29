@@ -3,10 +3,10 @@ import { useState, useEffect } from 'react';
 import { Week } from '../lib/json_parameter';
 import { useToast } from '../hooks/useToast';
 import { ToastComponent } from '../components/toast';
-import { JsonParameterTypeImpl } from '../lib/json_parameter';
+import { Calendar } from '../lib/calendar';
 
 type Props = {
-  calendar: JsonParameterTypeImpl;
+  calendar: Calendar;
   handleSubmit: (name: string, standardTime: number, workingWeek: Week, notify: (message: string) => void) => void;
 }
 
