@@ -6,17 +6,12 @@ import { PathGenerator } from '../lib/path_generator';
 import { SettingForm } from '../components/setting_form';
 import { useReducer, useEffect } from 'react';
 import { CalendarReducer } from '../reducers/calendar_reducer';
-import { Calendar } from '../lib/calendar';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
 
   const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
-  const calendarName = jsonObject.name;
-  const calendarStandardTime = jsonObject.standardTime;
-  const calendarWeek = jsonObject.week;
-  const calendarMonths = jsonObject.months;
-  const calendar = new Calendar(calendarName, calendarStandardTime, calendarWeek, calendarMonths);
+  const calendar = jsonObject.toCalendar()
 
   const [calendarState, dispatch] = useReducer(
     CalendarReducer,

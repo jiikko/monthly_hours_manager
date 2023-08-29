@@ -1,5 +1,5 @@
 import { DaysGenerator, DayObject } from '../../../lib/days_generator';
-import { JsonParameter, JsonParameterTypeImpl, Week } from '../../../lib/json_parameter';
+import { JsonParameter, JsonParameterTypeImpl } from '../../../lib/json_parameter';
 import Layout from '../../../components/layout';
 import type { NextPageWithLayout } from './../../_app'
 import { CalendarDate } from '../../../lib/calendar_date';
@@ -12,6 +12,7 @@ import { ToastComponent } from '../../../components/toast';
 import { MonthSummary } from '../../../components/month_summary';
 import { CalendarReducer } from '../../../reducers/calendar_reducer';
 import { CalendarMonth } from '../../../components/calendar_month';
+import { Calendar } from '../../../lib/calendar';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -27,7 +28,7 @@ const Page: NextPageWithLayout = () => {
   const calendarStandardTime = calendarState.standardTime;
   const calendarWeek = calendarState.week;
   const calendarMonths = calendarState.months;
-  console.log('foo')
+  const calendar = new Calendar(calendarName, calendarStandardTime, calendarWeek, calendarMonths);
 
   useEffect(() => {
     if (router.isReady) {
@@ -50,10 +51,10 @@ const Page: NextPageWithLayout = () => {
   }, [calendarState]);
 
   useEffect(() => {
-    if(display && calendarMonths && Object.entries(calendarMonths).length == 0 && calendarMonths[monthKey] === undefined) {
+    if(display && calendar.months && Object.entries(calendar.months).length == 0 && calendar.months[monthKey] === undefined) {
       initializeDays();
       console.log('初期化しました')
-    } else if(display && calendarMonths && Object.entries(calendarMonths).length > 0 && calendarMonths[monthKey] === undefined) {
+    } else if(display && calendar.months && Object.entries(calendar.months).length > 0 && calendar.months[monthKey] === undefined) {
       console.log('!!!!!!!!!!!!')
       // NOTE: 2つ月分のクエリパラメータを保持するとnextjsが500を返してしまう。パラメータがデカすぎる可能性があるので、1つの月分のみ保持するようにする。
       const result = confirm('他の月データが存在します。他の月のデータを削除しますが、操作を続けますか？')
@@ -63,7 +64,7 @@ const Page: NextPageWithLayout = () => {
         console.log('初期化しました2')
         return;
       } else {
-        const json = new JsonParameterTypeImpl(calendarState.name, calendarState.standardTime, calendarState.week, calendarMonths);
+        const json = new JsonParameterTypeImpl(calendarState.name, calendarState.standardTime, calendarState.week, calendar.months);
         document.location = PathGenerator().rootPath(json.serializeAsJson());
         console.log('トップページに戻ります')
         return;
@@ -71,7 +72,7 @@ const Page: NextPageWithLayout = () => {
     }
   }, [calendarState]);
 
-  if(calendarStandardTime === undefined) {
+  if(calendar.standardTime === undefined) {
     return(
       display && <div className="alert alert-danger" role="alert">カレンダーの設定情報がありません。設定してください。</div>
     )
@@ -94,29 +95,27 @@ const Page: NextPageWithLayout = () => {
   }
 
   const initializeDays = (notify?: boolean): void => {
-    const initializedDays = DaysGenerator.execute(Number(year), Number(month), calendarStandardTime, calendarWeek)
+    const initializedDays = DaysGenerator.execute(Number(year), Number(month), calendar.standardTime, calendar.week)
     dispatch({ type: 'updateDays', payload: { monthKey: monthKey, days: initializedDays } });
     if(notify) { toastProps.notify('初期化しました') }
   }
 
   const recalculateDays = (days: Array<DayObject>): void => {
-    const recalculatedDays = DaysGenerator.executeWithDays(Number(year), Number(month), calendarStandardTime, calendarWeek, days)
+    const recalculatedDays = DaysGenerator.executeWithDays(Number(year), Number(month), calendar.standardTime, calendar.week, days)
     dispatch({ type: 'updateDays', payload: { monthKey: monthKey, days: recalculatedDays } });
     toastProps.notify('再計算しました')
   }
 
-  console.log(display, calendarMonths, Object.entries(calendarMonths).length, (calendarMonths.months && calendarMonths[monthKey]))
-
   let days = []
-  if(calendarMonths[monthKey]) {
-    days = calendarMonths[monthKey].map((day: DayObject, _: number) => { return(new DayObject(day.scheduled, day.actual, day.day, day.isHoliday)) })
+  if(calendar.months[monthKey]) {
+    days = calendar.months[monthKey].map((day: DayObject, _: number) => { return(new DayObject(day.scheduled, day.actual, day.day, day.isHoliday)) })
   }
 
   return (
     <>
-      {calendarName ? <h1>{calendarName}の{year}年{month}月</h1> : <h1>{year}年{month}月</h1>}
-      {days.length && <CalendarMonth year={Number(year)} month={Number(month)} days={days} workingWeek={calendarWeek} handleUpdateDay={handleUpdateDay} />}
-      {<MonthSummary days={days} standardTime={calendarStandardTime} />}
+      {calendar.name ? <h1>{calendar.name}の{year}年{month}月</h1> : <h1>{year}年{month}月</h1>}
+      {days.length && <CalendarMonth year={Number(year)} month={Number(month)} days={days} workingWeek={calendar.week} handleUpdateDay={handleUpdateDay} />}
+      {<MonthSummary days={days} standardTime={calendar.standardTime} />}
 
       <Col>
         <Button type='button' variant="secondary" onClick={handleInitializeDaysButton}>時間を初期状態にする</Button>

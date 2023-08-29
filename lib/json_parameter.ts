@@ -1,4 +1,5 @@
 import { DayObject, MonthTable } from './days_generator';
+import { Calendar } from './calendar';
 
 export class Week {
   constructor(
@@ -70,6 +71,10 @@ export class JsonParameterTypeImpl implements ParameterType {
 
   setDaysInMonth(days: Array<DayObject>): void {
     this.months[this.currentMonthKey] = days;
+  }
+
+  toCalendar(): Calendar {
+    return new Calendar(this.name, this.standardTime, this.week, this.months);
   }
 
   isNoCurrentDaysInMonth(): boolean {
