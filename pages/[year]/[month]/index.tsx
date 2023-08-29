@@ -63,7 +63,7 @@ const Page: NextPageWithLayout = () => {
       // NOTE: 2つ月分のクエリパラメータを保持するとnextjsが500を返してしまう。パラメータがデカすぎる可能性があるので、1つの月分のみ保持するようにする。
       const result = confirm('他の月データが存在します。他の月のデータを削除しますが、操作を続けますか？')
       if(result) {
-        dispatch({ type: 'clearMonths', payload: {} });
+        dispatch({ type: 'clearMonths' });
         initializeDays();
         console.log('他の月を削除した上で初期化しました')
         return;
