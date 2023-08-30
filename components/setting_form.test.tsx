@@ -3,16 +3,12 @@ import '@testing-library/jest-dom'
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Week } from '../lib/json_parameter';
 import { SettingForm } from './setting_form';
-
+import { Calendar } from '../lib/calendar';
 
 test('SettingForm submits the correct values', () => {
   const handleSubmit = jest.fn();
-  const jsonObject = {
-    name: 'テスト名',
-    standardTime: 100,
-    week: Week.create(),
-  } as any;
-  render(<SettingForm jsonObject={jsonObject} handleSubmit={handleSubmit} />);
+  const calendar = new Calendar('a', 100, Week.create(), {});
+  render(<SettingForm calendar={calendar} handleSubmit={handleSubmit} />);
 
   fireEvent.change(screen.getByLabelText(/名前/i), { target: { value: '新しい名前' } });
   fireEvent.change(screen.getByLabelText(/基準時間/i), { target: { value: '120' } });
