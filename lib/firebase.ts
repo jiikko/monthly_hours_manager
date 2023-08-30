@@ -1,0 +1,13 @@
+import { initializeApp } from "firebase/app";
+
+const firebaseConfig = {
+  // apiKey: 
+  authDomain: "jiikko.firebaseapp.com",
+  projectId: "jiikko",
+  storageBucket: "jiikko.appspot.com",
+  messagingSenderId: "1009399482983",
+  appId: "1:1009399482983:web:a0cb481abe2971776ce2c2",
+  measurementId: "G-BC2S4M9LR7"
+};
+
+export const app = initializeApp(firebaseConfig);

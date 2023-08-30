@@ -1,5 +1,5 @@
 import type { NextPageWithLayout } from './_app'
-import Layout from '../components/layout'
+import { Layout } from '../components/layout'
 import { useRouter } from 'next/router';
 import { Week } from '../lib/json_parameter';
 import { PathGenerator } from '../lib/path_generator';
