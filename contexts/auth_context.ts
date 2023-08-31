@@ -1,3 +1,10 @@
 import { createContext } from 'react';
+import { AuthContextType } from '../lib/auth';
 
-export const AuthContext = createContext({});
+const defaultValue = {
+  loaded: false,
+  loggedInEmail: '',
+  logout: () => {},
+} as AuthContextType
+
+export const AuthContext = createContext(defaultValue);
