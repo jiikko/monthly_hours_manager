@@ -15,7 +15,7 @@ export const SettingForm: React.FC<Props> = ({ calendar, handleSubmit }) => {
   const { loaded } = useContext(AuthContext);
   const defaultStandardTime = 84;
   const [name, setName] = useState('');
-  const [standardTime, setStandardTime] = useState(0);
+  const [standardTime, setStandardTime] = useState(undefined);
   const [workingWeek, setWorkingWeek] = useState(Week.create());
   const toastProps = useToast();
 
@@ -27,10 +27,12 @@ export const SettingForm: React.FC<Props> = ({ calendar, handleSubmit }) => {
   };
 
   useEffect(() => {
+    if(!loaded) { return }
+
     setName(calendar.name || '');
     setStandardTime(calendar.standardTime || defaultStandardTime);
     setWorkingWeek(calendar.week || Week.create());
-  }, [calendar, loaded]);
+  }, [calendar]);
 
   if(!loaded) { return }
 

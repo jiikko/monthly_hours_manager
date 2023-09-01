@@ -18,7 +18,6 @@ const Page: NextPageWithLayout = () => {
     dispatch({ type:'updateCalendar', payload: { name, standardTime, week }});
     notify('カレンダー情報の変更に成功しました。')
   }
-  console.log(loaded, user)
 
   // NOTE: 永続化処理
   useEffect(() => {
