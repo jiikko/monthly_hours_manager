@@ -4,26 +4,46 @@ import { useRouter } from 'next/router';
 import { Week } from '../lib/json_parameter';
 import { PathGenerator } from '../lib/path_generator';
 import { SettingForm } from '../components/setting_form';
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { useCalendarState } from '../hooks/use_calendar_state';
+import { db } from "../lib/firebase";
+import { setDoc, doc } from "firebase/firestore";
+import { AuthContext} from '../contexts/auth_context'
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
-  const { calendarState, dispatch, calendar } = useCalendarState();
-  const handleSubmit = (name: string, standardTime: number, week: Week, notify: (message: string) => void) => {
+  const { user, loaded } = useContext(AuthContext);
+  const { calendarState, dispatch, calendar } = useCalendarState(user, loaded);
+  const handleSubmit = async (name: string, standardTime: number, week: Week, notify: (message: string) => void) => {
     dispatch({ type:'updateCalendar', payload: { name, standardTime, week }});
     notify('カレンダー情報の変更に成功しました。')
-  };
-  // NOTE: stateからクエリパラメータに反映する
+  }
+  console.log(loaded, user)
+
+  // NOTE: 永続化処理
   useEffect(() => {
-    if(router.isReady) {
+    if(!loaded) { return }
+
+    if(user) {
+      // NOTE: stateからDBに反映する
+      if(user) {
+        const uid = user.uid;
+        const docRef = doc(db, `time-manager/${uid}`);
+        setDoc(docRef, {
+          name: calendar.name, standardTime: calendar.standardTime, week: calendar.week,
+        }, { merge: true });
+      }
+    } else {
+      // NOTE: stateからクエリパラメータに反映する
       const editPath = PathGenerator().editPath(calendar.serializeAsJson());
       router.push(editPath , undefined, { scroll: false });
     }
   }, [calendarState]);
 
   return (
-    <SettingForm calendar={calendar} handleSubmit={handleSubmit} />
+    <>
+      {<SettingForm calendar={calendar} handleSubmit={handleSubmit} />}
+    </>
   )
 }
 

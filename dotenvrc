@@ -1,1 +1,1 @@
-export FIREBASE_API_KEY=xxx
+export NEXT_PUBLIC_FIREBASE_API_KEY=xxx

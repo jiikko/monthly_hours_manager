@@ -1,9 +1,10 @@
 import { Form, Button } from 'react-bootstrap';
-import { useState, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Week } from '../lib/json_parameter';
 import { useToast } from '../hooks/useToast';
 import { ToastComponent } from '../components/toast';
 import { Calendar } from '../lib/calendar';
+import { AuthContext } from '../contexts/auth_context';
 
 type Props = {
   calendar: Calendar;
@@ -11,6 +12,7 @@ type Props = {
 }
 
 export const SettingForm: React.FC<Props> = ({ calendar, handleSubmit }) => {
+  const { loaded } = useContext(AuthContext);
   const defaultStandardTime = 84;
   const [name, setName] = useState('');
   const [standardTime, setStandardTime] = useState(0);
@@ -28,7 +30,9 @@ export const SettingForm: React.FC<Props> = ({ calendar, handleSubmit }) => {
     setName(calendar.name || '');
     setStandardTime(calendar.standardTime || defaultStandardTime);
     setWorkingWeek(calendar.week || Week.create());
-  }, [calendar]);
+  }, [calendar, loaded]);
+
+  if(!loaded) { return }
 
   return (
     <>
