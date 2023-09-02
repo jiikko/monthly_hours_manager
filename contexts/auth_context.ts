@@ -5,7 +5,7 @@ const defaultValue = {
   loaded: false,
   loggedInEmail: '',
   logout: () => {},
-  user: null,
+  user: undefined,
 } as AuthContextType
 
 export const AuthContext = createContext(defaultValue);

@@ -7,8 +7,9 @@ import { AuthContext} from '../contexts/auth_context'
 
 import { doc, getFirestore, getDoc } from 'firebase/firestore';
 
-export const useCalendarState = (user: any, loaded: boolean) => {
+export const useCalendarState = () => {
   const router = useRouter();
+  const { user, loaded } = useContext(AuthContext);
   const [calendarState, dispatch] = useReducer(
     CalendarReducer, { name: '', standardTime: 0, week: {}, months: {} }
   );
@@ -16,8 +17,6 @@ export const useCalendarState = (user: any, loaded: boolean) => {
 
   // NOTE: stateへ反映する
   useEffect(() => {
-    if(!loaded) { return }
-
     if(user) {
       const db = getFirestore();
       const docRef = doc(db, `time-manager/${user.uid}`);
@@ -33,7 +32,7 @@ export const useCalendarState = (user: any, loaded: boolean) => {
           console.log("No such document!");
         }
       })
-    } else {
+    } else if(user === null){
       if (router.isReady) {
         const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
         dispatch({
@@ -41,8 +40,10 @@ export const useCalendarState = (user: any, loaded: boolean) => {
           payload: { name: jsonObject.name, standardTime: jsonObject.standardTime, week: jsonObject.week, months: jsonObject.months }
         });
       }
+    } else if (user === undefined) {
+      // NOTE: 何もしない
     }
-  }, [router.isReady, loaded, user]);
+  }, [router.isReady, loaded]);
 
-  return { calendarState, dispatch, calendar };
+  return { calendarState, dispatch, calendar, user };
 }

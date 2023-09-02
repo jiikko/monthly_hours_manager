@@ -13,7 +13,7 @@ export type AuthContextType = {
 export const useAuth = (): AuthContextType => {
   const [loggedInEmail, setLoggedInEmail] = useState('');
   const [loaded, setLoaded] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(undefined);
 
   const login = async (email: string, password: string) => {
     const auth = getAuth();
@@ -32,8 +32,13 @@ export const useAuth = (): AuthContextType => {
     const auth = getAuth(app);
     return onAuthStateChanged(auth, (user) => {
       setLoaded(true);
-      setUser(user);
       setLoggedInEmail(user?.email);
+
+      if(user) {
+        setUser(user);
+      } else {
+        setUser(null)
+      }
     });
   }, []);
 

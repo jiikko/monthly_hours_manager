@@ -12,7 +12,6 @@ type Props = {
 }
 
 export const SettingForm: React.FC<Props> = ({ calendar, handleSubmit }) => {
-  const { loaded } = useContext(AuthContext);
   const defaultStandardTime = 84;
   const [name, setName] = useState('');
   const [standardTime, setStandardTime] = useState(undefined);
@@ -27,14 +26,10 @@ export const SettingForm: React.FC<Props> = ({ calendar, handleSubmit }) => {
   };
 
   useEffect(() => {
-    if(!loaded) { return }
-
     setName(calendar.name || '');
     setStandardTime(calendar.standardTime || defaultStandardTime);
     setWorkingWeek(calendar.week || Week.create());
   }, [calendar]);
-
-  if(!loaded) { return }
 
   return (
     <>
