@@ -50,7 +50,7 @@ export const About: React.FC<Props> = ({ calendar }) => {
                   <td>{Object.keys(calendar.week).filter(key => calendar.week[key]).join(', ')}</td>
                   <td>
                     <ul>
-                      {calendar.months && Object.keys(calendar.months).map((key, index) => (
+                      {calendar.months && Object.keys(calendar.months).map((key, _index) => (
                         <li className="br-after" key={key}>{key}</li>
                       ))}
                     </ul>
