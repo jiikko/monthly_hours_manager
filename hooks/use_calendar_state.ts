@@ -1,4 +1,4 @@
-import { useReducer, useEffect, useContext } from 'react';
+import { useReducer, useEffect, useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 import { CalendarReducer } from '../reducers/calendar_reducer';
 import { JsonParameter } from '../lib/json_parameter';
@@ -8,6 +8,7 @@ import { db } from "../lib/firebase";
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 export const useCalendarState = (redirectPathFunc?: any) => {
+  const [isInitialRender, setIsInitialRender] = useState(true);
   const router = useRouter();
   const { user, loaded } = useContext(AuthContext);
   const [calendarState, dispatch] = useReducer(
@@ -46,15 +47,18 @@ export const useCalendarState = (redirectPathFunc?: any) => {
 
   // NOTE: stateを変更した時に永続化処理をする
   useEffect(() => {
+    if (isInitialRender) {
+      setIsInitialRender(false);
+      return;
+    }
+
     if(user) {
       // NOTE: stateからDBに反映する
-      if(user) {
-        const uid = user.uid;
-        const docRef = doc(db, `time-manager/${uid}`);
-        setDoc(docRef, {
-          name: calendar.name, standardTime: calendar.standardTime, week: calendar.week, months: (calendar.months || {})
-        }, { merge: true });
-      }
+      const uid = user.uid;
+      const docRef = doc(db, `time-manager/${uid}`);
+      setDoc(docRef, {
+        name: calendar.name, standardTime: calendar.standardTime, week: calendar.week, months: (calendar.months || {})
+      }, { merge: true });
     } else if(user === null && redirectPathFunc) {
       // NOTE: stateからクエリパラメータに反映する
       const path = redirectPathFunc(calendar.serializeAsJson())
