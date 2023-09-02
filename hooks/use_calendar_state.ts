@@ -4,10 +4,10 @@ import { CalendarReducer } from '../reducers/calendar_reducer';
 import { JsonParameter } from '../lib/json_parameter';
 import { Calendar } from '../lib/calendar';
 import { AuthContext} from '../contexts/auth_context'
+import { db } from "../lib/firebase";
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
-import { doc, getFirestore, getDoc } from 'firebase/firestore';
-
-export const useCalendarState = () => {
+export const useCalendarState = (redirectPathFunc: any) => {
   const router = useRouter();
   const { user, loaded } = useContext(AuthContext);
   const [calendarState, dispatch] = useReducer(
@@ -15,10 +15,9 @@ export const useCalendarState = () => {
   );
   const calendar = new Calendar(calendarState.name, calendarState.standardTime, calendarState.week, calendarState.months);
 
-  // NOTE: stateへ反映する
+  // NOTE: 画面読み込み時に、ストレージからstateへ復元する
   useEffect(() => {
     if(user) {
-      const db = getFirestore();
       const docRef = doc(db, `time-manager/${user.uid}`);
       getDoc(docRef).then((docSnap) => {
         if (docSnap.exists()) {
@@ -41,9 +40,29 @@ export const useCalendarState = () => {
         });
       }
     } else if (user === undefined) {
-      // NOTE: 何もしない
+      // NOTE: ログイン状態の確認が完了していない場合は何もしない
     }
   }, [router.isReady, loaded]);
+
+  // NOTE: stateを変更した時に永続化処理をする
+  useEffect(() => {
+    if(user) {
+      // NOTE: stateからDBに反映する
+      if(user) {
+        const uid = user.uid;
+        const docRef = doc(db, `time-manager/${uid}`);
+        setDoc(docRef, {
+          name: calendar.name, standardTime: calendar.standardTime, week: calendar.week, months: (calendar.months || {})
+        }, { merge: true });
+      }
+    } else if(user === null) {
+      // NOTE: stateからクエリパラメータに反映する
+      const path = redirectPathFunc(calendar.serializeAsJson())
+      router.push(path , undefined, { scroll: false });
+    } else if(user === undefined) {
+      // NOTE: ログイン状態の確認が完了していない場合は何もしない
+    }
+  }, [calendarState]);
 
   return { calendarState, dispatch, calendar, user };
 }
