@@ -15,14 +15,16 @@ import { useCalendarState } from '../../../hooks/use_calendar_state';
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { year, month } = router.query;
-  const [display, setDisplay] = useState(false);
   const date = CalendarDate(year && Number(year), month && Number(month), 1);
   const monthKey = date.monthlyKey();
   const toastProps = useToast();
-  const { calendarState, dispatch, calendar } = useCalendarState();
+  const { calendarState, dispatch, calendar, loading, loaded } = useCalendarState();
   const handleUpdateDay = (attributeName: string, value: boolean | string, dayIndex: number): void => {
     days[dayIndex][attributeName] = value
-    dispatch({ type: 'updateDays', payload: { monthKey: monthKey, days: days } });
+    dispatch({
+      type: 'updateDays',
+      payload: { monthKey: monthKey, days: days.map((day: DayObject) => { return(day.toObject()) }) },
+    })
     toastProps.notify('時間を更新しました')
   }
   const handleInitializeDaysButton = (): void => {
@@ -45,21 +47,11 @@ const Page: NextPageWithLayout = () => {
   }
 
   useEffect(() => {
-    if (router.isReady) { setDisplay(true) }
-  }, [router.isReady]);
-
-  useEffect(() => {
-    // NOTE: stateからクエリパラメータに反映する
-    if(router.isReady) {
-      const monthPath = PathGenerator().monthPath(date.year(), date.month(), calendar.serializeAsJson())
-      router.push(monthPath , undefined, { scroll: false });
-    }
-
     // NOTE: データの初期化
-    if(display && calendar.months && Object.entries(calendar.months).length == 0 && calendar.months[monthKey] === undefined) {
+    if(loaded && calendar.months && Object.entries(calendar.months).length == 0 && calendar.months[monthKey] === undefined) {
       initializeDays();
       console.log('初期化しました')
-    } else if(display && calendar.months && Object.entries(calendar.months).length > 0 && calendar.months[monthKey] === undefined) {
+    } else if(loaded && calendar.months && Object.entries(calendar.months).length > 0 && calendar.months[monthKey] === undefined) {
       // NOTE: 2つ月分のクエリパラメータを保持するとnextjsが500を返してしまう。パラメータがデカすぎる可能性があるので、1つの月分のみ保持するようにする。
       const result = confirm('他の月データが存在します。他の月のデータを削除しますが、操作を続けますか？')
       if(result) {
@@ -77,21 +69,22 @@ const Page: NextPageWithLayout = () => {
 
   if(calendar.standardTime === undefined) {
     return(
-      display && <div className="alert alert-danger" role="alert">カレンダーの設定情報がありません。設定してください。</div>
+      <div className="alert alert-danger" role="alert">カレンダーの設定情報がありません。設定してください。</div>
     )
   }
 
+  if(loading) { return }
   let days = []
   if(calendar.months[monthKey]) {
     days = calendar.months[monthKey].map((day: DayObject, _: number) => { return(new DayObject(day.scheduled, day.actual, day.day, day.isHoliday)) })
   }
   // NOTE: 画面遷移中にちらつかないようにするため
-  if(!display || calendar.months[monthKey] === undefined) { return }
+  if(calendar.months[monthKey] === undefined) { return }
 
   return (
     <>
       {calendar.name ? <h1>{calendar.name}の{year}年{month}月</h1> : <h1>{year}年{month}月</h1>}
-      {days.length && <CalendarMonth year={Number(year)} month={Number(month)} days={days} workingWeek={calendar.week} handleUpdateDay={handleUpdateDay} />}
+      {<CalendarMonth year={Number(year)} month={Number(month)} days={days} workingWeek={calendar.week} handleUpdateDay={handleUpdateDay} />}
       {<MonthSummary days={days} standardTime={calendar.standardTime} />}
 
       <Col>
