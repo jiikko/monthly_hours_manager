@@ -7,7 +7,7 @@ import { AuthContext} from '../contexts/auth_context'
 import { db } from "../lib/firebase";
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 
-export const useCalendarState = (redirectPathFunc: any) => {
+export const useCalendarState = (redirectPathFunc?: any) => {
   const router = useRouter();
   const { user, loaded } = useContext(AuthContext);
   const [calendarState, dispatch] = useReducer(
@@ -55,7 +55,7 @@ export const useCalendarState = (redirectPathFunc: any) => {
           name: calendar.name, standardTime: calendar.standardTime, week: calendar.week, months: (calendar.months || {})
         }, { merge: true });
       }
-    } else if(user === null) {
+    } else if(user === null && redirectPathFunc) {
       // NOTE: stateからクエリパラメータに反映する
       const path = redirectPathFunc(calendar.serializeAsJson())
       router.push(path , undefined, { scroll: false });
