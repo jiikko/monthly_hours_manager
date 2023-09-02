@@ -58,9 +58,11 @@ export const useCalendarState = (redirectPathFunc?: any) => {
       // NOTE: stateからDBに反映する
       const uid = user.uid;
       const docRef = doc(db, `time-manager/${uid}`);
+      console.log('calendar.months:', calendar.months)
+
       setDoc(docRef, {
         name: calendar.name, standardTime: calendar.standardTime, week: calendar.week, months: (calendar.months || {})
-      }, { merge: true });
+      });
     } else if(user === null && redirectPathFunc) {
       // NOTE: stateからクエリパラメータに反映する
       const path = redirectPathFunc(calendar.serializeAsJson())
