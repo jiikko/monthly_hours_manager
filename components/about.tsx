@@ -48,7 +48,13 @@ export const About: React.FC<Props> = ({ calendar }) => {
                   <td>{calendar.name}</td>
                   <td>{calendar.standardTime && `${calendar.standardTime}時間`}</td>
                   <td>{Object.keys(calendar.week).filter(key => calendar.week[key]).join(', ')}</td>
-                  <td>{calendar.months && Object.keys(calendar.months)}</td>
+                  <td>
+                    <ul>
+                      {calendar.months && Object.keys(calendar.months).map((key, index) => (
+                        <li className="br-after" key={key}>{key}</li>
+                      ))}
+                    </ul>
+                  </td>
                 </tr>
               </tbody>
             </Table>
