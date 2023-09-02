@@ -14,7 +14,7 @@ export const useCalendarState = (redirectPathFunc?: any) => {
   const [calendarState, dispatch] = useReducer(
     CalendarReducer, { name: '', standardTime: 0, week: {}, months: {} }
   );
-  const calendar = new Calendar(calendarState.name, calendarState.standardTime, calendarState.week, calendarState.months);
+  const calendar = new Calendar(calendarState.name, calendarState.standardTime, calendarState.week, calendarState.months, !!user);
   const loading = user === undefined
 
   // NOTE: 画面読み込み時に、ストレージからstateへ復元する

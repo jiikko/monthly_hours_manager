@@ -22,12 +22,17 @@ export type CalendarType = {
   standardTime?: number;
   week?: Week;
   months?: MonthTable,
+  loggedIn?: boolean;
 }
 
 export class Calendar implements CalendarType {
-  constructor(public name: string, public standardTime: number, public week: Week, public months: MonthTable) {}
+  constructor(public name: string, public standardTime: number, public week: Week, public months: MonthTable, loggedIn?: boolean) {
+    this.loggedIn = loggedIn;
+  }
 
   serializeAsJson(): string {
+    if(this.loggedIn) { return }
+
     return JsonParameter.serialize({ name: this.name, standardTime: this.standardTime, week: this.week, months: this.months })
   }
 

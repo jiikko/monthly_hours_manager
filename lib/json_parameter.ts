@@ -92,8 +92,7 @@ export class JsonParameter {
       .filter(([_key, value]) => value !== undefined )
       .map(([key, value]) => {
         return `${encodeURIComponent(key)}=${encodeURIComponent(JSON.stringify(value))}`;
-      })
-      .join('&');
+      }).join('&');
   }
 
   static parse(query: { [key: string]: string }): JsonParameterTypeImpl {
