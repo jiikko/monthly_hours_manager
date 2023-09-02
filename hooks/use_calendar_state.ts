@@ -47,6 +47,7 @@ export const useCalendarState = (redirectPathFunc?: any) => {
 
   // NOTE: stateを変更した時に永続化処理をする
   useEffect(() => {
+    // NOTE: 空の状態でストレージを上書きしてしまわないようにする
     if (isInitialRender) {
       setIsInitialRender(false);
       return;
