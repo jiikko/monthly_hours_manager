@@ -34,7 +34,7 @@ const Page: NextPageWithLayout = () => {
       <div className="alert alert-info">ログイン後、既存データ(クエリパラメータ)の引き継ぎは行いません。</div>
 
       {formErrorMessage && <Alert variant="danger">{formErrorMessage}</Alert>}
-      <Form>
+      <Form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
         <Form.Group controlId="formEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -47,7 +47,7 @@ const Page: NextPageWithLayout = () => {
 
         <Row>
           <Col>
-            <Button variant="primary" className='mt-3' onClick={handleSubmit}>
+            <Button variant="primary" className='mt-3' type="submit">
               ログイン
             </Button>
           </Col>
