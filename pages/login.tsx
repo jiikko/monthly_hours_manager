@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { PathGenerator } from '../lib/path_generator';
 import { useAuth } from '../lib/auth';
+import { Row, Alert, Button, Form, Col } from 'react-bootstrap';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -27,12 +28,34 @@ const Page: NextPageWithLayout = () => {
   return (
     <>
       <h1>ログイン</h1>
-      <div className="alert alert-info">ログインした時にデータの引き継ぎは行いません。</div>
+      <div className="alert alert-info">ログイン後、既存データ(クエリパラメータ)の引き継ぎは行いません。</div>
 
-      {formErrorMessage && <div className="alert alert-danger">{formErrorMessage}</div>}
-      <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} /><br />
-      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} /><br />
-      <input type="submit" value="ログイン" onClick={handleSubmit} />
+      {formErrorMessage && <Alert variant="danger">{formErrorMessage}</Alert>}
+      <Form>
+        <Form.Group controlId="formEmail">
+          <Form.Label>Email address</Form.Label>
+          <Form.Control type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </Form.Group>
+
+        <Form.Group controlId="formPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        </Form.Group>
+
+        <Row>
+          <Col>
+            <Button variant="primary" className='mt-3' onClick={handleSubmit}>
+              ログイン
+            </Button>
+          </Col>
+        </Row>
+      </Form>
+
+      <Row className='mt-5'>
+        <Col className="text-end">
+          <a href="/signup">新規登録はこちら</a>
+        </Col>
+      </Row>
     </>
   )
 }
