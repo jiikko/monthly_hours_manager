@@ -1,7 +1,7 @@
 import { Form, Button } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { Week } from '../lib/json_parameter';
-import { useToast } from '../hooks/useToast';
+import { useToast } from '../hooks/use_toast';
 import { ToastComponent } from '../components/toast';
 import { Calendar } from '../lib/calendar';
 

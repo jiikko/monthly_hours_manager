@@ -6,7 +6,7 @@ import { Button, Col } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { PathGenerator } from '../../../lib/path_generator';
-import { useToast } from '../../../hooks/useToast';
+import { useToast } from '../../../hooks/use_toast';
 import { ToastComponent } from '../../../components/toast';
 import { MonthSummary } from '../../../components/month_summary';
 import { CalendarMonth } from '../../../components/calendar_month';
