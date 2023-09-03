@@ -39,6 +39,7 @@ export class Calendar implements CalendarType {
   }
 
   hasNoSetting(): boolean {
+    if(!this.week) { return true }
     return Object.entries(this.week).length === 0
   }
 }

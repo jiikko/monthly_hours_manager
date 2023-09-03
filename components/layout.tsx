@@ -30,6 +30,7 @@ export function Layout({ children }: LayoutProps) {
   const handleLogout = async () => {
     logout();
     alert('ログアウトしました');
+    document.location = '/';
   }
 
   return (
