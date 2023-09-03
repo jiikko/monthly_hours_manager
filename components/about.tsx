@@ -8,13 +8,14 @@ type Props = {
 export const About: React.FC<Props> = ({ calendar }) => {
   return(
     <>
-      <Row>
-        月の時間を管理するアプリケーションです。<br /><br />
+      <Row className='mb-3'>
+        月の時間を管理するアプリケーションです。<br />
+        <a href='https://zenn.dev/jiikko/articles/43ee218a624a6a' target='_blank' className='text-decoration-underline'>詳細はこちら</a>
       </Row>
 
       <Row>
         <Col>
-          <h2>仕組み・注意点</h2>
+          <h2>機能説明</h2>
           <ol>
             <li>非ログイン時は、クエリパラメータでカレンダーデータを保持します</li>
             <li>ログインすることで、カレンダーデータをクラウドに保存します</li>
