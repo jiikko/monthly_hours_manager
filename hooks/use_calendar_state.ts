@@ -10,12 +10,13 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 export const useCalendarState = (redirectPathFunc?: any, redirectPathFuncArgs?: Array<number | string>) => {
   const [isInitialRender, setIsInitialRender] = useState(true);
   const router = useRouter();
-  const { user, loaded } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const [calendarState, dispatch] = useReducer(
     CalendarReducer, { name: '', standardTime: 0, week: {}, months: {} }
   );
   const calendar = new Calendar(calendarState.name, calendarState.standardTime, calendarState.week, calendarState.months, !!user);
   const loading = user === undefined
+  const loaded = user !== undefined
 
   // NOTE: 画面読み込み時に、ストレージからstateへ復元する
   useEffect(() => {

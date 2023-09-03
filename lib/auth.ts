@@ -3,41 +3,35 @@ import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, UserCreden
 import { app } from "./firebase";
 
 export type AuthContextType = {
-  loaded: boolean;
   login?: (email: string, password: string) => Promise<UserCredential>;
   logout?: () => void;
   register?: (email: string, password: string) => Promise<UserCredential>;
   user: any;
 };
 
+const auth = getAuth(app);
+
 export const useAuth = (): AuthContextType => {
-  const [loaded, setLoaded] = useState(false);
   const [user, setUser] = useState(undefined);
 
   const login = async (email: string, password: string) => {
-    const auth = getAuth();
     return setPersistence(auth, browserLocalPersistence).then(() => {
       return signInWithEmailAndPassword(auth, email, password);
     })
   }
 
   const logout = async () => {
-    const auth = getAuth(app);
     await signOut(auth);
   }
 
   const register = async (email: string, password: string) => {
-    const auth = getAuth();
     return setPersistence(auth, browserLocalPersistence).then(() => {
       return createUserWithEmailAndPassword(auth, email, password);
     });
   };
 
   useEffect(() => {
-    const auth = getAuth(app);
     return onAuthStateChanged(auth, (user) => {
-      setLoaded(true);
-
       if(user) {
         setUser(user);
       } else {
@@ -46,5 +40,5 @@ export const useAuth = (): AuthContextType => {
     });
   }, []);
 
-  return { loaded, login, logout, user, register };
+  return { login, logout, user, register };
 };

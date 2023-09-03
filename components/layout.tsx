@@ -23,8 +23,9 @@ export function Layout({ children }: LayoutProps) {
   const thisMonthPath = pathGenerator.monthPath(date.year(), date.month(), queryParameters)
   const nextMonthPath = pathGenerator.monthPath(date.year(), date.nextMonth(), queryParameters)
   const loginPath = pathGenerator.loginPath(queryParameters)
-  const { logout, loaded, user } = useAuth();
+  const { logout, user } = useAuth();
   const loggedInEmail = user && user.email;
+  const loaded = user !== undefined;
 
   const handleLogout = async () => {
     logout();
@@ -63,7 +64,7 @@ export function Layout({ children }: LayoutProps) {
 
       <Container>
         <Row className="justify-content-md-between p-3">
-          <AuthContext.Provider value={{ loaded, user }}>
+          <AuthContext.Provider value={{ user }}>
             {children}
           </AuthContext.Provider>
         </Row>
