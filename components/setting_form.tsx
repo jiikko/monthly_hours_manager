@@ -1,19 +1,20 @@
 import { Form, Button } from 'react-bootstrap';
-import { useState, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Week } from '../lib/json_parameter';
 import { useToast } from '../hooks/useToast';
 import { ToastComponent } from '../components/toast';
-import { JsonParameterTypeImpl } from '../lib/json_parameter';
+import { Calendar } from '../lib/calendar';
+import { AuthContext } from '../contexts/auth_context';
 
 type Props = {
-  jsonObject: JsonParameterTypeImpl;
+  calendar: Calendar;
   handleSubmit: (name: string, standardTime: number, workingWeek: Week, notify: (message: string) => void) => void;
 }
 
-export const SettingForm: React.FC<Props> = ({ jsonObject, handleSubmit }) => {
+export const SettingForm: React.FC<Props> = ({ calendar, handleSubmit }) => {
   const defaultStandardTime = 84;
   const [name, setName] = useState('');
-  const [standardTime, setStandardTime] = useState(0);
+  const [standardTime, setStandardTime] = useState(undefined);
   const [workingWeek, setWorkingWeek] = useState(Week.create());
   const toastProps = useToast();
 
@@ -25,10 +26,10 @@ export const SettingForm: React.FC<Props> = ({ jsonObject, handleSubmit }) => {
   };
 
   useEffect(() => {
-    setName(jsonObject.name || '');
-    setStandardTime(jsonObject.standardTime || defaultStandardTime);
-    setWorkingWeek(jsonObject.week || Week.create());
-  }, [jsonObject]);
+    setName(calendar.name || '');
+    setStandardTime(calendar.standardTime || defaultStandardTime);
+    setWorkingWeek(calendar.week || Week.create());
+  }, [calendar]);
 
   return (
     <>

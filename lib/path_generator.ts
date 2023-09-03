@@ -24,7 +24,15 @@ const PathGenerator = (() => {
       }
     }
 
-    return { monthPath, editPath, rootPath }
+    function loginPath(queryParam: string) {
+      if(queryParam) {
+        return `/login?${queryParam}`
+      } else {
+        return `/login`
+      }
+    }
+
+    return { monthPath, editPath, rootPath, loginPath }
   }
 })();
 

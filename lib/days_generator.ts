@@ -45,10 +45,15 @@ export class DayObject implements DayData {
   isInvalid(): boolean {
     return isNaN(this.scheduledHour()) || isNaN(this.actualHour());
   }
+
+  // NOTE: firestoreに保存するためにオブジェクトに変換する
+  toObject(): DayData {
+    return { day: this.day, scheduled: this.scheduled, actual: this.actual, isHoliday: this.isHoliday };
+  }
 }
 
 export class DaysGenerator {
-  static execute(year: number, month: number, standardTime: number, workingWeek: Week): Array<DayObject> {
+  static execute(year: number, month: number, standardTime: number, workingWeek: Week): Array<Object> {
     const date = CalendarDate(year, month, 1)
     const datesInMonth = allDaysInMonth(date.year(), date.month());
     const workingDays = datesInMonth.filter((date) => { return workingWeek[date.weekDayName()]; });
@@ -56,14 +61,14 @@ export class DaysGenerator {
 
     return datesInMonth.map((date) => {
       if(workingWeek[date.weekDayName()]) {
-        return new DayObject(avgHour, 0, date.day(), false)
+        return new DayObject(avgHour, 0, date.day(), false).toObject()
       } else {
-        return new DayObject(0, 0, date.day(), false)
+        return new DayObject(0, 0, date.day(), false).toObject()
       }
     });
   }
 
-  static executeWithDays(year: number, month: number, standardTime: number, workingWeek: Week, dayObjects: Array<DayObject>): Array<DayObject> {
+  static executeWithDays(year: number, month: number, standardTime: number, workingWeek: Week, dayObjects: Array<DayObject>): Array<DayData> {
     const holidays = dayObjects.filter((day) => { return day.isHoliday; });
     const date = CalendarDate(year, month, 1)
     const datesInMonth = allDaysInMonth(date.year(), date.month());
@@ -80,10 +85,10 @@ export class DaysGenerator {
       if(dayObject.isWorked()) { return dayObject; }
 
       // NOTE: 稼働予定日は予定を埋める
-      if(workingWeek[date.weekDayName()]) { return new DayObject(avgHour, dayObject.actual, date.day(), dayObject.isHoliday) } 
+      if(workingWeek[date.weekDayName()]) { return new DayObject(avgHour, dayObject.actual, date.day(), dayObject.isHoliday).toObject() }
 
       // NOTE: 稼働予定ではないので0を埋める
-      return new DayObject(0, 0, date.day(), false)
+      return new DayObject(0, 0, date.day(), false).toObject()
     });
   }
 }

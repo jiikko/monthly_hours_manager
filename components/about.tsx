@@ -1,24 +1,25 @@
 import { Table, Row, Col } from 'react-bootstrap';
-import { JsonParameterTypeImpl } from '../lib/json_parameter';
+import { Calendar } from '../lib/calendar';
 
 type Props = {
-  jsonObject: JsonParameterTypeImpl;
+  calendar: Calendar;
 }
 
-export const About: React.FC<Props> = ({ jsonObject }) => {
+export const About: React.FC<Props> = ({ calendar }) => {
   return(
     <>
-      <Row>
-        月毎の基準時間を管理するアプリケーションです。<br /><br />
+      <Row className='mb-3'>
+        月の時間を管理するアプリケーションです。<br />
+        <a href='https://zenn.dev/jiikko/articles/43ee218a624a6a' target='_blank' className='text-decoration-underline'>詳細はこちら</a>
       </Row>
 
       <Row>
         <Col>
-          <h2>仕組み・注意点</h2>
+          <h2>機能説明</h2>
           <ol>
-            <li>クエリパラメータのみで情報を保持しています</li>
-            <li>外部サーバは使っていません</li>
-            <li>認証の機構がないのでURLの取り扱いには注意してください</li>
+            <li>非ログイン時は、クエリパラメータでカレンダーデータを保持します</li>
+            <li>ログインすることで、カレンダーデータをクラウドに保存します</li>
+            <li>保存先に関係なく、1ヶ月分のカレンダーデータのみを保存します</li>
           </ol>
 
           <h2>使い方</h2>
@@ -30,7 +31,7 @@ export const About: React.FC<Props> = ({ jsonObject }) => {
         </Col>
       </Row>
 
-      {jsonObject.hasSetting() && (
+      {calendar.hasSetting() && (
         <Row>
           <Col>
             <h2 className='mb-3'>現在の設定情報</h2>
@@ -45,16 +46,22 @@ export const About: React.FC<Props> = ({ jsonObject }) => {
               </thead>
               <tbody>
                 <tr>
-                  <td>{jsonObject.name}</td>
-                  <td>{jsonObject.standardTime && `${jsonObject.standardTime}時間`}</td>
-                  <td>{Object.keys(jsonObject.week).filter(key => jsonObject.week[key]).join(', ')}</td>
-                  <td>{jsonObject.months && Object.keys(jsonObject.months)}</td>
+                  <td>{calendar.name}</td>
+                  <td>{calendar.standardTime && `${calendar.standardTime}時間`}</td>
+                  <td>{Object.keys(calendar.week).filter(key => calendar.week[key]).join(', ')}</td>
+                  <td>
+                    <ul>
+                      {calendar.months && Object.keys(calendar.months).map((key, _index) => (
+                        <li className="br-after" key={key}>{key}</li>
+                      ))}
+                    </ul>
+                  </td>
                 </tr>
               </tbody>
             </Table>
           </Col>
         </Row>
       )}
-  </>
-)
+    </>
+  )
 }

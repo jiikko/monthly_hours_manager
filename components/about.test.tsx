@@ -1,8 +1,9 @@
 import React from 'react'
 import { JsonParameterTypeImpl } from '../lib/json_parameter';
 import '@testing-library/jest-dom'
-import { render, fireEvent, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { About } from './about';
+import { Calendar } from '../lib/calendar';
 
 describe('About', () => {
   describe('when hasSetting is false', () => {
@@ -10,7 +11,7 @@ describe('About', () => {
       const jsonObject = {
         hasSetting: () => false,
       } as JsonParameterTypeImpl;
-      render(<About jsonObject={jsonObject} />)
+      render(<About calendar={jsonObject} />)
 
       expect(screen.queryByText('現在の設定情報')).not.toBeInTheDocument()
     })
@@ -19,44 +20,25 @@ describe('About', () => {
   describe('when hasSetting is true', () => {
     describe('when standardTime is true', () => {
       it('renders correctly', () => {
-        const jsonObject = {
-          hasSetting: () => true,
-          standardTime: 84,
-          name: 'name',
-          week: {},
-          months: undefined,
-        } as JsonParameterTypeImpl;
-        render(<About jsonObject={jsonObject} />)
+        const calendar = new Calendar('a', 84, {} as any, undefined);
+        render(<About calendar={calendar} />)
 
         expect(screen.queryByText('現在の設定情報')).toBeInTheDocument()
       })
     })
 
-    describe('when standardTime is null', () => {
+    describe('when standardTime is undefined', () => {
       it('renders correctly', () => {
-        const jsonObject = {
-          hasSetting: () => true,
-          standardTime: undefined,
-          name: 'name',
-          week: {},
-          months: undefined,
-        } as JsonParameterTypeImpl;
-        render(<About jsonObject={jsonObject} />)
-
+        const calendar = new Calendar('a', undefined, {} as any, undefined);
+        render(<About calendar={calendar} />)
         expect(screen.queryByText('現在の設定情報')).toBeInTheDocument()
       })
     })
 
     describe('when months is present', () => {
       it('renders correctly', () => {
-        const jsonObject = {
-          hasSetting: () => true,
-          standardTime: 84,
-          name: 'name',
-          week: {},
-          months: {},
-        } as JsonParameterTypeImpl;
-        render(<About jsonObject={jsonObject} />)
+        const calendar = new Calendar('a', 84, {} as any, {});
+        render(<About calendar={calendar} />)
 
         expect(screen.queryByText('現在の設定情報')).toBeInTheDocument()
       })

@@ -1,15 +1,13 @@
 import type { NextPageWithLayout } from './_app'
-import Layout from '../components/layout';
-import { JsonParameter } from '../lib/json_parameter';
-import { useRouter } from 'next/router';
+import { Layout } from '../components/layout';
 import { About } from '../components/about';
+import { useCalendarState } from '../hooks/use_calendar_state';
 
 const Page: NextPageWithLayout = () => {
-  const router = useRouter();
-  const jsonObject = JsonParameter.parse(Object.fromEntries(Object.entries(router.query).map(([key, val]) => [key, String(val)])));
+  const { calendar } = useCalendarState();
 
   return (
-    <About jsonObject={jsonObject} />
+    <About calendar={calendar} />
   )
 }
 

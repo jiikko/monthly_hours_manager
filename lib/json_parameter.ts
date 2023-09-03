@@ -1,4 +1,5 @@
 import { DayObject, MonthTable } from './days_generator';
+import { Calendar } from './calendar';
 
 export class Week {
   constructor(
@@ -72,6 +73,10 @@ export class JsonParameterTypeImpl implements ParameterType {
     this.months[this.currentMonthKey] = days;
   }
 
+  toCalendar(): Calendar {
+    return new Calendar(this.name, this.standardTime, this.week, this.months);
+  }
+
   isNoCurrentDaysInMonth(): boolean {
     return this.currentDaysInMonth() === undefined;
   }
@@ -84,11 +89,10 @@ export class JsonParameterTypeImpl implements ParameterType {
 export class JsonParameter {
   static serialize(obj: ParameterType): string {
     return Object.entries(obj)
-      .filter(([key, value]) => value !== undefined )
+      .filter(([_key, value]) => value !== undefined )
       .map(([key, value]) => {
         return `${encodeURIComponent(key)}=${encodeURIComponent(JSON.stringify(value))}`;
-      })
-      .join('&');
+      }).join('&');
   }
 
   static parse(query: { [key: string]: string }): JsonParameterTypeImpl {
