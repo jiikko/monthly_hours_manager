@@ -1,9 +1,11 @@
 import { createContext } from 'react';
-import { AuthContextType } from '../hooks/use_auth';
+import { User } from "firebase/auth";
+
+type AuthContextType = {
+  user: User | undefined | null;
+};
 
 const defaultValue = {
-  loaded: false,
-  logout: () => {},
   user: undefined,
 } as AuthContextType
 

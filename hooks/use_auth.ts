@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, UserCredential, browserLocalPersistence, signInWithEmailAndPassword, setPersistence, signOut } from "firebase/auth";
 import { app } from "../lib/firebase";
 
-export type AuthContextType = {
+export type UseAuthType = {
   login?: (email: string, password: string) => Promise<UserCredential>;
   logout?: () => void;
   register?: (email: string, password: string) => Promise<UserCredential>;
@@ -11,7 +11,7 @@ export type AuthContextType = {
 
 const auth = getAuth(app);
 
-export const useAuth = (): AuthContextType => {
+export const useAuth = (): UseAuthType => {
   const [user, setUser] = useState(undefined);
 
   const login = async (email: string, password: string) => {
