@@ -31,6 +31,16 @@ export const About: React.FC<Props> = ({ calendar }) => {
         </Col>
       </Row>
 
+      <Row className='mb-5'>
+        <Col>
+          <h2>更新履歴</h2>
+          <ul>
+            <li>2023/09/3: 認証機能, クラウド保存機能の公開</li>
+            <li>2023/08/15: リリース</li>
+          </ul>
+        </Col>
+      </Row>
+
       {calendar.hasSetting() && (
         <Row>
           <Col>
