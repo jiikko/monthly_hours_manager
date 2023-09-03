@@ -3,7 +3,7 @@ import type { NextPageWithLayout } from './_app';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { PathGenerator } from '../lib/path_generator';
-import { useAuth } from '../lib/auth';
+import { useAuth } from '../hooks/use_auth';
 import { Row, Alert, Button, Form, Col } from 'react-bootstrap';
 
 const Page: NextPageWithLayout = () => {

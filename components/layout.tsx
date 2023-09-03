@@ -5,7 +5,7 @@ import { CalendarDate } from '../lib/calendar_date';
 import { Container, Row, Nav, Navbar } from 'react-bootstrap';
 import { PathGenerator } from '../lib/path_generator';
 import GitHubForkRibbon from 'react-github-fork-ribbon';
-import { useAuth } from '../lib/auth';
+import { useAuth } from '../hooks/use_auth';
 
 type LayoutProps = {
   children: React.ReactNode;

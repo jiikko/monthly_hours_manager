@@ -1,7 +1,7 @@
 import { Layout } from '../components/layout';
 import { Row, Alert, Button, Form, Col } from 'react-bootstrap';
 import { useState } from 'react';
-import { useAuth } from '../lib/auth';
+import { useAuth } from '../hooks/use_auth';
 import { useRouter } from 'next/router';
 import { PathGenerator } from '../lib/path_generator';
 import type { NextPageWithLayout } from './_app';

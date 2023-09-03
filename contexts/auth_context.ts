@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { AuthContextType } from '../lib/auth';
+import { AuthContextType } from '../hooks/use_auth';
 
 const defaultValue = {
   loaded: false,
