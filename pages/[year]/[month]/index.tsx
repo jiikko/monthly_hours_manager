@@ -4,7 +4,7 @@ import type { NextPageWithLayout } from './../../_app'
 import { CalendarDate } from '../../../lib/calendar_date';
 import { Button, Col } from 'react-bootstrap';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { PathGenerator } from '../../../lib/path_generator';
 import { useToast } from '../../../hooks/useToast';
 import { ToastComponent } from '../../../components/toast';
@@ -47,8 +47,7 @@ const Page: NextPageWithLayout = () => {
     dispatch({ type: 'updateDays', payload: { monthKey: monthKey, days: recalculatedDays } });
     toastProps.notify('再計算しました')
   }
-
-  useEffect(() => {
+  const initializeCalendar = (calendar, dispatch) => {
     // NOTE: データの初期化
     if(loaded && calendar.hasSetting() && calendar.months && Object.entries(calendar.months).length == 0 && calendar.months[monthKey] === undefined) {
       initializeDays();
@@ -67,6 +66,10 @@ const Page: NextPageWithLayout = () => {
         return;
       }
     }
+  };
+
+  useEffect(() => {
+    initializeCalendar(calendar, dispatch);
   }, [calendarState]);
 
   if(calendar.hasNoSetting()) {
