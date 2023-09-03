@@ -1,9 +1,12 @@
 # README
-業務委託の精算幅契約での稼働時間計算をするカレンダーWEBアプリケーション
+
+* 月の時間を計算をするカレンダーWEBアプリケーション
+  * 主に、業務委託の精算幅契約での稼働時間の計算を想定しています
 
 <img width="1373" alt="スクリーンショット 2023-08-13 17 46 00" src="https://github.com/jiikko/monthly_hours_manager/assets/1664497/cc088a5c-909c-49f0-b05c-01bf7b0ade6a">
 
 # TODO
+
 * lint
 * formatter
 * キーを押すことでカーソル移動をする
