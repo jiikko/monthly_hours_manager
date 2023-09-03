@@ -48,10 +48,10 @@ const Page: NextPageWithLayout = () => {
 
   useEffect(() => {
     // NOTE: データの初期化
-    if(loaded && calendar.months && Object.entries(calendar.months).length == 0 && calendar.months[monthKey] === undefined) {
+    if(loaded && calendar.hasSetting() && calendar.months && Object.entries(calendar.months).length == 0 && calendar.months[monthKey] === undefined) {
       initializeDays();
       console.log('初期化しました')
-    } else if(loaded && calendar.months && Object.entries(calendar.months).length > 0 && calendar.months[monthKey] === undefined) {
+    } else if(loaded && calendar.hasSetting() && calendar.months && Object.entries(calendar.months).length > 0 && calendar.months[monthKey] === undefined) {
       // NOTE: 2つ月分のクエリパラメータを保持するとnextjsが500を返してしまう。パラメータがデカすぎる可能性があるので、1つの月分のみ保持するようにする。
       const result = confirm('他の月データが存在します。他の月のデータを削除しますが、操作を続けますか？')
       if(result) {
@@ -67,7 +67,7 @@ const Page: NextPageWithLayout = () => {
     }
   }, [calendarState]);
 
-  if(calendar.standardTime === undefined) {
+  if(calendar.hasNoSetting()) {
     return(
       <div className="alert alert-danger" role="alert">カレンダーの設定情報がありません。設定してください。</div>
     )

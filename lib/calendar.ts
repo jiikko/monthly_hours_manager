@@ -37,4 +37,8 @@ export class Calendar implements CalendarType {
   hasSetting(): boolean {
     return !!this.week;
   }
+
+  hasNoSetting(): boolean {
+    return !this.hasSetting();
+  }
 }
