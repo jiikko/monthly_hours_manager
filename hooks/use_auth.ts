@@ -13,10 +13,21 @@ const auth = getAuth(app);
 
 export const useAuth = (): UseAuthType => {
   const [user, setUser] = useState(undefined);
+  const errorMessageTable = {
+    'auth/user-not-found': 'ユーザが見つかりませんでした。メールアドレスかパスワードが間違っています。',
+    'auth/email-already-in-use': '既に登録されているメールアドレスです。',
+    'auth/invalid-email': 'メールアドレスの形式が正しくありません。',
+    'auth/missing-password': 'パスワードが入力されていません。',
+    'auth/missing-email': 'メールアドレスが入力されていません。',
+  };
 
   const login = async (email: string, password: string) => {
     return setPersistence(auth, browserLocalPersistence).then(() => {
       return signInWithEmailAndPassword(auth, email, password);
+    }).catch((error) => {
+      console.log(error);
+      const translatedErrorMessage = errorMessageTable[error.code] || error.message;
+      throw new Error(translatedErrorMessage);
     })
   }
 
@@ -27,7 +38,11 @@ export const useAuth = (): UseAuthType => {
   const register = async (email: string, password: string) => {
     return setPersistence(auth, browserLocalPersistence).then(() => {
       return createUserWithEmailAndPassword(auth, email, password);
-    });
+    }).catch((error) => {
+      console.log(error);
+      const translatedErrorMessage = errorMessageTable[error.code] || error.message;
+      throw new Error(translatedErrorMessage);
+    })
   };
 
   useEffect(() => {

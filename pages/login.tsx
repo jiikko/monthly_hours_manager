@@ -12,19 +12,11 @@ const Page: NextPageWithLayout = () => {
   const [password, setPassword] = useState('');
   const { login } = useAuth();
   const [formErrorMessage, setFormErrorMessage] = useState('');
-  const errorMessageTable = {
-    'auth/user-not-found': 'ユーザが見つかりませんでした。メールアドレスかパスワードが間違っています。',
-    'auth/invalid-email': 'メールアドレスの形式が正しくありません。',
-    'auth/missing-password': 'パスワードが入力されていません。',
-    'auth/missing-email': 'メールアドレスが入力されていません。',
-  };
-
   const handleSubmit = () => {
     login(email, password).then(() => {
       router.push(PathGenerator().rootPath(null));
     }).catch((error) => {
-      console.log(error);
-      setFormErrorMessage(errorMessageTable[error.code] || error.message);
+      setFormErrorMessage(error.message);
     });
   }
 

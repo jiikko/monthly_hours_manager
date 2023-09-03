@@ -39,7 +39,6 @@ export function Layout({ children }: LayoutProps) {
         <title>月の時間管理くん</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
       <GitHubForkRibbon href="//github.com/jiikko/monthly_hours_manager" target="_blank" position="right-bottom">Fork me on GitHub</GitHubForkRibbon>
 
       <Navbar expand="lg" className="bg-body-tertiary">
