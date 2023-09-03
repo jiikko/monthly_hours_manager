@@ -7,7 +7,7 @@ import { AuthContext} from '../contexts/auth_context'
 import { db } from "../lib/firebase";
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 
-export const useCalendarState = (redirectPathFunc?: any) => {
+export const useCalendarState = (redirectPathFunc?: any, redirectPathFuncArgs?: Array<number | string>) => {
   const [isInitialRender, setIsInitialRender] = useState(true);
   const router = useRouter();
   const { user, loaded } = useContext(AuthContext);
@@ -65,7 +65,12 @@ export const useCalendarState = (redirectPathFunc?: any) => {
       });
     } else if(user === null && redirectPathFunc) {
       // NOTE: stateからクエリパラメータに反映する
-      const path = redirectPathFunc(calendar.serializeAsJson())
+      let path = '';
+      if (Array.isArray(redirectPathFuncArgs)) {
+        path = redirectPathFunc(...redirectPathFuncArgs, calendar.serializeAsJson())
+      } else {
+        path = redirectPathFunc(calendar.serializeAsJson())
+      }
       router.push(path , undefined, { scroll: false });
     } else if(user === undefined) {
       // NOTE: ログイン状態の確認が完了していない場合は何もしない

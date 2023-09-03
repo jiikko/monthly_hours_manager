@@ -18,7 +18,9 @@ const Page: NextPageWithLayout = () => {
   const date = CalendarDate(year && Number(year), month && Number(month), 1);
   const monthKey = date.monthlyKey();
   const toastProps = useToast();
-  const { calendarState, dispatch, calendar, loading, loaded } = useCalendarState();
+  const { calendarState, dispatch, calendar, loading, loaded } = useCalendarState(
+    PathGenerator().monthPath, [date.year(), date.month()]
+  );
   const handleUpdateDay = (attributeName: string, value: boolean | string, dayIndex: number): void => {
     days[dayIndex][attributeName] = value
     dispatch({
