@@ -17,11 +17,7 @@ const Page: NextPageWithLayout = () => {
 
   const handleSubmit = () => {
     login(email, password).then(() => {
-      const pathGenerator = PathGenerator();
-      const { year, month, ...rest } = router.query; // パスパラメータは除外する
-      const queryParameters = new URLSearchParams(Object.fromEntries(Object.entries(rest).map(([key, val]) => [key, String(val)]))).toString();
-      const rootPath = pathGenerator.rootPath(queryParameters)
-      router.push(rootPath);
+      router.push(PathGenerator().rootPath(null));
     }).catch((error) => {
       console.log(error);
       setFormErrorMessage(errorMessageTable[error.code] || error.message);
@@ -31,6 +27,8 @@ const Page: NextPageWithLayout = () => {
   return (
     <>
       <h1>ログイン</h1>
+      <div className="alert alert-info">ログインした時にデータの引き継ぎは行いません。</div>
+
       {formErrorMessage && <div className="alert alert-danger">{formErrorMessage}</div>}
       <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} /><br />
       <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} /><br />
