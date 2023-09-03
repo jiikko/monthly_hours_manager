@@ -6,6 +6,17 @@ type Props = {
 }
 
 export const About: React.FC<Props> = ({ calendar }) => {
+  const weekDayMapping = {
+    "sun": "日曜日",
+    "mon": "月曜日",
+    "tue": "火曜日",
+    "wed": "水曜日",
+    "thu": "木曜日",
+    "fri": "金曜日",
+    "sat": "土曜日"
+  };
+  const weekDayOrder = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+
   return(
     <>
       <Row className='mb-3'>
@@ -58,7 +69,9 @@ export const About: React.FC<Props> = ({ calendar }) => {
                 <tr>
                   <td>{calendar.name}</td>
                   <td>{calendar.standardTime && `${calendar.standardTime}時間`}</td>
-                  <td>{Object.keys(calendar.week).filter(key => calendar.week[key]).join(', ')}</td>
+                  <td>
+                    {weekDayOrder.filter(key => calendar.week[key]).map(key => weekDayMapping[key]).join(', ')}
+                  </td>
                   <td>
                     <ul>
                       {calendar.months && Object.keys(calendar.months).map((key, _index) => (
