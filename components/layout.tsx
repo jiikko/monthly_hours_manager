@@ -63,7 +63,7 @@ export function Layout({ children }: LayoutProps) {
 
       <Container>
         <Row className="justify-content-md-between p-3">
-          <AuthContext.Provider value={{ loaded, user  }}>
+          <AuthContext.Provider value={{ loaded, user }}>
             {children}
           </AuthContext.Provider>
         </Row>
