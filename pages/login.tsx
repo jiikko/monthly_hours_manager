@@ -51,9 +51,9 @@ const Page: NextPageWithLayout = () => {
         </Row>
       </Form>
 
-      <Row className='mt-5'>
+      <Row className='mt-3'>
         <Col className="text-end">
-          <a href="/signup">新規登録はこちら</a>
+          <a href="/register">新規登録はこちら</a>
         </Col>
       </Row>
     </>
