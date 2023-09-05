@@ -24,8 +24,8 @@ const Page: NextPageWithLayout = () => {
     <>
       <h1>ログイン</h1>
       <div className="alert alert-info">ログイン後、既存データ(クエリパラメータ)の引き継ぎは行いません。</div>
-
       {formErrorMessage && <Alert variant="danger">{formErrorMessage}</Alert>}
+
       <Form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
         <Form.Group controlId="formEmail">
           <Form.Label>Email address</Form.Label>

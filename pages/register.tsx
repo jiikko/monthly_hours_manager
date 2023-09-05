@@ -45,6 +45,12 @@ const Page: NextPageWithLayout = () => {
           </Col>
         </Row>
       </Form>
+
+      <Row className='mt-3'>
+        <Col className="text-end">
+          <a href="/login">ログインはこちら</a>
+        </Col>
+      </Row>
     </>
   )
 }
