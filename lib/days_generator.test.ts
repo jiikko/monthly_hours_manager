@@ -9,6 +9,15 @@ describe('DaysGenerator', () => {
         expect(actual[30]).toEqual({ day: 31, scheduled: 0.0, actual: 0.0, isHoliday: false });
       })
     })
+
+    describe('2023年9月の月火水が稼働日のとき', () => {
+      it('配列を返す', () => {
+        const actual = DaysGenerator.execute(2023, 9, 84, { mon: true, tue: true, wed: true, thu: false, fri: false, sat: false, sun: false });
+        expect(actual[0]).toEqual({ day: 1, scheduled: 0, actual: 0.0, isHoliday: false });
+        expect(actual[17]).toEqual({ day: 18, scheduled: 7.6, actual: 0.0, isHoliday: true }); // 祝日なので稼働日ではない
+        expect(actual[29]).toEqual({ day: 30, scheduled: 0, actual: 0.0, isHoliday: false });
+      })
+    })
   })
 
   describe('executeWithDays', () => {
