@@ -1,4 +1,4 @@
-import { Layout } from '../components/layout';
+import { Layout } from '../layouts/v1'
 import { Row, Alert, Button, Form, Col } from 'react-bootstrap';
 import { useState } from 'react';
 import { useAuth } from '../hooks/use_auth';

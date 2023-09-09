@@ -1,5 +1,5 @@
 import { DaysGenerator, DayObject } from '../../../lib/days_generator';
-import { Layout } from '../../../components/layout';
+import { Layout } from '../../../layouts/v1';
 import type { NextPageWithLayout } from './../../_app'
 import { CalendarDate } from '../../../lib/calendar_date';
 import { Button, Col } from 'react-bootstrap';

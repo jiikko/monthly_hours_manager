@@ -1,5 +1,5 @@
 import type { NextPageWithLayout } from './_app'
-import { Layout } from '../components/layout'
+import { Layout } from '../layouts/v1';
 import { Week } from '../lib/json_parameter';
 import { PathGenerator } from '../lib/path_generator';
 import { SettingForm } from '../components/setting_form';
