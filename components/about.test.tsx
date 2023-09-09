@@ -20,7 +20,7 @@ describe('About', () => {
   describe('when hasSetting is true', () => {
     describe('when standardTime is true', () => {
       it('renders correctly', () => {
-        const calendar = new Calendar('a', 84, {} as any, undefined);
+        const calendar = new Calendar('a', 84, { web: true } as any, undefined);
         render(<About calendar={calendar} />)
 
         expect(screen.queryByText('現在の設定情報')).toBeInTheDocument()
@@ -29,7 +29,7 @@ describe('About', () => {
 
     describe('when standardTime is undefined', () => {
       it('renders correctly', () => {
-        const calendar = new Calendar('a', undefined, {} as any, undefined);
+        const calendar = new Calendar('a', undefined, { web: true } as any, undefined);
         render(<About calendar={calendar} />)
         expect(screen.queryByText('現在の設定情報')).toBeInTheDocument()
       })
@@ -37,7 +37,7 @@ describe('About', () => {
 
     describe('when months is present', () => {
       it('renders correctly', () => {
-        const calendar = new Calendar('a', 84, {} as any, {});
+        const calendar = new Calendar('a', 84, { web: true } as any, {});
         render(<About calendar={calendar} />)
 
         expect(screen.queryByText('現在の設定情報')).toBeInTheDocument()
