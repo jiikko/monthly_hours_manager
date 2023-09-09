@@ -56,12 +56,15 @@ export class DaysGenerator {
   static execute(year: number, month: number, standardTime: number, workingWeek: Week): Array<Object> {
     const date = CalendarDate(year, month, 1)
     const datesInMonth = allDaysInMonth(date.year(), date.month());
-    const workingDays = datesInMonth.filter((date) => { return workingWeek[date.weekDayName()]; });
-    const avgHour = Number((standardTime / workingDays.length).toFixed(1));
+    const workingDays = datesInMonth.filter((date) => workingWeek[date.weekDayName()]);
+    // NOTE: 稼働日に祝日がある場合は、稼働対象外にする
+    const nationalHolidays = datesInMonth.filter((date) => { return (date.isNationalHoliday() && workingWeek[date.weekDayName()]); });
+    const avgHour = Number((standardTime / (workingDays.length - nationalHolidays.length)).toFixed(1));
 
     return datesInMonth.map((date) => {
+      const isNationalHoliday =  date.isNationalHoliday()
       if(workingWeek[date.weekDayName()]) {
-        return new DayObject(avgHour, 0, date.day(), false).toObject()
+        return new DayObject(avgHour, 0, date.day(), isNationalHoliday).toObject()
       } else {
         return new DayObject(0, 0, date.day(), false).toObject()
       }
