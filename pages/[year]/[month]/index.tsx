@@ -6,7 +6,7 @@ import { Button, Col } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { PathGenerator } from '../../../lib/path_generator';
-import { useToast } from '../../../hooks/useToast';
+import { useToast } from '../../../hooks/use_toast';
 import { ToastComponent } from '../../../components/toast';
 import { MonthSummary } from '../../../components/month_summary';
 import { CalendarMonth } from '../../../components/calendar_month';
@@ -72,18 +72,17 @@ const Page: NextPageWithLayout = () => {
     initializeCalendar(calendar, dispatch);
   }, [calendarState]);
 
-  if(calendar.hasNoSetting()) {
-    return(
-      <div className="alert alert-danger" role="alert">カレンダーの設定情報がありません。設定してください。</div>
-    )
-  }
-
   let days = []
   if(calendar.months[monthKey]) {
     days = calendar.months[monthKey].map((day: DayObject, _: number) => { return(new DayObject(day.scheduled, day.actual, day.day, day.isHoliday)) })
   }
   // NOTE: 画面遷移中にちらつかないようにするため
   if(loading || calendar.months[monthKey] === undefined) { return }
+  if(calendar.hasNoSetting()) {
+    return(
+      <div className="alert alert-danger" role="alert">カレンダーの設定情報がありません。設定してください。</div>
+    )
+  }
 
   return (
     <>

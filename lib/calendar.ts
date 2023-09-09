@@ -35,10 +35,11 @@ export class Calendar implements CalendarType {
   }
 
   hasSetting(): boolean {
-    return !!this.week;
+    return(!this.hasNoSetting())
   }
 
   hasNoSetting(): boolean {
-    return !this.hasSetting();
+    if(!this.week) { return true }
+    return Object.entries(this.week).length === 0
   }
 }

@@ -5,7 +5,7 @@ import { CalendarDate } from '../lib/calendar_date';
 import { Container, Row, Nav, Navbar } from 'react-bootstrap';
 import { PathGenerator } from '../lib/path_generator';
 import GitHubForkRibbon from 'react-github-fork-ribbon';
-import { useAuth } from '../lib/auth';
+import { useAuth } from '../hooks/use_auth';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -23,12 +23,14 @@ export function Layout({ children }: LayoutProps) {
   const thisMonthPath = pathGenerator.monthPath(date.year(), date.month(), queryParameters)
   const nextMonthPath = pathGenerator.monthPath(date.year(), date.nextMonth(), queryParameters)
   const loginPath = pathGenerator.loginPath(queryParameters)
-  const { logout, loaded, user } = useAuth();
+  const { logout, user } = useAuth();
   const loggedInEmail = user && user.email;
+  const loaded = user !== undefined;
 
   const handleLogout = async () => {
     logout();
     alert('ログアウトしました');
+    document.location = '/';
   }
 
   return (
@@ -37,7 +39,6 @@ export function Layout({ children }: LayoutProps) {
         <title>月の時間管理くん</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
       <GitHubForkRibbon href="//github.com/jiikko/monthly_hours_manager" target="_blank" position="right-bottom">Fork me on GitHub</GitHubForkRibbon>
 
       <Navbar expand="lg" className="bg-body-tertiary">
@@ -63,7 +64,7 @@ export function Layout({ children }: LayoutProps) {
 
       <Container>
         <Row className="justify-content-md-between p-3">
-          <AuthContext.Provider value={{ loaded, user }}>
+          <AuthContext.Provider value={{ user }}>
             {children}
           </AuthContext.Provider>
         </Row>

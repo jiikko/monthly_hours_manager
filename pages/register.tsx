@@ -1,7 +1,7 @@
 import { Layout } from '../components/layout';
 import { Row, Alert, Button, Form, Col } from 'react-bootstrap';
 import { useState } from 'react';
-import { useAuth } from '../lib/auth';
+import { useAuth } from '../hooks/use_auth';
 import { useRouter } from 'next/router';
 import { PathGenerator } from '../lib/path_generator';
 import type { NextPageWithLayout } from './_app';
@@ -12,22 +12,13 @@ const Page: NextPageWithLayout = () => {
   const [password, setPassword] = useState('');
   const { register } = useAuth();
   const [formErrorMessage, setFormErrorMessage] = useState('');
-
   const handleSubmit = () => {
     register(email, password).then(() => {
       router.push(PathGenerator().rootPath(null));
     }).catch((error) => {
-      console.log(error);
-      setFormErrorMessage(errorMessageTable[error.code] || error.message);
+      setFormErrorMessage(error.message);
     })
   }
-
-  const errorMessageTable = {
-    'auth/email-already-in-use': '既に登録されているメールアドレスです。',
-    'auth/invalid-email': 'メールアドレスの形式が正しくありません。',
-    'auth/missing-password': 'パスワードが入力されていません。',
-    'auth/missing-email': 'メールアドレスが入力されていません。',
-  };
 
   return(
     <>
@@ -54,6 +45,12 @@ const Page: NextPageWithLayout = () => {
           </Col>
         </Row>
       </Form>
+
+      <Row className='mt-3'>
+        <Col className="text-end">
+          <a href="/login">ログインはこちら</a>
+        </Col>
+      </Row>
     </>
   )
 }

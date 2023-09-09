@@ -3,7 +3,7 @@ import type { NextPageWithLayout } from './_app';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { PathGenerator } from '../lib/path_generator';
-import { useAuth } from '../lib/auth';
+import { useAuth } from '../hooks/use_auth';
 import { Row, Alert, Button, Form, Col } from 'react-bootstrap';
 
 const Page: NextPageWithLayout = () => {
@@ -12,19 +12,11 @@ const Page: NextPageWithLayout = () => {
   const [password, setPassword] = useState('');
   const { login } = useAuth();
   const [formErrorMessage, setFormErrorMessage] = useState('');
-  const errorMessageTable = {
-    'auth/user-not-found': 'ユーザが見つかりませんでした。メールアドレスかパスワードが間違っています。',
-    'auth/invalid-email': 'メールアドレスの形式が正しくありません。',
-    'auth/missing-password': 'パスワードが入力されていません。',
-    'auth/missing-email': 'メールアドレスが入力されていません。',
-  };
-
   const handleSubmit = () => {
     login(email, password).then(() => {
       router.push(PathGenerator().rootPath(null));
     }).catch((error) => {
-      console.log(error);
-      setFormErrorMessage(errorMessageTable[error.code] || error.message);
+      setFormErrorMessage(error.message);
     });
   }
 
@@ -32,9 +24,9 @@ const Page: NextPageWithLayout = () => {
     <>
       <h1>ログイン</h1>
       <div className="alert alert-info">ログイン後、既存データ(クエリパラメータ)の引き継ぎは行いません。</div>
-
       {formErrorMessage && <Alert variant="danger">{formErrorMessage}</Alert>}
-      <Form>
+
+      <Form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
         <Form.Group controlId="formEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -47,7 +39,7 @@ const Page: NextPageWithLayout = () => {
 
         <Row>
           <Col>
-            <Button variant="primary" className='mt-3' onClick={handleSubmit}>
+            <Button variant="primary" className='mt-3' type="submit">
               ログイン
             </Button>
           </Col>

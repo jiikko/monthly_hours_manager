@@ -1,43 +1,52 @@
 import { useEffect, useState } from "react";
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, UserCredential, browserLocalPersistence, signInWithEmailAndPassword, setPersistence, signOut } from "firebase/auth";
-import { app } from "./firebase";
+import { app } from "../lib/firebase";
 
-export type AuthContextType = {
-  loaded: boolean;
+export type UseAuthType = {
   login?: (email: string, password: string) => Promise<UserCredential>;
   logout?: () => void;
   register?: (email: string, password: string) => Promise<UserCredential>;
   user: any;
 };
 
-export const useAuth = (): AuthContextType => {
-  const [loaded, setLoaded] = useState(false);
+const auth = getAuth(app);
+
+export const useAuth = (): UseAuthType => {
   const [user, setUser] = useState(undefined);
+  const errorMessageTable = {
+    'auth/user-not-found': 'ユーザが見つかりませんでした。メールアドレスかパスワードが間違っています。',
+    'auth/email-already-in-use': '既に登録されているメールアドレスです。',
+    'auth/invalid-email': 'メールアドレスの形式が正しくありません。',
+    'auth/missing-password': 'パスワードが入力されていません。',
+    'auth/missing-email': 'メールアドレスが入力されていません。',
+  };
 
   const login = async (email: string, password: string) => {
-    const auth = getAuth();
     return setPersistence(auth, browserLocalPersistence).then(() => {
       return signInWithEmailAndPassword(auth, email, password);
+    }).catch((error) => {
+      console.log(error);
+      const translatedErrorMessage = errorMessageTable[error.code] || error.message;
+      throw new Error(translatedErrorMessage);
     })
   }
 
   const logout = async () => {
-    const auth = getAuth(app);
     await signOut(auth);
   }
 
   const register = async (email: string, password: string) => {
-    const auth = getAuth();
     return setPersistence(auth, browserLocalPersistence).then(() => {
       return createUserWithEmailAndPassword(auth, email, password);
-    });
+    }).catch((error) => {
+      console.log(error);
+      const translatedErrorMessage = errorMessageTable[error.code] || error.message;
+      throw new Error(translatedErrorMessage);
+    })
   };
 
   useEffect(() => {
-    const auth = getAuth(app);
     return onAuthStateChanged(auth, (user) => {
-      setLoaded(true);
-
       if(user) {
         setUser(user);
       } else {
@@ -46,5 +55,5 @@ export const useAuth = (): AuthContextType => {
     });
   }, []);
 
-  return { loaded, login, logout, user, register };
+  return { login, logout, user, register };
 };
