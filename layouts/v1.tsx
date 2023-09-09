@@ -1,11 +1,12 @@
 import Head from 'next/head';
-import { AuthContext} from '../contexts/auth_context'
 import { useRouter } from 'next/router';
 import { CalendarDate } from '../lib/calendar_date';
 import { Container, Row, Nav, Navbar } from 'react-bootstrap';
 import { PathGenerator } from '../lib/path_generator';
 import GitHubForkRibbon from 'react-github-fork-ribbon';
 import { useAuth } from '../hooks/use_auth';
+import { AuthContext } from '../contexts/auth_context';
+import { useContext } from 'react';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -23,8 +24,10 @@ export function Layout({ children }: LayoutProps) {
   const thisMonthPath = pathGenerator.monthPath(date.year(), date.month(), queryParameters)
   const nextMonthPath = pathGenerator.monthPath(date.year(), date.nextMonth(), queryParameters)
   const loginPath = pathGenerator.loginPath(queryParameters)
-  const { logout, user } = useAuth();
+  const { logout } = useAuth();
+  const { user } = useContext(AuthContext);
   const loggedInEmail = user && user.email;
+  const logged = !!loggedInEmail;
   const loaded = user !== undefined;
 
   const handleLogout = async () => {
@@ -50,12 +53,12 @@ export function Layout({ children }: LayoutProps) {
               <Nav.Link href={editPath}>設定を編集する</Nav.Link>
               <Nav.Link href={thisMonthPath}>今月({date.month()}月)を表示する</Nav.Link>
               <Nav.Link href={nextMonthPath}>来月({date.nextMonth()}月)を表示する</Nav.Link>
-              <Nav.Link onClick={handleLogout} >{loaded && loggedInEmail && 'ログアウトする'}</Nav.Link>
-              <Nav.Link href={loginPath}>{loaded && !loggedInEmail && 'ログインする'}</Nav.Link>
+              <Nav.Link onClick={handleLogout} >{loaded && logged && 'ログアウトする'}</Nav.Link>
+              <Nav.Link href={loginPath}>{loaded && !logged && 'ログインする'}</Nav.Link>
             </Nav>
             <Nav>
               <Nav.Link href="#" onClick={() => { return false }}>
-                {loggedInEmail && <><b>{loggedInEmail}</b>でログインしています</>}
+                {logged && <><b>{loggedInEmail}</b>でログインしています</>}
               </Nav.Link>
             </Nav>
           </Navbar.Collapse>
@@ -64,9 +67,7 @@ export function Layout({ children }: LayoutProps) {
 
       <Container>
         <Row className="justify-content-md-between p-3">
-          <AuthContext.Provider value={{ user }}>
-            {children}
-          </AuthContext.Provider>
+          {children}
         </Row>
       </Container>
     </>
