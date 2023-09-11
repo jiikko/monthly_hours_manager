@@ -1,6 +1,7 @@
 import '../styles/globals.css'
 import { AuthContext} from '../contexts/auth_context'
 import { useAuth } from '../hooks/use_auth';
+import GitHubForkRibbon from 'react-github-fork-ribbon';
 
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
@@ -20,6 +21,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <AuthContext.Provider value={{ user }}>
+      <GitHubForkRibbon href="//github.com/jiikko/monthly_hours_manager" target="_blank" position="right-bottom">Fork me on GitHub</GitHubForkRibbon>
       {getLayout(<Component {...pageProps} />)}
     </AuthContext.Provider>
   )

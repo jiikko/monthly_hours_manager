@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { CalendarDate } from '../lib/calendar_date';
 import { Container, Row, Nav, Navbar } from 'react-bootstrap';
 import { PathGenerator } from '../lib/path_generator';
-import GitHubForkRibbon from 'react-github-fork-ribbon';
 import { useAuth } from '../hooks/use_auth';
 import { AuthContext } from '../contexts/auth_context';
 import { useContext } from 'react';
@@ -42,8 +41,6 @@ export function Layout({ children }: LayoutProps) {
         <title>月の時間管理くん</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <GitHubForkRibbon href="//github.com/jiikko/monthly_hours_manager" target="_blank" position="right-bottom">Fork me on GitHub</GitHubForkRibbon>
-
       <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
           <Navbar.Brand href={rootPath}>月の時間管理くん</Navbar.Brand>
