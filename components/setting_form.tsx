@@ -8,9 +8,10 @@ import { Calendar } from '../lib/calendar';
 type Props = {
   calendar: Calendar;
   handleSubmit: (name: string, standardTime: number, workingWeek: Week, notify: (message: string) => void) => void;
+  submitLabel: string;
 }
 
-export const SettingForm: React.FC<Props> = ({ calendar, handleSubmit }) => {
+export const SettingForm: React.FC<Props> = ({ calendar, handleSubmit, submitLabel }) => {
   const defaultStandardTime = 84;
   const [name, setName] = useState('');
   const [standardTime, setStandardTime] = useState(undefined);
@@ -32,8 +33,6 @@ export const SettingForm: React.FC<Props> = ({ calendar, handleSubmit }) => {
 
   return (
     <>
-      <h1>カレンダーの編集</h1>
-
       <Form onSubmit={(e) => e.preventDefault()}>
         <Form.Group className="mb-3">
           <Form.Label htmlFor="name">名前</Form.Label>
@@ -54,7 +53,9 @@ export const SettingForm: React.FC<Props> = ({ calendar, handleSubmit }) => {
         <Form.Check type="switch" id='sat' name="sat" label="土" className='mb-2' checked={workingWeek.sat} onChange={handleWorkingDaysChange} />
         <Form.Check type="switch" id='sun' name="sun" label="日" className='mb-4' checked={workingWeek.sun} onChange={handleWorkingDaysChange} />
 
-        <Button variant="primary" type="submit" onClick={(_) => handleSubmit(name, standardTime, workingWeek, toastProps.notify)}>保存する</Button>
+        <Button variant="primary" type="submit" onClick={(_) => handleSubmit(name, standardTime, workingWeek, toastProps.notify)}>
+          {submitLabel}
+        </Button>
       </Form>
 
       <ToastComponent {...toastProps} />

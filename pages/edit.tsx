@@ -13,7 +13,10 @@ const Page: NextPageWithLayout = () => {
   }
 
   return (
-    <SettingForm calendar={calendar} handleSubmit={handleSubmit} />
+    <>
+      <h1>カレンダーの編集</h1>
+      <SettingForm calendar={calendar} handleSubmit={handleSubmit} submitLabel={'保存する'} />
+    </>
   )
 }
 

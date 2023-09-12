@@ -1,17 +1,18 @@
 import type { NextPageWithLayout } from './../../_app'
 import { Layout } from '../../../layouts/v2';
 import { Button, Row, Col } from 'react-bootstrap';
+import { Calendar } from '../../../lib/calendar';
+import { SettingForm } from '../../../components/setting_form';
 
 const Page: NextPageWithLayout = () => {
+  const calendar = new Calendar('a', 11, {}, {});
+  const handleSubmit = async (name: string, standardTime: number, week: Week, notify: (message: string) => void) => {
+  }
+
   return (
     <>
       <h1>カレンダーの新規登録</h1>
-      <hr />
-      <Row>
-        <Col className="text-end">
-          <Button href="/v2/calendars/new">新しいカレンダーを作成する</Button>
-        </Col>
-      </Row>
+      <SettingForm calendar={calendar} handleSubmit={handleSubmit}  submitLabel={'新規作成する'} />
     </>
   )
 }
