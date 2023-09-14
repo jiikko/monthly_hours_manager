@@ -26,7 +26,7 @@ export type CalendarType = {
 }
 
 export class Calendar implements CalendarType {
-  constructor(public name: string, public standardTime: number, public week: Week, public months: MonthTable, public shouldOutputQueryParam?: boolean) {}
+  constructor(public name: string, public standardTime: number, public week: Week, public months: MonthTable, public shouldOutputQueryParam?: boolean, public id?: string) {}
 
   serializeAsJson(): string {
     if(this.shouldOutputQueryParam) { return }
