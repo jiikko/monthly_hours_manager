@@ -8,6 +8,7 @@ import { SettingForm } from '../../../components/setting_form';
 import { db } from "../../../lib/firebase";
 import { addDoc, runTransaction, collection } from 'firebase/firestore';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -21,6 +22,7 @@ const Page: NextPageWithLayout = () => {
       week,
       months: {}
     });
+    toast("カレンダーを作成しました。");
     router.push(`/v2/calendars`, undefined,{ scroll: false })
     console.log('created', docRef.id)
   }

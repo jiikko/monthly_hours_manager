@@ -22,6 +22,7 @@ const Page: NextPageWithLayout = () => {
 
     const docRef = doc(db, entryPath);
     await deleteDoc(docRef);
+    toast("カレンダーを削除しました。");
     router.push(`/v2/calendars`, undefined,{ scroll: false })
   }
 
