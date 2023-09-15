@@ -8,7 +8,7 @@ import { Calendar } from '../lib/calendar';
 test('SettingForm submits the correct values', () => {
   const handleSubmit = jest.fn();
   const calendar = new Calendar('a', 100, Week.create(), {});
-  render(<SettingForm calendar={calendar} handleSubmit={handleSubmit} />);
+  render(<SettingForm calendar={calendar} handleSubmit={handleSubmit} submitLabel={'a'} />);
 
   fireEvent.change(screen.getByLabelText(/名前/i), { target: { value: '新しい名前' } });
   fireEvent.change(screen.getByLabelText(/基準時間/i), { target: { value: '120' } });
