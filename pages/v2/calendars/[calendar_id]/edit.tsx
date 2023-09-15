@@ -6,7 +6,7 @@ import { useReducer, useEffect, useContext, useState } from 'react';
 import { Week, Calendar } from '../../../../lib/calendar';
 import { SettingForm } from '../../../../components/setting_form';
 import { db } from "../../../../lib/firebase";
-import { addDoc, runTransaction, collection, doc, getDoc } from 'firebase/firestore';
+import { addDoc, runTransaction, updateDoc, collection, doc, getDoc } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 
 const Page: NextPageWithLayout = () => {
@@ -14,16 +14,20 @@ const Page: NextPageWithLayout = () => {
   const { calendar_id } = router.query;
   const { user } = useContext(AuthContext);
   const [calendar, setCalendar] = useState<Calendar>(null);
+  const entryPath = `time-manager-v2/${user.uid}/calendars/${calendar_id}`;
+
   const handleSubmit = async (name: string, standardTime: number, week: Week, notify: (message: string) => void) => {
-    const entryPath = `time-manager-v2/${user.uid}/calendars/${calendar_id}`;
-    // TODO: 反映する
-    router.push(`/time_manager/v2/calendars`, undefined, { scroll: false })
-    console.log('created', docRef.id)
+    const docRef = doc(db, entryPath);
+    await updateDoc(docRef, {
+      name: name,
+      standardTime: standardTime,
+      week: week,
+      months: {}
+    });
   }
 
   useEffect(() => {
     const fetchCalendar = async (user, calendar_id) => {
-      const entryPath = `time-manager-v2/${user.uid}/calendars/${calendar_id}`;
       const docRef = doc(db, entryPath);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
@@ -32,6 +36,7 @@ const Page: NextPageWithLayout = () => {
         const calendar = new Calendar(doc.name, doc.standardTime, doc.week, doc.months, false, docSnap.id)
         setCalendar(calendar)
       } else {
+        // TODO: 404処理
         console.log("No such document!");
       }
     }
