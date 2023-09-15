@@ -16,6 +16,9 @@ const Page: NextPageWithLayout = () => {
   const [calendar, setCalendar] = useState<Calendar>(null);
   const entryPath = user && `time-manager-v2/${user.uid}/calendars/${calendar_id}`;
   const handleDelete = async () => {
+    const result = confirm('削除しますか？')
+    if(!result) { return }
+
     const docRef = doc(db, entryPath);
     await deleteDoc(docRef);
     router.push(`/v2/calendars`, undefined,{ scroll: false })

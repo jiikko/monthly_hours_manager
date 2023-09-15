@@ -68,8 +68,6 @@ return (
       </tbody>
     </Table>
 
-    <hr />
-
     <Row>
       <Col className="text-end">
         <Button href="/v2/calendars/new">新しいカレンダーを作成する</Button>
