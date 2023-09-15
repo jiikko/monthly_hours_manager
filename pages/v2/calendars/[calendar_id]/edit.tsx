@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
-  const { calendar_id } = router.query;
+  const calendar_id = typeof router.query.calendar_id === 'string' ? router.query.calendar_id : null;
   const { user } = useContext(AuthContext);
   const [calendar, setCalendar] = useState<Calendar>(null);
   const entryPath = user && `time-manager-v2/${user.uid}/calendars/${calendar_id}`;
@@ -39,7 +39,7 @@ const Page: NextPageWithLayout = () => {
   }
 
   useEffect(() => {
-    const fetchCalendar = async (user, calendar_id) => {
+    const fetchCalendar = async (user, calendar_id: string) => {
       const docRef = doc(db, entryPath);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
@@ -61,7 +61,6 @@ const Page: NextPageWithLayout = () => {
   return (
     <>
       <h1>カレンダーの更新</h1>
-
       <Row className='mt-3'>
         <Col className="text-end">
           <Button variant="danger" onClick={handleDelete}>削除する</Button>
