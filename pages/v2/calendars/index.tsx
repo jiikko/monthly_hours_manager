@@ -9,7 +9,7 @@ import { Calendar } from '../../../lib/calendar';
 
 const Page: NextPageWithLayout = () => {
   const { user } = useContext(AuthContext);
-  const [calendars, setCalendars] = useState([]);
+  const [calendars, setCalendars] = useState<Calendar[]>(undefined);
   const weekDayMapping = {
     "sun": "日曜日",
     "mon": "月曜日",
@@ -39,9 +39,12 @@ const Page: NextPageWithLayout = () => {
     }
   }, [user])
 
+  if(!user) { return null }
+  if(calendars === undefined) { return null }
+
 return (
   <>
-    <h1>カレンダーの一覧</h1>
+    <h1 className='mb-4'>作成したカレンダーの一覧</h1>
 
     <Table>
       <thead>
