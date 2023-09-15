@@ -1,8 +1,7 @@
 import type { NextPageWithLayout } from './../../_app'
 import { Layout } from '../../../layouts/v2';
-import { Button, Row, Col } from 'react-bootstrap';
 import { AuthContext} from '../../../contexts/auth_context'
-import { useReducer, useEffect, useContext, useState } from 'react';
+import { useContext } from 'react';
 import { Week, Calendar } from '../../../lib/calendar';
 import { SettingForm } from '../../../components/setting_form';
 import { db } from "../../../lib/firebase";
@@ -24,7 +23,6 @@ const Page: NextPageWithLayout = () => {
     });
     toast("カレンダーを作成しました。");
     router.push(`/v2/calendars`, undefined,{ scroll: false })
-    console.log('created', docRef.id)
   }
 
   return (

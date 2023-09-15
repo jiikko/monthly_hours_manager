@@ -1,11 +1,13 @@
 import type { NextPageWithLayout } from './../../_app'
 import { Layout } from '../../../layouts/v2';
-import { Button, Row, Col, Table } from 'react-bootstrap';
+import { Button, Row, Col, Table, Nav } from 'react-bootstrap';
 import { useReducer, useEffect, useContext, useState } from 'react';
 import { AuthContext } from '../../../contexts/auth_context'
 import { db } from "../../../lib/firebase";
 import { getDocs, runTransaction, collection, query } from 'firebase/firestore';
 import { Calendar } from '../../../lib/calendar';
+import { CalendarDate } from '../../../lib/calendar_date';
+import { PathGenerator } from '../../../lib/path_generator';
 
 const Page: NextPageWithLayout = () => {
   const { user } = useContext(AuthContext);
@@ -20,6 +22,10 @@ const Page: NextPageWithLayout = () => {
     "sat": "土曜日"
   };
   const weekDayOrder = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+  const date = CalendarDate();
+  const pathGenerator = PathGenerator()
+  const thisMonthPath = pathGenerator.monthPathV2(date.year(), date.month())
+  const nextMonthPath = pathGenerator.monthPathV2(date.year(), date.nextMonth())
 
   useEffect(() => {
     const fetchCalendars = async (user) => {
@@ -42,31 +48,39 @@ const Page: NextPageWithLayout = () => {
   if(!user) { return null }
   if(calendars === undefined) { return null }
 
-return (
-  <>
-    <h1 className='mb-4'>作成したカレンダーの一覧</h1>
+  return (
+    <>
+      <h1 className='mb-4'>作成したカレンダーの一覧</h1>
 
-    <Table>
-      <thead>
-        <tr>
-          <th>カレンダー名</th>
-          <th>基準時間</th>
-          <th>稼働曜日</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {calendars.map((calendar, index) => (
-          <tr key={index}>
-            <td>{calendar.name}</td>
-            <td>{calendar.standardTime}時間</td>
-            <td>
-              {weekDayOrder.filter(key => calendar.week[key]).map(key => weekDayMapping[key]).join(', ')}
-            </td>
-            <td>
-              <Button href={`/v2/calendars/${calendar.id}/edit`}>編集</Button>
-            </td>
+      <Table>
+        <thead>
+          <tr>
+            <th>カレンダー名</th>
+            <th>基準時間</th>
+            <th>稼働曜日</th>
+            <th>今月({date.month()}月)</th>
+            <th>来月({date.nextMonth()}月)</th>
+            <th></th>
           </tr>
+        </thead>
+        <tbody>
+          {calendars.map((calendar, index) => (
+            <tr key={index}>
+              <td>{calendar.name}</td>
+              <td>{calendar.standardTime}時間</td>
+              <td>
+                {weekDayOrder.filter(key => calendar.week[key]).map(key => weekDayMapping[key]).join(', ')}
+              </td>
+              <td>
+                <Nav.Link href={pathGenerator.monthPathV2(calendar.id, date.year(), date.month())}>表示する</Nav.Link>
+              </td>
+              <td>
+                <Nav.Link href={pathGenerator.monthPathV2(calendar.id, date.year(), date.month())}>表示する</Nav.Link>
+              </td>
+              <td>
+                <Button href={`/v2/calendars/${calendar.id}/edit`}>編集</Button>
+              </td>
+            </tr>
         ))}
       </tbody>
     </Table>
@@ -77,7 +91,7 @@ return (
       </Col>
     </Row>
   </>
-  )
+)
 }
 
 export default Page

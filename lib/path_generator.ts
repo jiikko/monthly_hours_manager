@@ -8,6 +8,10 @@ const PathGenerator = (() => {
       }
     }
 
+    function monthPathV2(calendar_id: string, year: number, month: number) {
+      return `/v2/calendars/${calendar_id}/${year}/${month}`
+    }
+
     function rootPath(queryParam: string) {
       if(queryParam) {
         return `/?${queryParam}`
@@ -32,7 +36,7 @@ const PathGenerator = (() => {
       }
     }
 
-    return { monthPath, editPath, rootPath, loginPath }
+    return { monthPath, monthPathV2, editPath, rootPath, loginPath }
   }
 })();
 
