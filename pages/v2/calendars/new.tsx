@@ -13,7 +13,6 @@ const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { user } = useContext(AuthContext);
   const calendar = new Calendar('a', 11, {} as Week, {}); // TODO: 仮の値
-
   const handleSubmit = async (name: string, standardTime: number, week: Week, notify: (message: string) => void) => {
     const newEntryPath = `time-manager-v2/${user.uid}/calendars`;
     const docRef = await addDoc(collection(db, newEntryPath), {
@@ -22,7 +21,7 @@ const Page: NextPageWithLayout = () => {
       week,
       months: {}
     });
-    router.push(`/time_manager/v2/calendars`, undefined,{ scroll: false })
+    router.push(`/v2/calendars`, undefined,{ scroll: false })
     console.log('created', docRef.id)
   }
 
