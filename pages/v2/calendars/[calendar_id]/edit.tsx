@@ -6,30 +6,44 @@ import { useReducer, useEffect, useContext, useState } from 'react';
 import { Week, Calendar } from '../../../../lib/calendar';
 import { SettingForm } from '../../../../components/setting_form';
 import { db } from "../../../../lib/firebase";
-import { addDoc, runTransaction, collection } from 'firebase/firestore';
+import { addDoc, runTransaction, collection, doc, getDoc } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
+  const { calendar_id } = router.query;
   const { user } = useContext(AuthContext);
-  const calendar = new Calendar('a', 11, {} as Week, {}); // TODO: 仮の値
-
+  const [calendar, setCalendar] = useState<Calendar>(null);
   const handleSubmit = async (name: string, standardTime: number, week: Week, notify: (message: string) => void) => {
-    const newEntryPath = `time-manager-v2/${user.uid}/calendars`;
-    const docRef = await addDoc(collection(db, newEntryPath), {
-      name,
-      standardTime,
-      week,
-      months: {}
-    });
-    router.push(`/time_manager/v2/calendars`, undefined,{ scroll: false })
+    const entryPath = `time-manager-v2/${user.uid}/calendars/${calendar_id}`;
+    // TODO: 反映する
+    router.push(`/time_manager/v2/calendars`, undefined, { scroll: false })
     console.log('created', docRef.id)
   }
 
+  useEffect(() => {
+    const fetchCalendar = async (user, calendar_id) => {
+      const entryPath = `time-manager-v2/${user.uid}/calendars/${calendar_id}`;
+      const docRef = doc(db, entryPath);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+        const doc = docSnap.data()
+        const calendar = new Calendar(doc.name, doc.standardTime, doc.week, doc.months, false, docSnap.id)
+        setCalendar(calendar)
+      } else {
+        console.log("No such document!");
+      }
+    }
+
+    if(user && calendar_id) { fetchCalendar(user, calendar_id) }
+  }, [user, calendar_id])
+
+
   return (
     <>
-      <h1>カレンダーの新規登録</h1>
-      <SettingForm calendar={calendar} handleSubmit={handleSubmit}  submitLabel={'新規作成する'} />
+      <h1>カレンダーの更新</h1>
+      {calendar && <SettingForm calendar={calendar} handleSubmit={handleSubmit}  submitLabel={'新規作成する'} />}
     </>
   )
 }
