@@ -28,7 +28,7 @@ const Page: NextPageWithLayout = () => {
       const list = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data()
-        const calendar = new Calendar(data.name, data.standardTime, data.week, doc.id)
+        const calendar = new Calendar(data.name, data.standardTime, data.week, data.months, false, doc.id)
         list.push(calendar);
       });
       setCalendars(list)
@@ -56,10 +56,10 @@ return (
         {calendars.map((calendar, index) => (
           <tr key={index}>
             <td>{calendar.name}</td>
+            <td>{calendar.standardTime}時間</td>
             <td>
               {weekDayOrder.filter(key => calendar.week[key]).map(key => weekDayMapping[key]).join(', ')}
             </td>
-            <td>{calendar.standardTime}</td>
             <td>
               <Button href={`/v2/calendars/${calendar.id}/edit`}>編集</Button>
             </td>
