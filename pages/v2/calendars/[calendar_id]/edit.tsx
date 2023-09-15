@@ -8,6 +8,7 @@ import { SettingForm } from '../../../../components/setting_form';
 import { db } from "../../../../lib/firebase";
 import { addDoc, runTransaction, updateDoc, collection, doc, getDoc, deleteDoc } from 'firebase/firestore';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -24,7 +25,7 @@ const Page: NextPageWithLayout = () => {
     router.push(`/v2/calendars`, undefined,{ scroll: false })
   }
 
-  const handleSubmit = async (name: string, standardTime: number, week: Week, notify: (message: string) => void) => {
+  const handleSubmit = async (name: string, standardTime: number, week: Week) => {
     const docRef = doc(db, entryPath);
     await updateDoc(docRef, {
       name: name,
@@ -32,6 +33,7 @@ const Page: NextPageWithLayout = () => {
       week: week,
       months: {}
     });
+    toast("カレンダーを更新しました。");
     router.push(`/v2/calendars`, undefined,{ scroll: false })
   }
 

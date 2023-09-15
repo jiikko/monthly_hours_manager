@@ -6,8 +6,7 @@ import { Button, Col } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { PathGenerator } from '../../../lib/path_generator';
-import { useToast } from '../../../hooks/use_toast';
-import { ToastComponent } from '../../../components/toast';
+import { toast } from 'react-toastify';
 import { MonthSummary } from '../../../components/month_summary';
 import { CalendarMonth } from '../../../components/calendar_month';
 import { useCalendarState } from '../../../hooks/use_calendar_state';
@@ -17,7 +16,6 @@ const Page: NextPageWithLayout = () => {
   const { year, month } = router.query;
   const date = CalendarDate(year && Number(year), month && Number(month), 1);
   const monthKey = date.monthlyKey();
-  const toastProps = useToast();
   const { calendarState, dispatch, calendar, loading, loaded } = useCalendarState(
     PathGenerator().monthPath, [date.year(), date.month()]
   );
@@ -27,7 +25,7 @@ const Page: NextPageWithLayout = () => {
       type: 'updateDays',
       payload: { monthKey: monthKey, days: days.map((day: DayObject) => { return(day.toObject()) }) },
     })
-    toastProps.notify('時間を更新しました')
+    toast('時間を更新しました')
   }
   const handleInitializeDaysButton = (): void => {
     const result = confirm('現在入力済みの時間をすべて削除しますが、操作を続けますか？');
@@ -40,12 +38,12 @@ const Page: NextPageWithLayout = () => {
   const initializeDays = (notify?: boolean): void => {
     const initializedDays = DaysGenerator.execute(Number(year), Number(month), calendar.standardTime, calendar.week)
     dispatch({ type: 'updateDays', payload: { monthKey: monthKey, days: initializedDays } });
-    if(notify) { toastProps.notify('初期化しました') }
+    if(notify) { toast('初期化しました') }
   }
   const recalculateDays = (days: Array<DayObject>): void => {
     const recalculatedDays = DaysGenerator.executeWithDays(Number(year), Number(month), calendar.standardTime, calendar.week, days)
     dispatch({ type: 'updateDays', payload: { monthKey: monthKey, days: recalculatedDays } });
-    toastProps.notify('再計算しました')
+    toast('再計算しました')
   }
   const initializeCalendar = (calendar, dispatch) => {
     // NOTE: データの初期化
@@ -96,8 +94,6 @@ const Page: NextPageWithLayout = () => {
       <Col>
         <Button type='button' variant="primary" onClick={((_) => handleRecalculateDaysButton(days)) }>未稼働日の予定を再計算する</Button>
       </Col>
-
-      <ToastComponent {...toastProps} />
     </>
   );
 }

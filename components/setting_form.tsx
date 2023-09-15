@@ -1,13 +1,11 @@
 import { Form, Button } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { Week } from '../lib/json_parameter';
-import { useToast } from '../hooks/use_toast';
-import { ToastComponent } from '../components/toast';
 import { Calendar } from '../lib/calendar';
 
 type Props = {
   calendar: Calendar;
-  handleSubmit: (name: string, standardTime: number, workingWeek: Week, notify: (message: string) => void) => void;
+  handleSubmit: (name: string, standardTime: number, workingWeek: Week) => void;
   submitLabel: string;
 }
 
@@ -16,7 +14,6 @@ export const SettingForm: React.FC<Props> = ({ calendar, handleSubmit, submitLab
   const [name, setName] = useState('');
   const [standardTime, setStandardTime] = useState(undefined);
   const [workingWeek, setWorkingWeek] = useState(Week.create());
-  const toastProps = useToast();
 
   const handleWorkingDaysChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setWorkingWeek({
@@ -53,12 +50,10 @@ export const SettingForm: React.FC<Props> = ({ calendar, handleSubmit, submitLab
         <Form.Check type="switch" id='sat' name="sat" label="土" className='mb-2' checked={workingWeek.sat} onChange={handleWorkingDaysChange} />
         <Form.Check type="switch" id='sun' name="sun" label="日" className='mb-4' checked={workingWeek.sun} onChange={handleWorkingDaysChange} />
 
-        <Button variant="primary" type="submit" onClick={(_) => handleSubmit(name, standardTime, workingWeek, toastProps.notify)}>
+        <Button variant="primary" type="submit" onClick={(_) => handleSubmit(name, standardTime, workingWeek)}>
           {submitLabel}
         </Button>
       </Form>
-
-      <ToastComponent {...toastProps} />
     </>
   )
 }
