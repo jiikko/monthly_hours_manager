@@ -41,7 +41,7 @@ export const CalendarMonth: React.FC<MonthProps>= ({ year, month, days, workingW
             {dayNo}日{calendarDate.isNationalHoliday() && '(祝)'}<br />
 
             <Form>
-              <Form.Check type="switch" checked={day.isHoliday} name={'isHoliday'}  label="稼働対象外" className='m-1' onChange={(e) => handleUpdateDay('isHoliday', e.target.checked, dayIndex)} />
+              <Form.Check type="switch" checked={day.isHoliday} name={'isHoliday'}  label="稼働対象外" className='m-1' onChange={(e) => handleUpdateDay('isHoliday', e.target.checked, dayIndex) } />
               {day.isWorkingDay() && (
                 <>
                   <FloatingLabel controlId="floatingInput" label="予定" className='mb-2' >
