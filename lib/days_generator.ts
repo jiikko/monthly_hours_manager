@@ -53,7 +53,7 @@ export class DayObject implements DayData {
 }
 
 export class DaysGenerator {
-  static execute(year: number, month: number, standardTime: number, workingWeek: Week): Array<Object> {
+  static execute(year: number, month: number, standardTime: number, workingWeek: Week): Array<DayData> {
     const date = CalendarDate(year, month, 1)
     const datesInMonth = allDaysInMonth(date.year(), date.month());
     const workingDays = datesInMonth.filter((date) => workingWeek[date.weekDayName()]);
