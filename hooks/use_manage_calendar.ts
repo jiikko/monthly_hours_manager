@@ -14,7 +14,7 @@ export const useManageCalendar = () => {
     if(calendar.months) { setCalendarMonth(calendar.months[monthKey]) }
   }
 
-  const updateMonths = async (user: User, calendar_id: string, months: any, monthKey: string) => {
+  const updateMonths = async (user: User, calendar_id: string, monthKey: string) => {
     const entryPath = `time-manager-v2/${user.uid}/calendars/${calendar_id}`;
     const docRef = doc(db, entryPath);
     await updateDoc(docRef, { months: calendar.months });

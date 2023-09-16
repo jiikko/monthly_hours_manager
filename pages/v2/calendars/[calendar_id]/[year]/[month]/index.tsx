@@ -23,7 +23,7 @@ const Page: NextPageWithLayout = () => {
   const handleUpdateDay = async (attributeName: string, value: boolean | string, dayIndex: number): Promise<void> => {
     days[dayIndex][attributeName] = value;
     calendar.months[monthKey] = days.map((day: DayObject) => { return(day.toObject()) });
-    updateMonths(user, calendar_id, calendar.months, monthKey);
+    updateMonths(user, calendar_id, monthKey);
     toast('時間を更新しました');
   }
 
@@ -31,13 +31,13 @@ const Page: NextPageWithLayout = () => {
     const days = DaysGenerator.execute(Number(year), Number(month), calendar.standardTime, calendar.week);
     if(calendar.months === undefined) { calendar.months = {} }
     calendar.months[monthKey] = days;
-    updateMonths(user, calendar_id, calendar.months, monthKey);
+    updateMonths(user, calendar_id, monthKey);
     toast('初期化しました');
   };
 
   useEffect(() => {
     fetchSingleCalendar(user, calendar_id, monthKey)
-  }, [user])
+  }, [])
 
   useEffect(() => {
     if(!calendar) { return }
@@ -47,18 +47,13 @@ const Page: NextPageWithLayout = () => {
         initializeDays();
       }
     }
-
     initializeCalendar();
-  }, [user, calendar]);
+  }, [calendar]);
 
   if(calendar === undefined) { return null }
   if(calendar === null) { return(<div className="alert alert-danger" role="alert">カレンダーが見つかりませんでした。</div>) }
   if(calendar?.months && calendar.months[monthKey] === undefined) { return }
-  if(calendar?.hasNoSetting()) {
-    return(
-      <div className="alert alert-danger" role="alert">カレンダーの設定情報がありません。設定してください。</div>
-    )
-  }
+  if(calendar?.hasNoSetting()) { return(<div className="alert alert-danger" role="alert">カレンダーの設定情報がありません。設定してください。</div>) }
 
   let days = []
   if(calendar?.months && calendar.months[monthKey]) {
