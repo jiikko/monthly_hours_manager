@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Calendar } from 'lib/calendar';
+import type { User } from '@firebase/auth'
 import { db } from "lib/firebase";
 import { getDoc, doc, updateDoc, runTransaction, collection, query } from 'firebase/firestore';
 
@@ -13,16 +14,14 @@ export const useManageCalendar = () => {
     if(calendar.months) { setCalendarMonth(calendar.months[monthKey]) }
   }
 
-  const updateMonths = async (user: any, calendar_id: string, months: any, monthKey: string) => {
-    const entryPath = user && `time-manager-v2/${user.uid}/calendars/${calendar_id}`;
+  const updateMonths = async (user: User, calendar_id: string, months: any, monthKey: string) => {
+    const entryPath = `time-manager-v2/${user.uid}/calendars/${calendar_id}`;
     const docRef = doc(db, entryPath);
     await updateDoc(docRef, { months: calendar.months });
     updateCalendarForReRender(calendar, monthKey);
   }
 
-  const fetchSingleCalendar = async (user: any, calendar_id: string, monthKey: string) => {
-    if (!user) return;
-
+  const fetchSingleCalendar = async (user: User, calendar_id: string, monthKey: string) => {
     const entryPath = user && `time-manager-v2/${user.uid}/calendars/${calendar_id}`;
     const docRef = doc(db, entryPath);
     const docSnap = await getDoc(docRef);

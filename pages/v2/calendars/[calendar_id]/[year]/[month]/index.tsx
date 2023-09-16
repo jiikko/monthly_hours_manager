@@ -40,7 +40,6 @@ const Page: NextPageWithLayout = () => {
   }, [user])
 
   useEffect(() => {
-    if(!user) { return }
     if(!calendar) { return }
 
     const initializeCalendar = () => {
@@ -52,13 +51,8 @@ const Page: NextPageWithLayout = () => {
     initializeCalendar();
   }, [user, calendar]);
 
-  if(!user) { return null }
   if(calendar === undefined) { return null }
-  if(calendar === null) {
-    return(
-      <div className="alert alert-danger" role="alert">カレンダーが見つかりませんでした。</div>
-    )
-  }
+  if(calendar === null) { return(<div className="alert alert-danger" role="alert">カレンダーが見つかりませんでした。</div>) }
   if(calendar?.months && calendar.months[monthKey] === undefined) { return }
   if(calendar?.hasNoSetting()) {
     return(
