@@ -1,11 +1,11 @@
-import type { NextPageWithLayout } from './../../../_app'
-import { Layout } from '../../../../layouts/v2';
+import type { NextPageWithLayout } from 'pages/_app'
+import { Layout } from 'layouts/v2';
 import { Button, Row, Col } from 'react-bootstrap';
-import { AuthContext} from '../../../../contexts/auth_context'
+import { AuthContext} from 'contexts/auth_context'
 import { useReducer, useEffect, useContext, useState } from 'react';
-import { Week, Calendar } from '../../../../lib/calendar';
-import { SettingForm } from '../../../../components/setting_form';
-import { db } from "../../../../lib/firebase";
+import { Week, Calendar } from 'lib/calendar';
+import { SettingForm } from 'components/setting_form';
+import { db } from "lib/firebase";
 import { addDoc, runTransaction, updateDoc, collection, doc, getDoc, deleteDoc } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
@@ -57,6 +57,7 @@ const Page: NextPageWithLayout = () => {
   }, [user, calendar_id])
 
   if(!user) { return null }
+  if(calendar === undefined) { return null }
 
   return (
     <>
