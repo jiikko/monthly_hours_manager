@@ -24,8 +24,6 @@ const Page: NextPageWithLayout = () => {
   const weekDayOrder = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
   const date = CalendarDate();
   const pathGenerator = PathGenerator()
-  const thisMonthPath = pathGenerator.monthPathV2(date.year(), date.month())
-  const nextMonthPath = pathGenerator.monthPathV2(date.year(), date.nextMonth())
 
   useEffect(() => {
     const fetchCalendars = async (user) => {

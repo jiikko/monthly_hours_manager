@@ -20,8 +20,6 @@ export function Layout({ children }: LayoutProps) {
   const pathGenerator = PathGenerator()
   const rootPath = pathGenerator.rootPath(queryParameters)
   const editPath = pathGenerator.editPath(queryParameters)
-  const thisMonthPath = pathGenerator.monthPath(date.year(), date.month(), queryParameters)
-  const nextMonthPath = pathGenerator.monthPath(date.year(), date.nextMonth(), queryParameters)
   const loginPath = pathGenerator.loginPath(queryParameters)
   const { logout } = useAuth();
   const { user } = useContext(AuthContext);
@@ -48,8 +46,6 @@ export function Layout({ children }: LayoutProps) {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link href={'/v2/calendars'}>カレンダー一覧</Nav.Link>
-              <Nav.Link href={thisMonthPath}>今月({date.month()}月)を表示する</Nav.Link>
-              <Nav.Link href={nextMonthPath}>来月({date.nextMonth()}月)を表示する</Nav.Link>
               <Nav.Link onClick={handleLogout} >{loaded && logged && 'ログアウトする'}</Nav.Link>
               <Nav.Link href={loginPath}>{loaded && !logged && 'ログインする'}</Nav.Link>
             </Nav>
