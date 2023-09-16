@@ -73,7 +73,7 @@ const Page: NextPageWithLayout = () => {
                 <Nav.Link href={pathGenerator.monthPathV2(calendar.id, date.year(), date.month())}>表示する</Nav.Link>
               </td>
               <td>
-                <Nav.Link href={pathGenerator.monthPathV2(calendar.id, date.year(), date.month())}>表示する</Nav.Link>
+                <Nav.Link href={pathGenerator.monthPathV2(calendar.id, date.year(), date.nextMonth())}>表示する</Nav.Link>
               </td>
               <td>
                 <Button href={`/v2/calendars/${calendar.id}/edit`}>編集</Button>
