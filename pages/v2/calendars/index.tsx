@@ -8,6 +8,7 @@ import { getDocs, runTransaction, collection, query } from 'firebase/firestore';
 import { Calendar } from '../../../lib/calendar';
 import { CalendarDate } from '../../../lib/calendar_date';
 import { PathGenerator } from '../../../lib/path_generator';
+import Link from 'next/link';
 
 const Page: NextPageWithLayout = () => {
   const { user } = useContext(AuthContext);
@@ -76,7 +77,9 @@ const Page: NextPageWithLayout = () => {
                 <Nav.Link href={pathGenerator.monthPathV2(calendar.id, date.year(), date.nextMonth())}>表示する</Nav.Link>
               </td>
               <td>
-                <Button href={`/v2/calendars/${calendar.id}/edit`}>編集</Button>
+                <Link href={`/v2/calendars/${calendar.id}/edit`}>
+                  <Button>編集</Button>
+                </Link>
               </td>
             </tr>
         ))}
@@ -85,7 +88,9 @@ const Page: NextPageWithLayout = () => {
 
     <Row>
       <Col className="text-end">
-        <Button href="/v2/calendars/new">新しいカレンダーを作成する</Button>
+        <Link href={`/v2/calendars/new`}>
+          <Button>新しいカレンダーを作成する</Button>
+        </Link>
       </Col>
     </Row>
   </>

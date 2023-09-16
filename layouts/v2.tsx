@@ -6,6 +6,7 @@ import { PathGenerator } from '../lib/path_generator';
 import { useAuth } from '../hooks/use_auth';
 import { AuthContext } from '../contexts/auth_context';
 import { useContext } from 'react';
+import Link from 'next/link';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -41,11 +42,11 @@ export function Layout({ children }: LayoutProps) {
       </Head>
       <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
-          <Navbar.Brand href={'/v2'}>月の時間管理くん(v2)</Navbar.Brand>
+          <Navbar.Brand href={'/v2'} as={Link}>月の時間管理くん(v2)</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href={'/v2/calendars'}>カレンダー一覧</Nav.Link>
+              <Nav.Link as={Link}  href={`/v2/calendars`}>カレンダー一覧</Nav.Link>
               <Nav.Link onClick={handleLogout} >{loaded && logged && 'ログアウトする'}</Nav.Link>
               <Nav.Link href={loginPath}>{loaded && !logged && 'ログインする'}</Nav.Link>
             </Nav>
