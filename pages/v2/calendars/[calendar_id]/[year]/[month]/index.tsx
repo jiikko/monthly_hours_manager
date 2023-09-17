@@ -23,13 +23,16 @@ const Page: NextPageWithLayout = () => {
   const monthKey = date.monthlyKey();
   const { updateMonths } = useManageCalendar();
 
+  const handleConfirm = (message: string, action: () => void) => {
+    const result = confirm(message);
+    if(result) { action(); }
+  }
+
   const handleInitializeDaysButton = () => {
-    const result = confirm('現在入力済みの時間をすべて削除しますが、操作を続けますか？');
-    if(result) { initializeDays(); }
+    handleConfirm('現在入力済みの時間をすべて削除しますが、操作を続けますか？', initializeDays);
   }
   const handleRecalculateDaysButton = (days: Array<DayObject>) => {
-    const result = confirm('実績が入力されていない時間をすべて削除しますが、操作を続けますか？');
-    if(result) { recalculateDays(days); }
+    handleConfirm('実績が入力されていない時間をすべて削除しますが、操作を続けますか？', () => { recalculateDays(days) });
   }
   const recalculateDays = (days: Array<DayObject>): void => {
     calendar.months[monthKey] = DaysGenerator.executeWithDays(Number(year), Number(month), calendar.standardTime, calendar.week, days)
