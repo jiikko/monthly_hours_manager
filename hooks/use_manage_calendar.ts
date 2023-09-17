@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { Calendar } from 'lib/calendar';
 import type { User } from '@firebase/auth'
 import { db } from "lib/firebase";
-import { getDoc, doc, updateDoc, runTransaction, collection, query } from 'firebase/firestore';
+import { getDoc, doc, updateDoc, deleteDoc, collection, query } from 'firebase/firestore';
+import { Week } from '../lib/calendar';
 
 export const useManageCalendar = () => {
   const [calendar, setCalendar] = useState<Calendar>(undefined);
@@ -15,14 +16,30 @@ export const useManageCalendar = () => {
   }
 
   const updateMonths = async (calendar, user: User, calendar_id: string, monthKey: string) => {
-    const entryPath = `time-manager-v2/${user.uid}/calendars/${calendar_id}`;
+    const entryPath = calendarPath(user, calendar_id);
     const docRef = doc(db, entryPath);
     await updateDoc(docRef, { months: calendar.months });
     updateCalendarForReRender(calendar, monthKey);
   }
 
+  const updateCalendar = async (user: User, calendar_id: string, name: string, standardTime: number, week: Week) => {
+    const entryPath = calendarPath(user, calendar_id);
+    const docRef = doc(db, entryPath);
+    await updateDoc(docRef, {
+      name: name,
+      standardTime: standardTime,
+      week: week,
+    });
+  }
+
+  const deleteCalendar = async (user: User, calendar_id: string) => {
+    const entryPath = calendarPath(user, calendar_id);
+    const docRef = doc(db, entryPath);
+    await deleteDoc(docRef);
+  }
+
   const fetchSingleCalendar = async (user: User, calendar_id: string, monthKey?: string) => {
-    const entryPath = user && `time-manager-v2/${user.uid}/calendars/${calendar_id}`;
+    const entryPath = calendarPath(user, calendar_id);
     const docRef = doc(db, entryPath);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
@@ -36,5 +53,9 @@ export const useManageCalendar = () => {
     }
   };
 
-  return { calendar, fetchSingleCalendar, updateMonths };
+  const calendarPath = (user: User, calendar_id: string) => {
+    return `time-manager-v2/${user.uid}/calendars/${calendar_id}`;
+  }
+
+  return { calendar, updateCalendar, fetchSingleCalendar, updateMonths, deleteCalendar };
 }
