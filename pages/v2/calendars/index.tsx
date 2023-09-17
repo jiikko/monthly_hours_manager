@@ -33,8 +33,11 @@ const Page: NextPageWithLayout = () => {
       const list = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data()
-        const calendar = new Calendar(data.name, data.standardTime, data.week, data.months, false, doc.id)
+        const calendar = new Calendar(data.name, data.standardTime, data.week, data.months, false, doc.id, data.created_at.toDate());
         list.push(calendar);
+      });
+      list.sort((a, b) => {
+        return a.createdAt.getTime() - b.createdAt.getTime();
       });
       setCalendars(list)
     }
