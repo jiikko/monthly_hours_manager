@@ -14,7 +14,7 @@ const Page: NextPageWithLayout = () => {
   const [formErrorMessage, setFormErrorMessage] = useState('');
   const handleSubmit = () => {
     register(email, password).then(() => {
-      router.push(PathGenerator().rootPath(null));
+      router.push('/v2');
     }).catch((error) => {
       setFormErrorMessage(error.message);
     })
