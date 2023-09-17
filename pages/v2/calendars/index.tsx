@@ -14,16 +14,6 @@ const Page: NextPageWithLayout = () => {
   const { user } = useContext(AuthContext);
   const [calendars, setCalendars] = useState<Calendar[]>(undefined);
   const { fetchCalendars } = useManageCalendar();
-  const weekDayMapping = {
-    "sun": "日曜日",
-    "mon": "月曜日",
-    "tue": "火曜日",
-    "wed": "水曜日",
-    "thu": "木曜日",
-    "fri": "金曜日",
-    "sat": "土曜日"
-  };
-  const weekDayOrder = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
   const date = CalendarDate();
   const dateOnNextMonth = date.nextDateOnMonth();
   const pathGenerator = PathGenerator()
@@ -71,7 +61,7 @@ const Page: NextPageWithLayout = () => {
               <td>{calendar.name}</td>
               <td>{calendar.standardTime}時間</td>
               <td>
-                {weekDayOrder.filter(key => calendar.week[key]).map(key => weekDayMapping[key]).join(', ')}
+                {calendar.week.formatted()}
               </td>
               <td>
                 {calendar.formattedCreatedAt()}

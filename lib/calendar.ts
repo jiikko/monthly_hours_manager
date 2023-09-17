@@ -15,6 +15,24 @@ export class Week {
   static create(): Week {
     return new Week(false, false, false, false, false, false, false);
   }
+
+  static parse(week: Week): Week {
+    return new Week(week.mon, week.tue, week.wed, week.thu, week.fri, week.sat, week.sun);
+  }
+
+  formatted(): string {
+    const weekDayMapping = {
+      "sun": "日",
+      "mon": "月",
+      "tue": "火",
+      "wed": "水",
+      "thu": "木",
+      "fri": "金",
+      "sat": "土"
+    };
+    const weekDayOrder = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+    return weekDayOrder.filter(key => this[key]).map(key => weekDayMapping[key]).join(', ')
+  }
 }
 
 export type CalendarType = {
