@@ -59,12 +59,12 @@ const Page: NextPageWithLayout = () => {
                 {weekDayOrder.filter(key => calendar.week[key]).map(key => weekDayMapping[key]).join(', ')}
               </td>
               <td>
+                {calendar.createdAt.toISOString().slice(0, 10)}
+              </td>
+              <td>
                 <Nav.Link as={Link} href={pathGenerator.monthPathV2(calendar.id, date.year(), date.month())}>
                   <Button variant='info'>表示する</Button>
                 </Nav.Link>
-              </td>
-              <td>
-                {calendar.createdAt.toISOString().slice(0, 10)}
               </td>
               <td>
                 <Nav.Link as={Link} href={pathGenerator.monthPathV2(calendar.id, date.year(), date.nextMonth())}>
