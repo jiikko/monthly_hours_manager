@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import { useManageCalendar } from 'hooks/use_manage_calendar';
 import { useCurrentUser } from 'hooks/use_current_user';
+import { RequiredUser } from 'layouts/required_user';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -35,6 +36,10 @@ export default Page
 
 Page.getLayout = function getLayout(page: React.ReactElement) {
   return (
-    <Layout>{page}</Layout>
+    <Layout>
+      <RequiredUser>
+        {page}
+      </RequiredUser>
+    </Layout>
   )
 }

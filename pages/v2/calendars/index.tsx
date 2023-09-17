@@ -5,6 +5,7 @@ import { Calendar } from 'lib/calendar';
 import { useManageCalendar } from 'hooks/use_manage_calendar';
 import { CalendarCollection } from 'components/calendar_collection';
 import { useCurrentUser } from 'hooks/use_current_user';
+import { RequiredUser } from 'layouts/required_user';
 
 const Page: NextPageWithLayout = () => {
   const { user } = useCurrentUser()
@@ -28,6 +29,10 @@ export default Page
 
 Page.getLayout = function getLayout(page: React.ReactElement) {
   return (
-    <Layout>{page}</Layout>
+    <Layout>
+      <RequiredUser>
+        {page}
+      </RequiredUser>
+    </Layout>
   )
 }

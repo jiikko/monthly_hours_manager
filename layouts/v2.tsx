@@ -56,7 +56,7 @@ export function Layout({ children }: LayoutProps) {
 
       <Container>
         <Row className="justify-content-md-between p-3">
-          {logged && children}
+          {children}
         </Row>
       </Container>
     </>

@@ -14,6 +14,7 @@ import { RequiredCalendar } from 'layouts/required_calendar';
 import { CalendarContext } from 'contexts/calendar_context';
 import { useCurrentUser } from 'hooks/use_current_user';
 import Link from 'next/link';
+import { RequiredUser } from 'layouts/required_user';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -102,9 +103,11 @@ export default Page
 Page.getLayout = function getLayout(page: React.ReactElement) {
   return (
     <Layout>
-      <RequiredCalendar>
-        {page}
-      </RequiredCalendar>
+      <RequiredUser>
+        <RequiredCalendar>
+          {page}
+        </RequiredCalendar>
+      </RequiredUser>
     </Layout>
   )
 }
