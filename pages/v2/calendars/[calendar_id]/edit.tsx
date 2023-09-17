@@ -42,10 +42,9 @@ const Page: NextPageWithLayout = () => {
   }
 
   useEffect(() => {
-    if(user && calendar_id) { fetchSingleCalendar(user, calendar_id) }
-  }, [user, calendar_id])
+    if(calendar_id) { fetchSingleCalendar(user, calendar_id) }
+  }, [calendar_id])
 
-  if(!user) { return null }
   if(calendar === undefined) { return null }
 
   return (

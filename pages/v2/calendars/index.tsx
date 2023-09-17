@@ -1,10 +1,10 @@
 import type { NextPageWithLayout } from './../../_app'
 import { Layout } from '../../../layouts/v2';
 import { Button, Row, Col, Table, Nav } from 'react-bootstrap';
-import { useReducer, useEffect, useContext, useState } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import { AuthContext } from '../../../contexts/auth_context'
 import { db } from "../../../lib/firebase";
-import { getDocs, runTransaction, collection, query } from 'firebase/firestore';
+import { getDocs, collection, query } from 'firebase/firestore';
 import { Calendar } from '../../../lib/calendar';
 import { CalendarDate } from '../../../lib/calendar_date';
 import { PathGenerator } from '../../../lib/path_generator';
@@ -27,7 +27,7 @@ const Page: NextPageWithLayout = () => {
   const pathGenerator = PathGenerator()
 
   useEffect(() => {
-    const fetchCalendars = async (user) => {
+    const fetchCalendars = async () => {
       const q = query(collection(db, `time-manager-v2/${user.uid}/calendars`));
       const querySnapshot = await getDocs(q);
       const list = [];
@@ -39,12 +39,9 @@ const Page: NextPageWithLayout = () => {
       setCalendars(list)
     }
 
-    if(user) {
-      fetchCalendars(user)
-    }
-  }, [user])
+    fetchCalendars()
+  }, [])
 
-  if(!user) { return null }
   if(calendars === undefined) { return null }
 
   return (
