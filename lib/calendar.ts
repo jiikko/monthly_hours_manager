@@ -43,4 +43,8 @@ export class Calendar implements CalendarType {
     if(!this.week) { return true }
     return Object.entries(this.week).length === 0
   }
+
+  formattedCreatedAt(): string {
+    return this.createdAt.toISOString().slice(0, 10);
+  }
 }

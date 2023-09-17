@@ -42,7 +42,7 @@ const Page: NextPageWithLayout = () => {
       </Row>
       <Row className='mt-3'>
         <Col className="text-end">
-          作成日: {calendar.createdAt.toISOString().slice(0, 10)}
+          作成日: {calendar.formattedCreatedAt()}
         </Col>
       </Row>
       {<SettingForm calendar={calendar} handleSubmit={handleSubmit}  submitLabel={'更新する'} />}
