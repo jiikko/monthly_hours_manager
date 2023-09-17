@@ -35,7 +35,6 @@ const Page: NextPageWithLayout = () => {
       name: name,
       standardTime: standardTime,
       week: week,
-      months: {}
     });
     toast("カレンダーを更新しました。");
     router.push(`/v2/calendars`, undefined,{ scroll: false })
