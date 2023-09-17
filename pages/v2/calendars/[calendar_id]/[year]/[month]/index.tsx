@@ -52,7 +52,7 @@ const Page: NextPageWithLayout = () => {
 
   useEffect(() => {
     const initializeCalendar = () => {
-      if(calendar.hasSetting() && ((calendar.months && calendar.months[monthKey] === undefined) || calendar.months === undefined)) {
+      if(((calendar.months && calendar.months[monthKey] === undefined) || calendar.months === undefined)) {
         initializeDays();
       }
     }
