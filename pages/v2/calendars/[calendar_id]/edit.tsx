@@ -31,7 +31,6 @@ const Page: NextPageWithLayout = () => {
     toast("カレンダーを更新しました。");
     router.push(`/v2/calendars`, undefined,{ scroll: false })
   }
-  console.log(calendar.createdAt)
 
   return (
     <>
@@ -43,7 +42,7 @@ const Page: NextPageWithLayout = () => {
       </Row>
       <Row className='mt-3'>
         <Col className="text-end">
-          作成日: {calendar.createdAt.toISOString()}
+          作成日: {calendar.createdAt.toISOString().slice(0, 10)}
         </Col>
       </Row>
       {<SettingForm calendar={calendar} handleSubmit={handleSubmit}  submitLabel={'更新する'} />}

@@ -2,9 +2,8 @@ import { useState } from 'react';
 import { Calendar } from 'lib/calendar';
 import type { User } from '@firebase/auth'
 import { db } from "lib/firebase";
-import { getDoc, doc, updateDoc, deleteDoc, collection, addDoc, query } from 'firebase/firestore';
+import { getDoc, doc, getDocs, updateDoc, deleteDoc, collection, addDoc, query } from 'firebase/firestore';
 import { Week } from '../lib/calendar';
-import {debug} from 'console';
 
 export const useManageCalendar = () => {
   const [calendar, setCalendar] = useState<Calendar>(undefined);
@@ -54,6 +53,22 @@ export const useManageCalendar = () => {
     }
   };
 
+  const fetchCalendars = async (user: User) => {
+    const q = query(collection(db, `time-manager-v2/${user.uid}/calendars`));
+    const querySnapshot = await getDocs(q);
+    const list = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data()
+      const calendar = new Calendar(data.name, data.standardTime, data.week, data.months, false, doc.id, data.created_at.toDate());
+      list.push(calendar);
+    });
+    list.sort((a, b) => {
+      return a.createdAt.getTime() - b.createdAt.getTime();
+    });
+
+    return list
+  }
+
   const createCalendar = async (user: User, name: string, standardTime: number, week: Week) => {
     const newEntryPath = `time-manager-v2/${user.uid}/calendars`;
     await addDoc(collection(db, newEntryPath), {
@@ -73,6 +88,7 @@ export const useManageCalendar = () => {
     calendar,
     createCalendar,
     deleteCalendar,
+    fetchCalendars,
     fetchSingleCalendar,
     updateCalendar,
     updateMonths,
