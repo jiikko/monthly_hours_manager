@@ -1,12 +1,10 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { CalendarDate } from '../lib/calendar_date';
 import { Container, Row, Nav, Navbar } from 'react-bootstrap';
 import { PathGenerator } from '../lib/path_generator';
 import { useAuth } from '../hooks/use_auth';
-import { AuthContext } from '../contexts/auth_context';
-import { useContext } from 'react';
 import Link from 'next/link';
+import { useCurrentUser } from 'hooks/use_current_user';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -20,7 +18,7 @@ export function Layout({ children }: LayoutProps) {
   const pathGenerator = PathGenerator()
   const loginPath = pathGenerator.loginPath(queryParameters)
   const { logout } = useAuth();
-  const { user } = useContext(AuthContext);
+  const { user } = useCurrentUser();
   const loggedInEmail = user && user.email;
   const logged = !!loggedInEmail;
   const loaded = user !== undefined;

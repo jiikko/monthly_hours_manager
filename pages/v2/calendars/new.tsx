@@ -1,16 +1,15 @@
 import type { NextPageWithLayout } from './../../_app'
 import { Layout } from '../../../layouts/v2';
-import { AuthContext} from '../../../contexts/auth_context'
-import { useContext } from 'react';
 import { Week, Calendar } from '../../../lib/calendar';
 import { SettingForm } from '../../../components/setting_form';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import { useManageCalendar } from 'hooks/use_manage_calendar';
+import { useCurrentUser } from 'hooks/use_current_user';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
-  const { user } = useContext(AuthContext);
+  const { user } = useCurrentUser()
   const calendar = new Calendar(
     '新しいカレンダー',
     84,

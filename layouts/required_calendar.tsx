@@ -1,16 +1,16 @@
-import { AuthContext} from 'contexts/auth_context'
 import { CalendarContext } from 'contexts/calendar_context';
-import { useEffect, useContext } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useManageCalendar } from 'hooks/use_manage_calendar';
+import { useCurrentUser } from 'hooks/use_current_user';
 
-type RequiredCalendarProps = {
+type Props = {
   children: React.ReactNode;
 }
 
-export function RequiredCalendar({ children }: RequiredCalendarProps) {
+export function RequiredCalendar({ children }: Props) {
   const router = useRouter();
-  const { user } = useContext(AuthContext);
+  const { user } = useCurrentUser()
   const calendar_id = typeof router.query.calendar_id === 'string' ? router.query.calendar_id : null;
   const { fetchSingleCalendar, calendar } = useManageCalendar();
 
@@ -29,4 +29,3 @@ export function RequiredCalendar({ children }: RequiredCalendarProps) {
     </>
   )
 }
-

@@ -1,7 +1,6 @@
 import type { NextPageWithLayout } from 'pages/_app'
 import { Layout } from 'layouts/v2';
 import { useEffect, useContext } from 'react';
-import { AuthContext } from 'contexts/auth_context'
 import { CalendarDate } from 'lib/calendar_date';
 import { CalendarMonth } from 'components/calendar_month';
 import { useRouter } from 'next/router';
@@ -13,12 +12,13 @@ import { useManageCalendar } from 'hooks/use_manage_calendar';
 import { Button, Col } from 'react-bootstrap';
 import { RequiredCalendar } from 'layouts/required_calendar';
 import { CalendarContext } from 'contexts/calendar_context';
+import { useCurrentUser } from 'hooks/use_current_user';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { year, month } = router.query;
   const { calendar, calendar_id } = useContext(CalendarContext);
-  const { user } = useContext(AuthContext);
+  const { user } = useCurrentUser()
   const date = CalendarDate(year && Number(year), month && Number(month), 1);
   const monthKey = date.monthlyKey();
   const { updateMonths } = useManageCalendar();
