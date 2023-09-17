@@ -1,6 +1,6 @@
-import { DayObject } from '../lib/days_generator';
-import { CalendarDate } from '../lib/calendar_date';
-import { Week } from '../lib/calendar';
+import { DayObject } from 'lib/days_generator';
+import { CalendarDate } from 'lib/calendar_date';
+import { Week } from 'lib/calendar';
 import { Table, Form, FloatingLabel } from 'react-bootstrap';
 
 type MonthProps = {
@@ -81,4 +81,3 @@ export const CalendarMonth: React.FC<MonthProps>= ({ year, month, days, workingW
     </>
   );
 };
-

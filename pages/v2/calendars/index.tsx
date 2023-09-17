@@ -1,5 +1,5 @@
-import type { NextPageWithLayout } from './../../_app'
-import { Layout } from '../../../layouts/v2';
+import type { NextPageWithLayout } from 'pages/_app'
+import { Layout } from 'layouts/v2';
 import { useEffect, useState } from 'react';
 import { Calendar } from 'lib/calendar';
 import { useManageCalendar } from 'hooks/use_manage_calendar';

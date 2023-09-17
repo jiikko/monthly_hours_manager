@@ -1,7 +1,6 @@
 import { Form, Button } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
-import { Week } from '../lib/json_parameter';
-import { Calendar } from '../lib/calendar';
+import { Calendar, Week } from 'lib/calendar';
 
 type Props = {
   calendar: Calendar;
@@ -16,10 +15,9 @@ export const SettingForm: React.FC<Props> = ({ calendar, handleSubmit, submitLab
   const [workingWeek, setWorkingWeek] = useState(Week.create());
 
   const handleWorkingDaysChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setWorkingWeek({
-      ...workingWeek,
-      [e.target.name]: e.target.checked,
-    });
+    const newWorkingWeek = Week.parse(workingWeek);
+    newWorkingWeek[e.target.name] = e.target.checked;
+    setWorkingWeek(newWorkingWeek);
   };
 
   useEffect(() => {

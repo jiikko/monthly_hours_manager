@@ -9,7 +9,7 @@ describe('JsonParameter', () => {
         week: { mon: true, tue: true, wed: true, thu: true, fri: true, sat: false, sun: false },
       };
 
-      const result = JsonParameter.serialize(obj);
+      const result = JsonParameter.serialize(obj as any);
       expect(result).toBe(
         "name=%22Alice%22&standardTime=25&week=%7B%22mon%22%3Atrue%2C%22tue%22%3Atrue%2C%22wed%22%3Atrue%2C%22thu%22%3Atrue%2C%22fri%22%3Atrue%2C%22sat%22%3Afalse%2C%22sun%22%3Afalse%7D"
       );
@@ -23,7 +23,7 @@ describe('JsonParameter', () => {
         week: { mon: true, tue: true, wed: true, thu: true, fri: true, sat: false, sun: false },
       };
 
-      const result = JsonParameter.serialize(obj);
+      const result = JsonParameter.serialize(obj as any);
       expect(result).toBe(
         "name=%22Alice%22&standardTime=25&week=%7B%22mon%22%3Atrue%2C%22tue%22%3Atrue%2C%22wed%22%3Atrue%2C%22thu%22%3Atrue%2C%22fri%22%3Atrue%2C%22sat%22%3Afalse%2C%22sun%22%3Afalse%7D"
       );

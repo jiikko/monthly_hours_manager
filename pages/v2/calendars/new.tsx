@@ -1,7 +1,7 @@
-import type { NextPageWithLayout } from './../../_app'
-import { Layout } from '../../../layouts/v2';
-import { Week, Calendar } from '../../../lib/calendar';
-import { SettingForm } from '../../../components/setting_form';
+import type { NextPageWithLayout } from 'pages/_app'
+import { Layout } from 'layouts/v2';
+import { Week, Calendar } from 'lib/calendar';
+import { SettingForm } from 'components/setting_form';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import { useManageCalendar } from 'hooks/use_manage_calendar';

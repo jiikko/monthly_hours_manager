@@ -1,4 +1,4 @@
-import { Week } from './json_parameter';
+import { Week } from 'lib/calendar';
 import { CalendarDate, CalendarDateType } from './calendar_date';
 
 function allDaysInMonth(year: number, month: number): Array<CalendarDateType> {

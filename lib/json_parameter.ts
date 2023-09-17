@@ -1,21 +1,5 @@
 import { DayObject, MonthTable } from './days_generator';
-import { Calendar } from './calendar';
-
-export class Week {
-  constructor(
-    public mon: boolean,
-    public tue: boolean,
-    public wed: boolean,
-    public thu: boolean,
-    public fri: boolean,
-    public sat: boolean,
-    public sun: boolean
-  ) {}
-
-  static create(): Week {
-    return new Week(false, false, false, false, false, false, false);
-  }
-}
+import { Week } from './calendar';
 
 export type ParameterType = {
   name?: string;
