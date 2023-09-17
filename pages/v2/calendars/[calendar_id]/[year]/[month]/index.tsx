@@ -1,6 +1,6 @@
 import type { NextPageWithLayout } from 'pages/_app'
 import { Layout } from 'layouts/v2';
-import { useEffect, useContext, useState } from 'react';
+import { useEffect, useContext } from 'react';
 import { AuthContext } from 'contexts/auth_context'
 import { CalendarDate } from 'lib/calendar_date';
 import { CalendarMonth } from 'components/calendar_month';
@@ -11,15 +11,17 @@ import { DaysGenerator } from 'lib/days_generator';
 import { toast } from 'react-toastify';
 import { useManageCalendar } from 'hooks/use_manage_calendar';
 import { Button, Col } from 'react-bootstrap';
+import { RequiredCalendar } from 'layouts/required_calendar';
+import { CalendarContext } from 'contexts/calendar_context';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { year, month } = router.query;
-  const calendar_id = typeof router.query.calendar_id === 'string' ? router.query.calendar_id : null;
+  const { calendar, calendar_id } = useContext(CalendarContext);
   const { user } = useContext(AuthContext);
   const date = CalendarDate(year && Number(year), month && Number(month), 1);
   const monthKey = date.monthlyKey();
-  const { fetchSingleCalendar, calendar, updateMonths } = useManageCalendar();
+  const { updateMonths } = useManageCalendar();
 
   const handleInitializeDaysButton = () => {
     const result = confirm('現在入力済みの時間をすべて削除しますが、操作を続けますか？');
@@ -31,42 +33,31 @@ const Page: NextPageWithLayout = () => {
   }
   const recalculateDays = (days: Array<DayObject>): void => {
     calendar.months[monthKey] = DaysGenerator.executeWithDays(Number(year), Number(month), calendar.standardTime, calendar.week, days)
-    updateMonths(user, calendar_id, monthKey);
+    updateMonths(calendar, user, calendar_id, monthKey);
     toast('再計算しました')
   }
   const handleUpdateDay = async (attributeName: string, value: boolean | string, dayIndex: number): Promise<void> => {
     days[dayIndex][attributeName] = value;
     calendar.months[monthKey] = days.map((day: DayObject) => { return(day.toObject()) });
-    updateMonths(user, calendar_id, monthKey);
+    updateMonths(calendar, user, calendar_id, monthKey);
     toast('時間を更新しました');
   }
   const initializeDays = async (): Promise<void> => {  // asyncとPromise<void>を追加
     const days = DaysGenerator.execute(Number(year), Number(month), calendar.standardTime, calendar.week);
     if(calendar.months === undefined) { calendar.months = {} }
     calendar.months[monthKey] = days;
-    updateMonths(user, calendar_id, monthKey);
+    updateMonths(calendar, user, calendar_id, monthKey);
     toast('初期化しました');
   };
 
   useEffect(() => {
-    fetchSingleCalendar(user, calendar_id, monthKey)
-  }, [])
-
-  useEffect(() => {
-    if(!calendar) { return }
-
     const initializeCalendar = () => {
       if(calendar.hasSetting() && ((calendar.months && calendar.months[monthKey] === undefined) || calendar.months === undefined)) {
         initializeDays();
       }
     }
     initializeCalendar();
-  }, [calendar]);
-
-  if(calendar === undefined) { return null }
-  if(calendar === null) { return(<div className="alert alert-danger" role="alert">カレンダーが見つかりませんでした。</div>) }
-  if(calendar.months && calendar.months[monthKey] === undefined) { return }
-  if(calendar.hasNoSetting()) { return(<div className="alert alert-danger" role="alert">カレンダーの設定情報がありません。設定してください。</div>) }
+  }, []);
 
   let days = []
   if(calendar.months && calendar.months[monthKey]) {
@@ -95,6 +86,10 @@ export default Page
 
 Page.getLayout = function getLayout(page: React.ReactElement) {
   return (
-    <Layout>{page}</Layout>
+    <Layout>
+      <RequiredCalendar>
+        {page}
+      </RequiredCalendar>
+    </Layout>
   )
 }

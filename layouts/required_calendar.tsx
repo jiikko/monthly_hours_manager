@@ -19,6 +19,7 @@ export function RequiredCalendar({ children }: RequiredCalendarProps) {
   }, [calendar_id])
 
   if(calendar === undefined) { return null }
+  if(calendar === null) { return(<div className="alert alert-danger" role="alert">カレンダーが見つかりませんでした。</div>) }
 
   return(
     <>
