@@ -9,10 +9,11 @@ import { MonthSummary } from 'components/month_summary';
 import { DaysGenerator } from 'lib/days_generator';
 import { toast } from 'react-toastify';
 import { useManageCalendar } from 'hooks/use_manage_calendar';
-import { Button, Col } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import { RequiredCalendar } from 'layouts/required_calendar';
 import { CalendarContext } from 'contexts/calendar_context';
 import { useCurrentUser } from 'hooks/use_current_user';
+import Link from 'next/link';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -71,7 +72,18 @@ const Page: NextPageWithLayout = () => {
 
   return(
     <>
-      {calendar.name ? <h1>{calendar.name}の{year}年{month}月</h1> : <h1>{year}年{month}月</h1>}
+      <Row className='mb-3'>
+        <Col>
+          {calendar.name ? <h1>{calendar.name}の{year}年{month}月</h1> : <h1>{year}年{month}月</h1>}
+        </Col>
+
+        <Col className="text-end mt-3">
+          <Link href={`/v2/calendars/${calendar.id}/edit`}>
+            <Button>カレンダーの編集</Button>
+          </Link>
+        </Col>
+      </Row>
+
       {<CalendarMonth year={Number(year)} month={Number(month)} days={days} workingWeek={calendar.week} handleUpdateDay={handleUpdateDay} />}
       {<MonthSummary days={days} standardTime={calendar.standardTime} />}
 
