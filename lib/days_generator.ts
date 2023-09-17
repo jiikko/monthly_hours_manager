@@ -85,7 +85,7 @@ export class DaysGenerator {
       const dayObject = dayObjects.find((day) => { return day.day === date.day(); });
 
       // NOTE: 稼働済みの日は再計算の対象外
-      if(dayObject.isWorked()) { return dayObject; }
+      if(dayObject.isWorked()) { return dayObject.toObject(); }
 
       // NOTE: 稼働予定日は予定を埋める
       if(workingWeek[date.weekDayName()]) { return new DayObject(avgHour, dayObject.actual, date.day(), dayObject.isHoliday).toObject() }
