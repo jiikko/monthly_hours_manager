@@ -9,9 +9,9 @@ export const useManageCalendar = () => {
   // NOTE: calendar.monthsを更新した時に再レンダリングしてくれないので対策のためのstate. useReducerに変更すれば不要らしい
   const [_, setCalendarMonth] = useState(null);
 
-  const updateCalendarForReRender = (calendar: Calendar, monthKey: string) => {
+  const updateCalendarForReRender = (calendar: Calendar, monthKey?: string) => {
     setCalendar(calendar)
-    if(calendar.months) { setCalendarMonth(calendar.months[monthKey]) }
+    if(monthKey && calendar.months) { setCalendarMonth(calendar.months[monthKey]) }
   }
 
   const updateMonths = async (user: User, calendar_id: string, monthKey: string) => {
@@ -21,7 +21,7 @@ export const useManageCalendar = () => {
     updateCalendarForReRender(calendar, monthKey);
   }
 
-  const fetchSingleCalendar = async (user: User, calendar_id: string, monthKey: string) => {
+  const fetchSingleCalendar = async (user: User, calendar_id: string, monthKey?: string) => {
     const entryPath = user && `time-manager-v2/${user.uid}/calendars/${calendar_id}`;
     const docRef = doc(db, entryPath);
     const docSnap = await getDoc(docRef);
