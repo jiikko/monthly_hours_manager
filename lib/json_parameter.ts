@@ -73,10 +73,6 @@ export class JsonParameterTypeImpl implements ParameterType {
     this.months[this.currentMonthKey] = days;
   }
 
-  toCalendar(): Calendar {
-    return new Calendar(this.name, this.standardTime, this.week, this.months);
-  }
-
   isNoCurrentDaysInMonth(): boolean {
     return this.currentDaysInMonth() === undefined;
   }

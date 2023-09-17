@@ -1,6 +1,6 @@
 import type { NextPageWithLayout } from './_app'
 import { Layout } from '../layouts/v1';
-import { Week } from '../lib/json_parameter';
+import { Week } from 'lib/calendar';
 import { PathGenerator } from '../lib/path_generator';
 import { SettingForm } from '../components/setting_form';
 import { useCalendarState } from '../hooks/use_calendar_state';

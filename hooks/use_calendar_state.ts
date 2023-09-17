@@ -6,6 +6,7 @@ import { Calendar } from '../lib/calendar';
 import { AuthContext} from '../contexts/auth_context'
 import { db } from "../lib/firebase";
 import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { Week } from 'lib/calendar';
 
 export const useCalendarState = (redirectPathFunc?: any, redirectPathFuncArgs?: Array<number | string>) => {
   const [isInitialRender, setIsInitialRender] = useState(true);
