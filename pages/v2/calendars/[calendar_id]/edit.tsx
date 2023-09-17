@@ -2,20 +2,20 @@ import type { NextPageWithLayout } from 'pages/_app'
 import { Layout } from 'layouts/v2';
 import { Button, Row, Col } from 'react-bootstrap';
 import { AuthContext} from 'contexts/auth_context'
-import { useReducer, useEffect, useContext, useState } from 'react';
+import { CalendarContext } from 'contexts/calendar_context';
+import { useContext } from 'react';
 import { Week } from 'lib/calendar';
 import { SettingForm } from 'components/setting_form';
 import { db } from "lib/firebase";
 import { updateDoc, doc, deleteDoc } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
-import { useManageCalendar } from 'hooks/use_manage_calendar';
+import { RequiredCalendar } from 'layouts/required_calendar';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
-  const calendar_id = typeof router.query.calendar_id === 'string' ? router.query.calendar_id : null;
   const { user } = useContext(AuthContext);
-  const { fetchSingleCalendar, calendar } = useManageCalendar();
+  const { calendar, calendar_id } = useContext(CalendarContext);
 
   const handleDelete = async () => {
     const result = confirm('削除しますか？')
@@ -41,12 +41,6 @@ const Page: NextPageWithLayout = () => {
     router.push(`/v2/calendars`, undefined,{ scroll: false })
   }
 
-  useEffect(() => {
-    if(calendar_id) { fetchSingleCalendar(user, calendar_id) }
-  }, [calendar_id])
-
-  if(calendar === undefined) { return null }
-
   return (
     <>
       <h1>カレンダーの更新</h1>
@@ -55,7 +49,7 @@ const Page: NextPageWithLayout = () => {
           <Button variant="danger" onClick={handleDelete}>削除する</Button>
         </Col>
       </Row>
-      {calendar && <SettingForm calendar={calendar} handleSubmit={handleSubmit}  submitLabel={'更新する'} />}
+      {<SettingForm calendar={calendar} handleSubmit={handleSubmit}  submitLabel={'更新する'} />}
     </>
   )
 }
@@ -64,7 +58,11 @@ export default Page
 
 Page.getLayout = function getLayout(page: React.ReactElement) {
   return (
-    <Layout>{page}</Layout>
+    <Layout>
+      <RequiredCalendar>
+        {page}
+      </RequiredCalendar>
+    </Layout>
   )
 }
 
