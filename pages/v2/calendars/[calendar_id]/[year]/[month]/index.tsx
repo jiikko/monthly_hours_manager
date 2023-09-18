@@ -79,6 +79,12 @@ const Page: NextPageWithLayout = () => {
         </Col>
 
         <Col className="text-end mt-3">
+          <Link href={`/v2/calendars/${calendar.id}/months`}>
+            <Button>管理中の月一覧</Button>
+          </Link>
+        </Col>
+
+        <Col className="text-end mt-3">
           <Link href={`/v2/calendars/${calendar.id}/edit`}>
             <Button>カレンダーの編集</Button>
           </Link>
