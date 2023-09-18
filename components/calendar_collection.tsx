@@ -21,8 +21,8 @@ export const CalendarCollection: React.FC<Props>= ({ calendars }) => {
     const monthCalculator = new MonthCalculator(days);
     return (
       <>
-        予定: {monthCalculator.totalScheduled()}<br/>
-        実績: {monthCalculator.totalActual()}
+        予定: {monthCalculator.totalScheduled()}時間<br/>
+        実績: {monthCalculator.totalActual()}時間
       </>
     );
   }
