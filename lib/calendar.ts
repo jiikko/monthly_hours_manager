@@ -47,6 +47,15 @@ export type CalendarType = {
 export class Calendar implements CalendarType {
   constructor(public name: string, public standardTime: number, public week: Week, public months: MonthTable, public shouldOutputQueryParam?: boolean, public id?: string, public createdAt?: Date) {}
 
+  static initializeWithDefault(): Calendar {
+    return new Calendar(
+      '新しいカレンダー',
+      84,
+      {} as Week,
+      {}
+    );
+  }
+
   serializeAsJson(): string {
     if(this.shouldOutputQueryParam) { return }
 

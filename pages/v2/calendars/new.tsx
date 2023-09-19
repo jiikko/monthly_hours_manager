@@ -11,17 +11,16 @@ import { RequiredUser } from 'layouts/required_user';
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { user } = useCurrentUser()
-  const calendar = new Calendar(
-    '新しいカレンダー',
-    84,
-    {} as Week,
-    {}
-  );
+  const calendar = Calendar.initializeWithDefault()
   const { createCalendar } = useManageCalendar();
   const handleSubmit = async (name: string, standardTime: number, week: Week) => {
-    createCalendar(user, name, standardTime, week);
-    toast("カレンダーを作成しました。");
-    router.push(`/v2/calendars`, undefined,{ scroll: false })
+    try {
+      await createCalendar(user, name, standardTime, week);
+      toast("カレンダーを作成しました。");
+      await router.push(`/v2/calendars`, undefined, { scroll: false });
+    } catch (error) {
+      toast("カレンダーの作成に失敗しました。");
+    }
   }
 
   return (
