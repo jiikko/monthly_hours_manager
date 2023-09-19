@@ -15,20 +15,20 @@ import { RequiredUser } from 'layouts/required_user';
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { user } = useCurrentUser()
-  const { calendar, calendar_id } = useContext(CalendarContext);
+  const { calendar } = useContext(CalendarContext);
   const { updateCalendar, deleteCalendar } = useManageCalendar();
 
   const handleDelete = async () => {
     const result = confirm('削除しますか？')
     if(!result) { return }
 
-    await deleteCalendar(user, calendar_id);
+    await deleteCalendar(user, calendar.id);
     toast("カレンダーを削除しました。");
     router.push(`/v2/calendars`, undefined,{ scroll: false })
   }
 
   const handleSubmit = async (name: string, standardTime: number, week: Week) => {
-    updateCalendar(user, calendar_id, name, standardTime, week);
+    updateCalendar(user, calendar.id, name, standardTime, week);
     toast("カレンダーを更新しました。");
     router.push(`/v2/calendars`, undefined,{ scroll: false })
   }

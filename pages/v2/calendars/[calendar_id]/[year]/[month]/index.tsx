@@ -19,7 +19,7 @@ import { RequiredUser } from 'layouts/required_user';
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { year, month } = router.query;
-  const { calendar, calendar_id } = useContext(CalendarContext);
+  const { calendar } = useContext(CalendarContext);
   const { user } = useCurrentUser()
   const date = CalendarDate(year && Number(year), month && Number(month), 1);
   const monthKey = date.monthlyKey();
@@ -38,20 +38,20 @@ const Page: NextPageWithLayout = () => {
   }
   const recalculateDays = (days: Array<DayObject>): void => {
     calendar.months[monthKey] = DaysGenerator.executeWithDays(Number(year), Number(month), calendar.standardTime, calendar.week, days)
-    updateMonths(calendar, user, calendar_id, monthKey);
+    updateMonths(calendar, user, calendar.id, monthKey);
     toast('再計算しました')
   }
   const handleUpdateDay = async (attributeName: string, value: boolean | string, dayIndex: number): Promise<void> => {
     days[dayIndex][attributeName] = value;
     calendar.months[monthKey] = days.map((day: DayObject) => { return(day.toObject()) });
-    updateMonths(calendar, user, calendar_id, monthKey);
+    updateMonths(calendar, user, calendar.id, monthKey);
     toast('時間を更新しました');
   }
   const initializeDays = async (): Promise<void> => {  // asyncとPromise<void>を追加
     const days = DaysGenerator.execute(Number(year), Number(month), calendar.standardTime, calendar.week);
     if(calendar.months === undefined) { calendar.months = {} }
     calendar.months[monthKey] = days;
-    updateMonths(calendar, user, calendar_id, monthKey);
+    updateMonths(calendar, user, calendar.id, monthKey);
     toast('初期化しました');
   };
 

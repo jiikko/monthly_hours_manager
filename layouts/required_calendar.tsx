@@ -23,7 +23,7 @@ export function RequiredCalendar({ children }: Props) {
 
   return(
     <>
-      <CalendarContext.Provider value={{ calendar, calendar_id }}>
+      <CalendarContext.Provider value={{ calendar }}>
         {children}
       </CalendarContext.Provider>
     </>
