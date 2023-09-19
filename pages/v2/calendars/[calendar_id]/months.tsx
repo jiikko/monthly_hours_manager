@@ -18,7 +18,7 @@ const Page: NextPageWithLayout = () => {
     if(!result) { return; }
 
     delete calendar.months[monthKey];
-    updateMonths(calendar, user, calendar.id, monthKey);
+    updateMonths(calendar, user, monthKey);
     toast(`${monthKey}を削除しました`);
   }
 

@@ -15,8 +15,8 @@ export const useManageCalendar = () => {
     if(monthKey && calendar.months) { setCalendarMonth(calendar.months[monthKey]) }
   }
 
-  const updateMonths = async (calendar: Calendar, user: User, calendar_id: string, monthKey: string) => {
-    const entryPath = calendarPath(user, calendar_id);
+  const updateMonths = async (calendar: Calendar, user: User, monthKey: string) => {
+    const entryPath = calendarPath(user, calendar.id);
     const docRef = doc(db, entryPath);
     await updateDoc(docRef, { months: calendar.months });
     updateCalendarForReRender(calendar, monthKey);
