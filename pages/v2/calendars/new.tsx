@@ -19,6 +19,7 @@ const Page: NextPageWithLayout = () => {
       toast("カレンダーを作成しました。");
       await router.push(`/v2/calendars`, undefined, { scroll: false });
     } catch (error) {
+      console.error(error);
       toast("カレンダーの作成に失敗しました。");
     }
   }
