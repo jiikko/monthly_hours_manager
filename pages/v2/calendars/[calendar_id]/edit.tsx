@@ -28,7 +28,7 @@ const Page: NextPageWithLayout = () => {
   }
 
   const handleSubmit = async (name: string, standardTime: number, week: Week) => {
-    updateCalendar(user, calendar.id, name, standardTime, week);
+    await updateCalendar(user, calendar.id, name, standardTime, week);
     toast("カレンダーを更新しました。");
     router.push(`/v2/calendars`, undefined,{ scroll: false })
   }
