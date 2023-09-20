@@ -28,7 +28,7 @@ export const useManageCalendar = () => {
     await updateDoc(docRef, {
       name: name,
       standardTime: standardTime,
-      week: week,
+      week: week.toObject(),
     });
   }
 

@@ -33,6 +33,14 @@ export class Week {
     const weekDayOrder = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
     return weekDayOrder.filter(key => this[key]).map(key => weekDayMapping[key]).join(', ')
   }
+
+  // NOTE: firestoreに格納するときに使う
+  toObject(): object {
+    const { mon, tue, wed, thu, fri, sat, sun } = this;
+    const obj = { mon, tue, wed, thu, fri, sat, sun };
+    Object.keys(obj).forEach(key => obj[key] === undefined && delete obj[key]);
+    return obj;
+  }
 }
 
 export type CalendarType = {
