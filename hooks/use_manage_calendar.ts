@@ -74,7 +74,7 @@ export const useManageCalendar = () => {
     await addDoc(collection(db, newEntryPath), {
       name,
       standardTime,
-      week,
+      week: week.toObject(),
       months: {},
       created_at: new Date(),
     });
