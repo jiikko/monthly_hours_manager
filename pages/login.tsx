@@ -1,4 +1,4 @@
-import { Layout } from '../components/layout';
+import { Layout } from '../layouts/v1'
 import type { NextPageWithLayout } from './_app';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
@@ -14,7 +14,7 @@ const Page: NextPageWithLayout = () => {
   const [formErrorMessage, setFormErrorMessage] = useState('');
   const handleSubmit = () => {
     login(email, password).then(() => {
-      router.push(PathGenerator().rootPath(null));
+      router.push('/v2');
     }).catch((error) => {
       setFormErrorMessage(error.message);
     });

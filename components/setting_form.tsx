@@ -1,27 +1,23 @@
 import { Form, Button } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
-import { Week } from '../lib/json_parameter';
-import { useToast } from '../hooks/use_toast';
-import { ToastComponent } from '../components/toast';
-import { Calendar } from '../lib/calendar';
+import { Calendar, Week } from 'lib/calendar';
 
 type Props = {
   calendar: Calendar;
-  handleSubmit: (name: string, standardTime: number, workingWeek: Week, notify: (message: string) => void) => void;
+  handleSubmit: (name: string, standardTime: number, workingWeek: Week) => void;
+  submitLabel: string;
 }
 
-export const SettingForm: React.FC<Props> = ({ calendar, handleSubmit }) => {
+export const SettingForm: React.FC<Props> = ({ calendar, handleSubmit, submitLabel }) => {
   const defaultStandardTime = 84;
   const [name, setName] = useState('');
   const [standardTime, setStandardTime] = useState(undefined);
   const [workingWeek, setWorkingWeek] = useState(Week.create());
-  const toastProps = useToast();
 
   const handleWorkingDaysChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setWorkingWeek({
-      ...workingWeek,
-      [e.target.name]: e.target.checked,
-    });
+    const newWorkingWeek = Week.parse(workingWeek);
+    newWorkingWeek[e.target.name] = e.target.checked;
+    setWorkingWeek(newWorkingWeek);
   };
 
   useEffect(() => {
@@ -32,8 +28,6 @@ export const SettingForm: React.FC<Props> = ({ calendar, handleSubmit }) => {
 
   return (
     <>
-      <h1>カレンダーの編集</h1>
-
       <Form onSubmit={(e) => e.preventDefault()}>
         <Form.Group className="mb-3">
           <Form.Label htmlFor="name">名前</Form.Label>
@@ -46,18 +40,18 @@ export const SettingForm: React.FC<Props> = ({ calendar, handleSubmit }) => {
         </Form.Group>
 
         <Form.Label>稼働曜日</Form.Label>
-        <Form.Check type="switch" id='m' name="mon" label="月" className='mb-2' checked={workingWeek.mon} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" id='t' name="tue" label="火" className='mb-2' checked={workingWeek.tue} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" id='w' name="wed" label="水" className='mb-2' checked={workingWeek.wed} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" id='thu' name="thu" label="木" className='mb-2' checked={workingWeek.thu} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" id='fri' name="fri" label="金" className='mb-2' checked={workingWeek.fri} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" id='sat' name="sat" label="土" className='mb-2' checked={workingWeek.sat} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" id='sun' name="sun" label="日" className='mb-4' checked={workingWeek.sun} onChange={handleWorkingDaysChange} />
+        <Form.Check type="switch" id='m' name="mon" label="月" className='mb-2' checked={workingWeek.mon || false} onChange={handleWorkingDaysChange} />
+        <Form.Check type="switch" id='t' name="tue" label="火" className='mb-2' checked={workingWeek.tue || false} onChange={handleWorkingDaysChange} />
+        <Form.Check type="switch" id='w' name="wed" label="水" className='mb-2' checked={workingWeek.wed || false} onChange={handleWorkingDaysChange} />
+        <Form.Check type="switch" id='thu' name="thu" label="木" className='mb-2' checked={workingWeek.thu || false} onChange={handleWorkingDaysChange} />
+        <Form.Check type="switch" id='fri' name="fri" label="金" className='mb-2' checked={workingWeek.fri || false} onChange={handleWorkingDaysChange} />
+        <Form.Check type="switch" id='sat' name="sat" label="土" className='mb-2' checked={workingWeek.sat || false} onChange={handleWorkingDaysChange} />
+        <Form.Check type="switch" id='sun' name="sun" label="日" className='mb-4' checked={workingWeek.sun || false} onChange={handleWorkingDaysChange} />
 
-        <Button variant="primary" type="submit" onClick={(_) => handleSubmit(name, standardTime, workingWeek, toastProps.notify)}>保存する</Button>
+        <Button variant="primary" type="submit" onClick={(_) => handleSubmit(name, standardTime, workingWeek)}>
+          {submitLabel}
+        </Button>
       </Form>
-
-      <ToastComponent {...toastProps} />
     </>
   )
 }

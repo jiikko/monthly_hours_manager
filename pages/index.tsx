@@ -1,5 +1,5 @@
 import type { NextPageWithLayout } from './_app'
-import { Layout } from '../components/layout';
+import { Layout } from '../layouts/v1'
 import { About } from '../components/about';
 import { useCalendarState } from '../hooks/use_calendar_state';
 

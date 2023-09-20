@@ -1,5 +1,6 @@
 import { DayObject } from '../lib/days_generator';
 import { Table } from 'react-bootstrap';
+import { MonthCalculator } from 'lib/month_calculator';
 
 type SummaryProps = {
   days: Array<DayObject>;
@@ -7,11 +8,12 @@ type SummaryProps = {
 }
 
 export const MonthSummary: React.FC<SummaryProps> = ({ days, standardTime }) => {
-  const daysWithoutHoliday =  days.filter(day => day.isWorkingDay());
-  const totalScheduled = Number(daysWithoutHoliday.reduce((sum, day) => sum + Number(day.scheduled), 0).toFixed(1));
+  const calculator = new MonthCalculator(days)
+  const daysWithoutHoliday = calculator.daysWithoutHoliday();
+  const totalScheduled = calculator.totalScheduled();
   const diffScheduled = Number((totalScheduled - standardTime).toFixed(1));
   const totalScheduledClassName = (totalScheduled >= standardTime) ? 'text-white bg-success' : 'text-white bg-danger';
-  const totalActual = daysWithoutHoliday.reduce((sum, day) => sum + Number(day.actual), 0);
+  const totalActual = calculator.totalActual();
   const diffActual = totalActual - standardTime;
   const totalActualClassName = (totalActual >= standardTime) ? 'text-white bg-success' : '';
 

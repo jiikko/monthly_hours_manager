@@ -1,19 +1,23 @@
 import type { NextPageWithLayout } from './_app'
-import { Layout } from '../components/layout'
-import { Week } from '../lib/json_parameter';
+import { Layout } from '../layouts/v1';
+import { Week } from 'lib/calendar';
 import { PathGenerator } from '../lib/path_generator';
 import { SettingForm } from '../components/setting_form';
 import { useCalendarState } from '../hooks/use_calendar_state';
+import { toast } from 'react-toastify';
 
 const Page: NextPageWithLayout = () => {
   const { dispatch, calendar } = useCalendarState(PathGenerator().editPath);
-  const handleSubmit = async (name: string, standardTime: number, week: Week, notify: (message: string) => void) => {
+  const handleSubmit = async (name: string, standardTime: number, week: Week) => {
     dispatch({ type:'updateCalendar', payload: { name, standardTime, week }});
-    notify('カレンダー情報の変更に成功しました。')
+    toast('カレンダー情報の変更に成功しました。')
   }
 
   return (
-    <SettingForm calendar={calendar} handleSubmit={handleSubmit} />
+    <>
+      <h1>カレンダーの編集</h1>
+      <SettingForm calendar={calendar} handleSubmit={handleSubmit} submitLabel={'保存する'} />
+    </>
   )
 }
 

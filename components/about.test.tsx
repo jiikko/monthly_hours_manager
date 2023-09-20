@@ -1,5 +1,4 @@
 import React from 'react'
-import { JsonParameterTypeImpl } from '../lib/json_parameter';
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import { About } from './about';
@@ -10,7 +9,7 @@ describe('About', () => {
     it('renders correctly', () => {
       const jsonObject = {
         hasSetting: () => false,
-      } as JsonParameterTypeImpl;
+      } as any;
       render(<About calendar={jsonObject} />)
 
       expect(screen.queryByText('現在の設定情報')).not.toBeInTheDocument()

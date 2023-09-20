@@ -1,10 +1,11 @@
-import { DaysGenerator, DayObject } from './days_generator';
+import { DaysGenerator, DayObject } from 'lib/days_generator';
+import { Week } from 'lib/calendar';
 
 describe('DaysGenerator', () => {
   describe('execute', () => {
     describe('2023年8月の月火水が稼働日のとき', () => {
       it('配列を返す', () => {
-        const actual = DaysGenerator.execute(2023, 8, 84, { mon: true, tue: true, wed: true, thu: false, fri: false, sat: false, sun: false });
+        const actual = DaysGenerator.execute(2023, 8, 84, { mon: true, tue: true, wed: true, thu: false, fri: false, sat: false, sun: false } as Week);
         expect(actual[0]).toEqual({ day: 1, scheduled: 6.0, actual: 0.0, isHoliday: false });
         expect(actual[30]).toEqual({ day: 31, scheduled: 0.0, actual: 0.0, isHoliday: false });
       })
@@ -12,7 +13,7 @@ describe('DaysGenerator', () => {
 
     describe('2023年9月の月火水が稼働日のとき', () => {
       it('配列を返す', () => {
-        const actual = DaysGenerator.execute(2023, 9, 84, { mon: true, tue: true, wed: true, thu: false, fri: false, sat: false, sun: false });
+        const actual = DaysGenerator.execute(2023, 9, 84, { mon: true, tue: true, wed: true, thu: false, fri: false, sat: false, sun: false } as Week);
         expect(actual[0]).toEqual({ day: 1, scheduled: 0, actual: 0.0, isHoliday: false });
         expect(actual[17]).toEqual({ day: 18, scheduled: 7.6, actual: 0.0, isHoliday: true }); // 祝日なので稼働日ではない
         expect(actual[29]).toEqual({ day: 30, scheduled: 0, actual: 0.0, isHoliday: false });
@@ -57,7 +58,7 @@ describe('DaysGenerator', () => {
           { "scheduled": 0, "actual": 0,   "day": 31, isHoliday: false }
         ]
         const d = days.map((dd) => { return new DayObject(dd.scheduled, dd.actual, dd.day, dd.isHoliday) });
-        const actual = DaysGenerator.executeWithDays(2023, 8, 84, { mon: true, tue: true, wed: true, thu: false, fri: false, sat: false, sun: false }, d);
+        const actual = DaysGenerator.executeWithDays(2023, 8, 84, { mon: true, tue: true, wed: true, thu: false, fri: false, sat: false, sun: false } as Week, d);
         expect(actual[0]).toEqual({ day: 1, scheduled: 5.3, actual: 0.0, isHoliday: false });
         expect(actual[30]).toEqual({ day: 31, scheduled: 0.0, actual: 0.0, isHoliday: false });
       })

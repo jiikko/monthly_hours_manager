@@ -15,6 +15,24 @@ export class Week {
   static create(): Week {
     return new Week(false, false, false, false, false, false, false);
   }
+
+  static parse(week: Week): Week {
+    return new Week(week.mon, week.tue, week.wed, week.thu, week.fri, week.sat, week.sun);
+  }
+
+  formatted(): string {
+    const weekDayMapping = {
+      "sun": "日",
+      "mon": "月",
+      "tue": "火",
+      "wed": "水",
+      "thu": "木",
+      "fri": "金",
+      "sat": "土"
+    };
+    const weekDayOrder = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+    return weekDayOrder.filter(key => this[key]).map(key => weekDayMapping[key]).join(', ')
+  }
 }
 
 export type CalendarType = {
@@ -23,10 +41,20 @@ export type CalendarType = {
   week?: Week;
   months?: MonthTable,
   shouldOutputQueryParam?: boolean;
+  createdAt?: Date;
 }
 
 export class Calendar implements CalendarType {
-  constructor(public name: string, public standardTime: number, public week: Week, public months: MonthTable, public shouldOutputQueryParam?: boolean) {}
+  constructor(public name: string, public standardTime: number, public week: Week, public months: MonthTable, public shouldOutputQueryParam?: boolean, public id?: string, public createdAt?: Date) {}
+
+  static initializeWithDefault(): Calendar {
+    return new Calendar(
+      '新しいカレンダー',
+      84,
+      {} as Week,
+      {}
+    );
+  }
 
   serializeAsJson(): string {
     if(this.shouldOutputQueryParam) { return }
@@ -41,5 +69,9 @@ export class Calendar implements CalendarType {
   hasNoSetting(): boolean {
     if(!this.week) { return true }
     return Object.entries(this.week).length === 0
+  }
+
+  formattedCreatedAt(): string {
+    return this.createdAt.toISOString().slice(0, 10);
   }
 }

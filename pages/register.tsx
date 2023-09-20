@@ -1,4 +1,4 @@
-import { Layout } from '../components/layout';
+import { Layout } from '../layouts/v1'
 import { Row, Alert, Button, Form, Col } from 'react-bootstrap';
 import { useState } from 'react';
 import { useAuth } from '../hooks/use_auth';
@@ -14,7 +14,7 @@ const Page: NextPageWithLayout = () => {
   const [formErrorMessage, setFormErrorMessage] = useState('');
   const handleSubmit = () => {
     register(email, password).then(() => {
-      router.push(PathGenerator().rootPath(null));
+      router.push('/v2');
     }).catch((error) => {
       setFormErrorMessage(error.message);
     })

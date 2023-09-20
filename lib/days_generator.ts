@@ -1,4 +1,4 @@
-import { Week } from './json_parameter';
+import { Week } from 'lib/calendar';
 import { CalendarDate, CalendarDateType } from './calendar_date';
 
 function allDaysInMonth(year: number, month: number): Array<CalendarDateType> {
@@ -53,7 +53,7 @@ export class DayObject implements DayData {
 }
 
 export class DaysGenerator {
-  static execute(year: number, month: number, standardTime: number, workingWeek: Week): Array<Object> {
+  static execute(year: number, month: number, standardTime: number, workingWeek: Week): Array<DayData> {
     const date = CalendarDate(year, month, 1)
     const datesInMonth = allDaysInMonth(date.year(), date.month());
     const workingDays = datesInMonth.filter((date) => workingWeek[date.weekDayName()]);
@@ -85,7 +85,7 @@ export class DaysGenerator {
       const dayObject = dayObjects.find((day) => { return day.day === date.day(); });
 
       // NOTE: 稼働済みの日は再計算の対象外
-      if(dayObject.isWorked()) { return dayObject; }
+      if(dayObject.isWorked()) { return dayObject.toObject(); }
 
       // NOTE: 稼働予定日は予定を埋める
       if(workingWeek[date.weekDayName()]) { return new DayObject(avgHour, dayObject.actual, date.day(), dayObject.isHoliday).toObject() }
