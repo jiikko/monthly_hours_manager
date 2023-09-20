@@ -17,7 +17,6 @@ export const AboutWithoutSetting: React.FC<Props> = () => {
           <ol>
             <li>非ログイン時は、クエリパラメータでカレンダーデータを保持します</li>
             <li>ログインすることで、カレンダーデータをクラウドに保存します</li>
-            <li>保存先に関係なく、1ヶ月分のカレンダーデータのみを保存します</li>
           </ol>
 
           <h2>使い方</h2>
@@ -33,6 +32,7 @@ export const AboutWithoutSetting: React.FC<Props> = () => {
         <Col>
           <h2>更新履歴</h2>
           <ul>
+            <li>2023/09/20: ログインすると複数のカレンダーを登録できるようになりました</li>
             <li>2023/09/3: 認証機能, クラウド保存機能の公開</li>
             <li>2023/08/15: リリース</li>
           </ul>
