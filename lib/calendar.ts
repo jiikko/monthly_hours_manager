@@ -20,7 +20,7 @@ export class Week {
     return new Week(week.mon, week.tue, week.wed, week.thu, week.fri, week.sat, week.sun);
   }
 
-  formatted(): string {
+  format(): string {
     const weekDayMapping = {
       "sun": "日",
       "mon": "月",

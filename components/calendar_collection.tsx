@@ -49,7 +49,7 @@ export const CalendarCollection: React.FC<Props>= ({ calendars }) => {
               <td>{calendar.name}</td>
               <td>{calendar.standardTime}時間</td>
               <td>
-                {calendar.week.formatted()}
+                {calendar.week.format()}
               </td>
               <td>
                 {calendar.formattedCreatedAt()}
