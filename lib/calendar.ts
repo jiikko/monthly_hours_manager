@@ -59,7 +59,7 @@ export class Calendar implements CalendarType {
     return new Calendar(
       '新しいカレンダー',
       84,
-      {} as Week,
+      Week.create(),
       {}
     );
   }
