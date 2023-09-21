@@ -41,6 +41,7 @@ export const CalendarCollection: React.FC<Props>= ({ calendars }) => {
             <th>今月({date.month()}月)</th>
             <th>来月({date.nextMonth()}月)</th>
             <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -65,6 +66,11 @@ export const CalendarCollection: React.FC<Props>= ({ calendars }) => {
                   <Button variant='info'>表示する</Button>
                 </Nav.Link>
                 {renderMonthSummary(calendar, dateOnNextMonth)}
+              </td>
+              <td>
+                <Link href={`/v2/calendars/${calendar.id}/months`}>
+                  <Button>月一覧</Button>
+                </Link>
               </td>
               <td>
                 <Link href={`/v2/calendars/${calendar.id}/edit`}>
