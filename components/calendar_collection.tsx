@@ -13,16 +13,14 @@ export const CalendarCollection: React.FC<Props>= ({ calendars }) => {
   const date = CalendarDate();
   const dateOnNextMonth = date.nextDateOnMonth();
   const pathGenerator = PathGenerator()
-
   const renderMonthSummary = (calendar: Calendar, date: CalendarDateType) => {
     const days = calendar.months[date.monthlyKey()]
     if(days === undefined) { return null }
 
-    const monthCalculator = new MonthCalculator(days);
     return (
       <>
-        予定: {monthCalculator.totalScheduled()}時間<br/>
-        実績: {monthCalculator.totalActual()}時間
+        予定: {new MonthCalculator(days).totalScheduled()}時間<br/>
+        実績: {new MonthCalculator(days).totalActual()}時間
       </>
     );
   }
@@ -79,6 +77,38 @@ export const CalendarCollection: React.FC<Props>= ({ calendars }) => {
               </td>
             </tr>
           ))}
+          <tr>
+              <td>合計</td>
+              <td>{calendars.reduce((a, b) => a + b.standardTime, 0)}時間</td>
+              <td></td>
+              <td></td>
+              <td>
+                予定:{calendars.reduce((a, calendar) => {
+                  const days = calendar.months[date.monthlyKey()]
+                  const t =  new MonthCalculator(days).totalScheduled()
+                  return a + t }, 0)
+                }時間<br></br>
+                実績:{calendars.reduce((a, calendar) => {
+                  const days = calendar.months[date.monthlyKey()]
+                  const t =  new MonthCalculator(days).totalActual()
+                  return a + t }, 0)
+                }時間
+              </td>
+              <td>
+                予定:{calendars.reduce((a, calendar) => {
+                  const days = calendar.months[dateOnNextMonth.monthlyKey()]
+                  const t =  new MonthCalculator(days).totalScheduled()
+                  return a + t }, 0)
+                }時間<br></br>
+                実績:{calendars.reduce((a, calendar) => {
+                  const days = calendar.months[dateOnNextMonth.monthlyKey()]
+                  const t =  new MonthCalculator(days).totalActual()
+                  return a + t }, 0)
+                }時間
+              </td>
+              <td></td>
+            <td></td>
+          </tr>
         </tbody>
       </Table>
 
