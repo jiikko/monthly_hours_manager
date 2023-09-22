@@ -19,11 +19,18 @@ export const CalendarCollection: React.FC<Props>= ({ calendars }) => {
 
     return (
       <>
-        予定: {new MonthCalculator(days).totalScheduled()}時間<br/>
-        実績: {new MonthCalculator(days).totalActual()}時間
+        予定: {calculateTime(calendars, date.monthlyKey(), 'totalScheduled')}時間<br/>
+        実績: {calculateTime(calendars, date.monthlyKey(), 'totalActual')}時間
       </>
     );
   }
+  const calculateTime = (calendars: Array<Calendar>, dateKey: string, method: string): number => {
+    return calendars.reduce((total, calendar) => {
+      const days = calendar.months[dateKey];
+      const monthCalculator = new MonthCalculator(days);
+      return total + monthCalculator[method]();
+    }, 0);
+  };
 
   return (
     <>
@@ -83,28 +90,12 @@ export const CalendarCollection: React.FC<Props>= ({ calendars }) => {
               <td></td>
               <td></td>
               <td>
-                予定:{calendars.reduce((a, calendar) => {
-                  const days = calendar.months[date.monthlyKey()]
-                  const t =  new MonthCalculator(days).totalScheduled()
-                  return a + t }, 0)
-                }時間<br></br>
-                実績:{calendars.reduce((a, calendar) => {
-                  const days = calendar.months[date.monthlyKey()]
-                  const t =  new MonthCalculator(days).totalActual()
-                  return a + t }, 0)
-                }時間
+                予定: {calculateTime(calendars, date.monthlyKey(), 'totalScheduled')}時間<br/>
+                実績:{calculateTime(calendars, date.monthlyKey(), 'totalActual')}時間
               </td>
               <td>
-                予定:{calendars.reduce((a, calendar) => {
-                  const days = calendar.months[dateOnNextMonth.monthlyKey()]
-                  const t =  new MonthCalculator(days).totalScheduled()
-                  return a + t }, 0)
-                }時間<br></br>
-                実績:{calendars.reduce((a, calendar) => {
-                  const days = calendar.months[dateOnNextMonth.monthlyKey()]
-                  const t =  new MonthCalculator(days).totalActual()
-                  return a + t }, 0)
-                }時間
+                予定: {calculateTime(calendars, dateOnNextMonth.monthlyKey(), 'totalScheduled')}時間<br/>
+                実績:{calculateTime(calendars, dateOnNextMonth.monthlyKey(), 'totalActual')}時間
               </td>
               <td></td>
             <td></td>
