@@ -43,8 +43,16 @@ export const CalendarCollection: React.FC<Props>= ({ calendars }) => {
             <th>基準時間</th>
             <th>稼働曜日</th>
             <th>作成日</th>
-            <th>今月({date.month()}月)</th>
-            <th>来月({date.nextMonth()}月)</th>
+            <th>
+              <Link href={`/v2/calendars/all/${date.year()}/${date.month()}`} className='text-decoration-underline'>
+                今月({date.month()}月)
+              </Link>
+            </th>
+            <th>
+              <Link href={`/v2/calendars/all/${dateOnNextMonth.year()}/${dateOnNextMonth.month()}`} className='text-decoration-underline'>
+              来月({dateOnNextMonth.month()}月)
+              </Link>
+            </th>
             <th></th>
             <th></th>
           </tr>
@@ -91,11 +99,11 @@ export const CalendarCollection: React.FC<Props>= ({ calendars }) => {
               <td></td>
               <td>
                 予定: {calculateTime(calendars, date.monthlyKey(), 'totalScheduled')}時間<br/>
-                実績:{calculateTime(calendars, date.monthlyKey(), 'totalActual')}時間
+                実績: {calculateTime(calendars, date.monthlyKey(), 'totalActual')}時間
               </td>
               <td>
                 予定: {calculateTime(calendars, dateOnNextMonth.monthlyKey(), 'totalScheduled')}時間<br/>
-                実績:{calculateTime(calendars, dateOnNextMonth.monthlyKey(), 'totalActual')}時間
+                実績: {calculateTime(calendars, dateOnNextMonth.monthlyKey(), 'totalActual')}時間
               </td>
               <td></td>
             <td></td>
