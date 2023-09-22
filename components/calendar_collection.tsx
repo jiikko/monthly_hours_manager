@@ -84,7 +84,7 @@ export const CalendarCollection: React.FC<Props>= ({ calendars }) => {
               </td>
             </tr>
           ))}
-          <tr>
+          <tr className='table-info'>
               <td>合計</td>
               <td>{calendars.reduce((a, b) => a + b.standardTime, 0)}時間</td>
               <td></td>
