@@ -5,10 +5,11 @@ import { RequiredUser } from 'layouts/required_user';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
+  const { year, month } = router.query;
 
   return (
     <>
-      <h1>集約したカレンダー</h1>
+      <h1>集約した{year}年{month}月のカレンダー</h1>
     </>
   )
 }
