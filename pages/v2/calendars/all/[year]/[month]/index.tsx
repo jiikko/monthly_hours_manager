@@ -1,7 +1,7 @@
-import type { NextPageWithLayout } from 'pages/_app'
-import { Layout } from 'layouts/v2';
-import { useRouter } from 'next/router';
-import { RequiredUser } from 'layouts/required_user';
+import {RequiredUser} from 'layouts/required_user';
+import {Layout} from 'layouts/v2';
+import {useRouter} from 'next/router';
+import type {NextPageWithLayout} from 'pages/_app';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();

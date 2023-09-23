@@ -1,11 +1,11 @@
-import type { NextPageWithLayout } from 'pages/_app'
-import { Layout } from 'layouts/v2';
-import { useEffect, useState } from 'react';
-import { Calendar } from 'lib/calendar';
-import { useManageCalendar } from 'hooks/use_manage_calendar';
-import { CalendarCollection } from 'components/calendar_collection';
-import { useCurrentUser } from 'hooks/use_current_user';
-import { RequiredUser } from 'layouts/required_user';
+import {CalendarCollection} from 'components/calendar_collection';
+import {useCurrentUser} from 'hooks/use_current_user';
+import {useManageCalendar} from 'hooks/use_manage_calendar';
+import {RequiredUser} from 'layouts/required_user';
+import {Layout} from 'layouts/v2';
+import {Calendar} from 'lib/calendar';
+import type {NextPageWithLayout} from 'pages/_app';
+import {useEffect, useState} from 'react';
 
 const Page: NextPageWithLayout = () => {
   const { user } = useCurrentUser()

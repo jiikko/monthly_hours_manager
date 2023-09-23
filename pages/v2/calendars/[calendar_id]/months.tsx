@@ -1,13 +1,13 @@
-import type { NextPageWithLayout } from 'pages/_app'
-import { CalendarContext } from 'contexts/calendar_context';
-import { Layout } from 'layouts/v2';
-import { RequiredCalendar } from 'layouts/required_calendar';
-import { RequiredUser } from 'layouts/required_user';
-import { useContext } from 'react';
-import { useCurrentUser } from 'hooks/use_current_user';
-import { useManageCalendar } from 'hooks/use_manage_calendar';
-import { toast } from 'react-toastify';
-import { CalendarMonthsTable } from 'components/calendar_months_table';
+import {CalendarMonthsTable} from 'components/calendar_months_table';
+import {CalendarContext} from 'contexts/calendar_context';
+import {useCurrentUser} from 'hooks/use_current_user';
+import {useManageCalendar} from 'hooks/use_manage_calendar';
+import {RequiredCalendar} from 'layouts/required_calendar';
+import {RequiredUser} from 'layouts/required_user';
+import {Layout} from 'layouts/v2';
+import type {NextPageWithLayout} from 'pages/_app';
+import {useContext} from 'react';
+import {toast} from 'react-toastify';
 
 const Page: NextPageWithLayout = () => {
   const { user } = useCurrentUser()

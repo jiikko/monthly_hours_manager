@@ -1,12 +1,12 @@
-import '../styles/globals.css'
-import { AuthContext} from '../contexts/auth_context'
-import { useAuth } from '../hooks/use_auth';
 import GitHubForkRibbon from 'react-github-fork-ribbon';
-import { ToastContainer } from 'react-toastify';
+import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {AuthContext} from '../contexts/auth_context';
+import {useAuth} from '../hooks/use_auth';
+import '../styles/globals.css';
 
-import type { NextPage } from 'next'
-import type { AppProps } from 'next/app'
+import type {NextPage} from 'next';
+import type {AppProps} from 'next/app';
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: React.ReactElement) => React.ReactNode

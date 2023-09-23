@@ -1,20 +1,19 @@
-import type { NextPageWithLayout } from 'pages/_app'
-import { Layout } from 'layouts/v2';
-import { useEffect, useContext } from 'react';
-import { CalendarDate } from 'lib/calendar_date';
-import { CalendarMonth } from 'components/calendar_month';
-import { useRouter } from 'next/router';
-import { DayObject } from 'lib/days_generator';
-import { MonthSummary } from 'components/month_summary';
-import { DaysGenerator } from 'lib/days_generator';
-import { toast } from 'react-toastify';
-import { useManageCalendar } from 'hooks/use_manage_calendar';
-import { Button, Col, Row } from 'react-bootstrap';
-import { RequiredCalendar } from 'layouts/required_calendar';
-import { CalendarContext } from 'contexts/calendar_context';
-import { useCurrentUser } from 'hooks/use_current_user';
+import {CalendarMonth} from 'components/calendar_month';
+import {MonthSummary} from 'components/month_summary';
+import {CalendarContext} from 'contexts/calendar_context';
+import {useCurrentUser} from 'hooks/use_current_user';
+import {useManageCalendar} from 'hooks/use_manage_calendar';
+import {RequiredCalendar} from 'layouts/required_calendar';
+import {RequiredUser} from 'layouts/required_user';
+import {Layout} from 'layouts/v2';
+import {CalendarDate} from 'lib/calendar_date';
+import {DayObject, DaysGenerator} from 'lib/days_generator';
 import Link from 'next/link';
-import { RequiredUser } from 'layouts/required_user';
+import {useRouter} from 'next/router';
+import type {NextPageWithLayout} from 'pages/_app';
+import {useContext, useEffect} from 'react';
+import {Button, Col, Row} from 'react-bootstrap';
+import {toast} from 'react-toastify';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
