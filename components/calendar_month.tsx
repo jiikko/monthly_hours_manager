@@ -13,7 +13,7 @@ type MonthProps = {
 }
 
 export const CalendarMonth: React.FC<MonthProps>= ({ year, month, days, workingWeek, handleUpdateDay }) => {
-  const builder = CalendarViewBuilder(handleUpdateDay, year, month);
+  const builder = CalendarViewBuilder(year, month);
 
   return (
     <>
