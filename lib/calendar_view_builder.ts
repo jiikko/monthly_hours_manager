@@ -1,6 +1,18 @@
 import { CalendarDate } from 'lib/calendar_date';
 
-export const CalendarViewBuilder = (() => {
+export type WeekInfo = {
+  dayNumber: number | null;
+  index: number;
+};
+
+export interface CalendarViewBuilderReturnType {
+  headerWeeks: () => string[];
+  bodyWeeks: () => WeekInfo[][];
+}
+
+export type CalendarViewBuilderType = (year: number, month: number) => CalendarViewBuilderReturnType;
+
+export const CalendarViewBuilder: CalendarViewBuilderType = (() => {
   return function (year: number, month: number) {
     const headerWeeks = () => {
       return(
