@@ -1,9 +1,9 @@
 import {CalendarMonthTemplate} from 'components/calendar_month_template';
 import {Calendar} from 'lib/calendar';
 import {CalendarDate} from 'lib/calendar_date';
+import {CalendarMonthData} from 'lib/calendar_month_data';
 import {CalendarViewBuilder} from 'lib/calendar_view_builder';
 import React from 'react';
-import {CalendarMonthData} from 'lib/calendar_month_data';
 
 type Props = {
   year: number;
@@ -17,12 +17,15 @@ export const AllCalendarMonth: React.FC<Props>= ({ year, month, calendars }) => 
   const monthKey = date.monthlyKey();
 
   const monthDataList = calendars.map((c) => {
-    return { name: c.name, days: c.months[monthKey] } }
-  ) as Array<CalendarMonthData>
+    const days = c.months[monthKey]
+    if(days === undefined) { return null }
 
+    return { name: c.name, days: c.months[monthKey] } }
+  ).filter((item) => item) as Array<CalendarMonthData>
 
   const tDBody = (dayNumber: (number | null), index: number) => {
     if(dayNumber === null) { return <td key={index}></td> }
+
     let calendarDate = CalendarDate(year, month, dayNumber);
     let dayIndex = dayNumber - 1;
 
