@@ -16,8 +16,10 @@ export const AllCalendarMonth: React.FC<Props>= ({ year, month, calendars }) => 
   const date = CalendarDate(Number(year), Number(month), 1);
   const monthKey = date.monthlyKey();
 
+  // calendars.map((c) => ({ name: c.name, days: c.months[monthKey] }))
+
   const handleUpdateDay = (attributeName: string, value: boolean | string, dayIndex: number) => {}
-  const tDBody = (dayNumber: number | null, index: number, days: Array<DayObject | Calendar>, workingWeek: Week, handleUpdateDay: HandleUpdateDayType) => {
+  const tDBody = (dayNumber: number | null, index: number, days: Array<DayObject | Calendar>) => {
     if(dayNumber === null) { return <td key={index}></td> }
     let calendarDate = CalendarDate(year, month, dayNumber);
 
@@ -31,7 +33,7 @@ export const AllCalendarMonth: React.FC<Props>= ({ year, month, calendars }) => 
   return(
     <>
       <h1>集約した{year}年{month}月のカレンダー</h1>
-      <CalendarMonthTemplate builder={builder} days={calendars} workingWeek={{} as any} handleUpdateDay={handleUpdateDay} tDBody={tDBody} />
+      <CalendarMonthTemplate builder={builder} days={calendars} tDBody={tDBody} />
     </>
   )
 }

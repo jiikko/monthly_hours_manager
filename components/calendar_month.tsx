@@ -5,21 +5,27 @@ import {CalendarViewBuilder} from 'lib/calendar_view_builder';
 import {DayObject} from 'lib/days_generator';
 import {FloatingLabel, Form} from 'react-bootstrap';
 
+type CalendarMonthData = {
+  name: string;
+  days: Array<DayObject>;
+}
+
 type HandleUpdateDayType = (attributeName: string, value: boolean | string, dayIndex: number) => void;
 type MonthProps = {
   year: number;
   month: number;
+  monthDataList: Array<CalendarMonthData>;
   days: Array<DayObject>;
   workingWeek: Week;
   handleUpdateDay: (attributeName: string, value: boolean | string, dayIndex: number) => void;
 }
 
-export const CalendarMonth: React.FC<MonthProps>= ({ year, month, days, workingWeek, handleUpdateDay }) => {
+export const CalendarMonth: React.FC<MonthProps>= ({ year, month, days, workingWeek, handleUpdateDay, monthDataList }) => {
   const builder = CalendarViewBuilder(year, month);
-  const tDBody = (dayNumber: number | null, index: number, days: Array<DayObject>, workingWeek: Week, handleUpdateDay: HandleUpdateDayType) => {
+  const tDBody = (dayNumber: number | null, index: number, days: Array<DayObject>) => {
     if(dayNumber === null) { return <td key={index}></td> }
     let dayIndex = dayNumber - 1;
-    let day = days[dayIndex];
+    let day = monthDataList[0].days[dayIndex];
     let calendarDate = CalendarDate(year, month, dayNumber);
     let tdClassName = (workingWeek[calendarDate.weekDayName()]) ? 'bg-info' : 'bg-secondary text-light';
     if(Number(day.actual)) { tdClassName = 'bg-success text-light' }
@@ -48,6 +54,6 @@ export const CalendarMonth: React.FC<MonthProps>= ({ year, month, days, workingW
   }
 
   return (
-    <CalendarMonthTemplate builder={builder} days={days} workingWeek={workingWeek} handleUpdateDay={handleUpdateDay} tDBody={tDBody} />
+    <CalendarMonthTemplate builder={builder} days={days} tDBody={tDBody} />
   );
 };

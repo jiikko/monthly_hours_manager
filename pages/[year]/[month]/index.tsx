@@ -81,11 +81,12 @@ const Page: NextPageWithLayout = () => {
       <div className="alert alert-danger" role="alert">カレンダーの設定情報がありません。設定してください。</div>
     )
   }
+  const monthDataList = [{ name: calendar.name, days: days }]
 
   return (
     <>
       {calendar.name ? <h1>{calendar.name}の{year}年{month}月</h1> : <h1>{year}年{month}月</h1>}
-      {<CalendarMonth year={Number(year)} month={Number(month)} days={days} workingWeek={calendar.week} handleUpdateDay={handleUpdateDay} />}
+      {<CalendarMonth year={Number(year)} month={Number(month)} days={days} workingWeek={calendar.week} handleUpdateDay={handleUpdateDay} monthDataList={monthDataList} />}
       {<MonthSummary days={days} standardTime={calendar.standardTime} />}
 
       <Col>

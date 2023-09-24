@@ -15,6 +15,11 @@ import {useContext, useEffect} from 'react';
 import {Button, Col, Row} from 'react-bootstrap';
 import {toast} from 'react-toastify';
 
+type CalendarMonthData = {
+  name: string;
+  days: Array<DayObject>;
+}
+
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { year, month } = router.query;
@@ -69,6 +74,7 @@ const Page: NextPageWithLayout = () => {
   } else {
     return null
   }
+  const monthDataList = [{ name: null, days: days }] as Array<CalendarMonthData>;
 
   return(
     <>
@@ -90,7 +96,7 @@ const Page: NextPageWithLayout = () => {
         </Col>
       </Row>
 
-      {<CalendarMonth year={Number(year)} month={Number(month)} days={days} workingWeek={calendar.week} handleUpdateDay={handleUpdateDay} />}
+      {<CalendarMonth year={Number(year)} month={Number(month)} monthDataList={monthDataList} days={days} workingWeek={calendar.week} handleUpdateDay={handleUpdateDay} />}
       {<MonthSummary days={days} standardTime={calendar.standardTime} />}
 
       <Col>
