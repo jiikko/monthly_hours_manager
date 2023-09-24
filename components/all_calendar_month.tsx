@@ -1,20 +1,23 @@
-import {CalendarViewBuilder} from 'lib/calendar_view_builder';
 import {CalendarMonthTemplate} from 'components/calendar_month_template';
-import {Week} from 'lib/calendar';
+import {Calendar, Week} from 'lib/calendar';
 import {CalendarDate} from 'lib/calendar_date';
+import {CalendarViewBuilder} from 'lib/calendar_view_builder';
 import {DayObject} from 'lib/days_generator';
 
 type Props = {
   year: number;
   month: number;
-  days: Array<DayObject>;
+  calendars: Array<Calendar>;
 }
+type HandleUpdateDayType = (attributeName: string, value: boolean | string, dayIndex: number) => void;
 
-export const AllCalendarMonth: React.FC<Props>= ({ year, month, days }) => {
+export const AllCalendarMonth: React.FC<Props>= ({ year, month, calendars }) => {
   const builder = CalendarViewBuilder(year, month);
-  const workingWeek = {} as any;
+  const date = CalendarDate(Number(year), Number(month), 1);
+  const monthKey = date.monthlyKey();
+
   const handleUpdateDay = (attributeName: string, value: boolean | string, dayIndex: number) => {}
-  const tDBody = (dayNumber: number | null, index: number, days: Array<DayObject>, workingWeek: Week, handleUpdateDay: HandleUpdateDayType) => {
+  const tDBody = (dayNumber: number | null, index: number, days: Array<DayObject | Calendar>, workingWeek: Week, handleUpdateDay: HandleUpdateDayType) => {
     if(dayNumber === null) { return <td key={index}></td> }
     let calendarDate = CalendarDate(year, month, dayNumber);
 
@@ -28,7 +31,7 @@ export const AllCalendarMonth: React.FC<Props>= ({ year, month, days }) => {
   return(
     <>
       <h1>集約した{year}年{month}月のカレンダー</h1>
-      <CalendarMonthTemplate builder={builder} days={days} workingWeek={workingWeek} handleUpdateDay={handleUpdateDay} tDBody={tDBody} />
+      <CalendarMonthTemplate builder={builder} days={calendars} workingWeek={{} as any} handleUpdateDay={handleUpdateDay} tDBody={tDBody} />
     </>
   )
 }

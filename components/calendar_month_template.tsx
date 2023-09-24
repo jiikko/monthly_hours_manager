@@ -1,13 +1,13 @@
-import {Week} from 'lib/calendar';
+import {Calendar, Week} from 'lib/calendar';
 import {CalendarViewBuilderReturnType} from 'lib/calendar_view_builder';
 import {DayObject} from 'lib/days_generator';
 import {Table} from 'react-bootstrap';
 
 type HandleUpdateDayType = (attributeName: string, value: boolean | string, dayIndex: number) => void;
-type TDBodyType = (dayNumber: number | null, index: number, days: Array<DayObject>, workingWeek: Week, handleUpdateDay: HandleUpdateDayType) => JSX.Element;
+type TDBodyType = (dayNumber: number | null, index: number, days: Array<DayObject | Calendar>, workingWeek: Week, handleUpdateDay: HandleUpdateDayType) => JSX.Element;
 type Props = {
   builder: CalendarViewBuilderReturnType;
-  days: Array<DayObject>;
+  days: Array<DayObject | Calendar>;
   workingWeek: Week;
   handleUpdateDay: HandleUpdateDayType;
   tDBody: TDBodyType;
