@@ -1,14 +1,9 @@
 import {CalendarMonthTemplate} from 'components/calendar_month_template';
-import {Calendar, Week} from 'lib/calendar';
+import {Calendar} from 'lib/calendar';
 import {CalendarDate} from 'lib/calendar_date';
 import {CalendarViewBuilder} from 'lib/calendar_view_builder';
-import {DayObject} from 'lib/days_generator';
 import React from 'react';
-
-type CalendarMonthData = {
-  name: string;
-  days: Array<DayObject>;
-}
+import {CalendarMonthData} from 'lib/calendar_month_data';
 
 type Props = {
   year: number;

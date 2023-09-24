@@ -2,13 +2,8 @@ import {CalendarMonthTemplate} from 'components/calendar_month_template';
 import {Week} from 'lib/calendar';
 import {CalendarDate} from 'lib/calendar_date';
 import {CalendarViewBuilder} from 'lib/calendar_view_builder';
-import {DayObject} from 'lib/days_generator';
 import {FloatingLabel, Form} from 'react-bootstrap';
-
-type CalendarMonthData = {
-  name: string;
-  days: Array<DayObject>;
-}
+import {CalendarMonthData} from 'lib/calendar_month_data';
 
 type HandleUpdateDayType = (attributeName: string, value: boolean | string, dayIndex: number) => void;
 type MonthProps = {

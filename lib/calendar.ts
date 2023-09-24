@@ -1,5 +1,5 @@
-import { MonthTable } from './days_generator';
-import { JsonParameter } from './json_parameter';
+import {MonthTable} from './days_generator';
+import {JsonParameter} from './json_parameter';
 
 export class Week {
   constructor(

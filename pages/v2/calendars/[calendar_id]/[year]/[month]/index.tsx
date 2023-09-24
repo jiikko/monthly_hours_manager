@@ -7,6 +7,7 @@ import {RequiredCalendar} from 'layouts/required_calendar';
 import {RequiredUser} from 'layouts/required_user';
 import {Layout} from 'layouts/v2';
 import {CalendarDate} from 'lib/calendar_date';
+import {CalendarMonthData} from 'lib/calendar_month_data';
 import {DayObject, DaysGenerator} from 'lib/days_generator';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
@@ -14,11 +15,6 @@ import type {NextPageWithLayout} from 'pages/_app';
 import {useContext, useEffect} from 'react';
 import {Button, Col, Row} from 'react-bootstrap';
 import {toast} from 'react-toastify';
-
-type CalendarMonthData = {
-  name: string;
-  days: Array<DayObject>;
-}
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
