@@ -14,7 +14,7 @@ type Props = {
 }
 
 export const AllCalendarMonth: React.FC<Props>= ({ year, month, calendars }) => {
-  const builder = CalendarViewBuilder(year, month);
+  const builder = new CalendarViewBuilder(year, month)
   const date = CalendarDate(Number(year), Number(month), 1);
   const monthKey = date.monthlyKey();
 
@@ -33,14 +33,14 @@ export const AllCalendarMonth: React.FC<Props>= ({ year, month, calendars }) => 
     return(
       <td key={index}>
         {dayNumber}日{calendarDate.isNationalHoliday() && '(祝)'}<br />
-          {
-            monthDataList.map((monthData, i) => (
-              <React.Fragment key={i}>
-                {`${monthData.name}: ${monthData.days[dayIndex].scheduled}時間`}
-                <br />
-              </React.Fragment>
-            ))
-          }
+        {
+          monthDataList.map((monthData, i) => (
+            <React.Fragment key={i}>
+              {`${monthData.name}: ${monthData.days[dayIndex].scheduled}時間`}
+              <br />
+            </React.Fragment>
+          ))
+        }
       </td>
     )
   }

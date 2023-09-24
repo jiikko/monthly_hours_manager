@@ -14,7 +14,7 @@ type MonthProps = {
 }
 
 export const CalendarMonth: React.FC<MonthProps>= ({ year, month, workingWeek, handleUpdateDay, monthDataList }) => {
-  const builder = CalendarViewBuilder(year, month);
+  const builder = new CalendarViewBuilder(year, month);
   const tDBody = (dayNumber: number | null, index: number) => {
     if(dayNumber === null) { return <td key={index}></td> }
 
