@@ -18,6 +18,7 @@ export const CalendarMonth: React.FC<MonthProps>= ({ year, month, workingWeek, h
   const builder = CalendarViewBuilder(year, month);
   const tDBody = (dayNumber: number | null, index: number) => {
     if(dayNumber === null) { return <td key={index}></td> }
+
     let dayIndex = dayNumber - 1;
     let day = monthDataList[0].days[dayIndex]; // NOTE: ここでは1つのカレンダーのみ入ってくるので、0番目を参照する
     let calendarDate = CalendarDate(year, month, dayNumber);

@@ -3,7 +3,9 @@ import {Calendar} from 'lib/calendar';
 import {CalendarDate} from 'lib/calendar_date';
 import {CalendarMonthData} from 'lib/calendar_month_data';
 import {CalendarViewBuilder} from 'lib/calendar_view_builder';
+import Link from 'next/link';
 import React from 'react';
+import {Button, Col, Row} from 'react-bootstrap';
 
 type Props = {
   year: number;
@@ -46,7 +48,17 @@ export const AllCalendarMonth: React.FC<Props>= ({ year, month, calendars }) => 
 
   return(
     <>
-      <h1>{year}年{month}月の予定カレンダー</h1>
+      <h1>{year}年{month}月予定の総合カレンダー</h1>
+      <Row className='mb-3 mt-3'>
+        {calendars.map((calendar) => (
+          <Col key={calendar.id}>
+            <Link href={`/v2/calendars/${calendar.id}/${year}/${month}`}>
+              <Button>{calendar.name}のカレンダー</Button>
+            </Link>
+          </Col>
+        ))}
+      </Row>
+
       <CalendarMonthTemplate builder={builder} tDBody={tDBody} />
     </>
   )
