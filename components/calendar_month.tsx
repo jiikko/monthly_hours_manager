@@ -2,7 +2,7 @@ import {CalendarMonthTemplate} from 'components/calendar_month_template';
 import {Week} from 'lib/calendar';
 import {CalendarDate} from 'lib/calendar_date';
 import {CalendarMonthData} from 'lib/calendar_month_data';
-import {CalendarViewBuilder} from 'lib/calendar_view_builder';
+import {CalendarMonthView} from 'lib/calendar_month_view';
 import {FloatingLabel, Form} from 'react-bootstrap';
 
 type MonthProps = {
@@ -14,7 +14,7 @@ type MonthProps = {
 }
 
 export const CalendarMonth: React.FC<MonthProps>= ({ year, month, workingWeek, handleUpdateDay, monthDataList }) => {
-  const builder = new CalendarViewBuilder(year, month);
+  const builder = new CalendarMonthView(year, month);
   const tDBody = (dayNumber: number | null, index: number) => {
     if(dayNumber === null) { return <td key={index}></td> }
 

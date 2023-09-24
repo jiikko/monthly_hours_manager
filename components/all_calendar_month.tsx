@@ -2,7 +2,7 @@ import {CalendarMonthTemplate} from 'components/calendar_month_template';
 import {Calendar} from 'lib/calendar';
 import {CalendarDate} from 'lib/calendar_date';
 import {CalendarMonthData} from 'lib/calendar_month_data';
-import {CalendarViewBuilder} from 'lib/calendar_view_builder';
+import {CalendarMonthView} from 'lib/calendar_month_view';
 import Link from 'next/link';
 import React from 'react';
 import {Button, Col, Row} from 'react-bootstrap';
@@ -14,7 +14,7 @@ type Props = {
 }
 
 export const AllCalendarMonth: React.FC<Props>= ({ year, month, calendars }) => {
-  const builder = new CalendarViewBuilder(year, month)
+  const builder = new CalendarMonthView(year, month)
   const date = CalendarDate(Number(year), Number(month), 1);
   const monthKey = date.monthlyKey();
 

@@ -5,7 +5,7 @@ export type WeekInfo = {
   index: number;
 };
 
-export class CalendarViewBuilder {
+export class CalendarMonthView {
   private year: number;
   private month: number;
 

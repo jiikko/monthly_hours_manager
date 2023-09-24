@@ -1,9 +1,9 @@
-import {CalendarViewBuilder} from "lib/calendar_view_builder";
+import {CalendarMonthView} from "lib/calendar_month_view";
 import {Table} from "react-bootstrap";
 
 type TDBodyType = (dayNumber: number | null, index: number) => JSX.Element;
 type Props = {
-  builder: CalendarViewBuilder;
+  builder: CalendarMonthView;
   tDBody: TDBodyType;
 };
 
