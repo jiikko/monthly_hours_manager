@@ -3,37 +3,53 @@ import {Calendar, Week} from 'lib/calendar';
 import {CalendarDate} from 'lib/calendar_date';
 import {CalendarViewBuilder} from 'lib/calendar_view_builder';
 import {DayObject} from 'lib/days_generator';
+import React from 'react';
+
+type CalendarMonthData = {
+  name: string;
+  days: Array<DayObject>;
+}
 
 type Props = {
   year: number;
   month: number;
   calendars: Array<Calendar>;
 }
-type HandleUpdateDayType = (attributeName: string, value: boolean | string, dayIndex: number) => void;
 
 export const AllCalendarMonth: React.FC<Props>= ({ year, month, calendars }) => {
   const builder = CalendarViewBuilder(year, month);
   const date = CalendarDate(Number(year), Number(month), 1);
   const monthKey = date.monthlyKey();
 
-  // calendars.map((c) => ({ name: c.name, days: c.months[monthKey] }))
+  const monthDataList = calendars.map((c) => {
+    return { name: c.name, days: c.months[monthKey] } }
+  ) as Array<CalendarMonthData>
 
-  const handleUpdateDay = (attributeName: string, value: boolean | string, dayIndex: number) => {}
-  const tDBody = (dayNumber: number | null, index: number, days: Array<DayObject | Calendar>) => {
+
+  const tDBody = (dayNumber: (number | null), index: number) => {
     if(dayNumber === null) { return <td key={index}></td> }
     let calendarDate = CalendarDate(year, month, dayNumber);
+    let dayIndex = dayNumber - 1;
 
     return(
       <td key={index}>
         {dayNumber}日{calendarDate.isNationalHoliday() && '(祝)'}<br />
+          {
+            monthDataList.map((monthData, i) => (
+              <React.Fragment key={i}>
+                {`${monthData.name}: ${monthData.days[dayIndex].scheduled}時間`}
+                <br />
+              </React.Fragment>
+            ))
+          }
       </td>
     )
   }
 
   return(
     <>
-      <h1>集約した{year}年{month}月のカレンダー</h1>
-      <CalendarMonthTemplate builder={builder} days={calendars} tDBody={tDBody} />
+      <h1>{year}年{month}月の予定カレンダー</h1>
+      <CalendarMonthTemplate builder={builder} tDBody={tDBody} />
     </>
   )
 }

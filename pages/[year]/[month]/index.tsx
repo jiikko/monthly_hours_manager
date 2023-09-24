@@ -86,7 +86,7 @@ const Page: NextPageWithLayout = () => {
   return (
     <>
       {calendar.name ? <h1>{calendar.name}の{year}年{month}月</h1> : <h1>{year}年{month}月</h1>}
-      {<CalendarMonth year={Number(year)} month={Number(month)} days={days} workingWeek={calendar.week} handleUpdateDay={handleUpdateDay} monthDataList={monthDataList} />}
+      {<CalendarMonth year={Number(year)} month={Number(month)} workingWeek={calendar.week} handleUpdateDay={handleUpdateDay} monthDataList={monthDataList} />}
       {<MonthSummary days={days} standardTime={calendar.standardTime} />}
 
       <Col>

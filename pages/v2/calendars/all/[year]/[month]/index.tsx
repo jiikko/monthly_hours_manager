@@ -11,7 +11,6 @@ import {useEffect, useState} from 'react';
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { year, month } = router.query;
-  if(year === undefined || month === undefined) { return <></> }
 
   const { user } = useCurrentUser()
   const [calendars, setCalendars] = useState<Calendar[]>(undefined);
@@ -24,7 +23,7 @@ const Page: NextPageWithLayout = () => {
   }, [])
 
   return (
-    {calendars} && <AllCalendarMonth year={Number(year)} month={Number(month)} calendars={calendars} />
+    calendars && <AllCalendarMonth year={Number(year)} month={Number(month)} calendars={calendars} />
   )
 }
 

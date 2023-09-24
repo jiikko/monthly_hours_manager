@@ -4,14 +4,13 @@ import {DayObject} from 'lib/days_generator';
 import {Table} from 'react-bootstrap';
 
 type HandleUpdateDayType = (attributeName: string, value: boolean | string, dayIndex: number) => void;
-type TDBodyType = (dayNumber: number | null, index: number, days: Array<DayObject | Calendar>) => JSX.Element;
+type TDBodyType = (dayNumber: number | null, index: number) => JSX.Element;
 type Props = {
   builder: CalendarViewBuilderReturnType;
-  days: Array<DayObject | Calendar>;
   tDBody: TDBodyType;
 };
 
-export const CalendarMonthTemplate: React.FC<Props> = ({ builder, tDBody, days }) => {
+export const CalendarMonthTemplate: React.FC<Props> = ({ builder, tDBody }) => {
   return(
     <Table striped bordered hover>
       <thead>
@@ -21,7 +20,7 @@ export const CalendarMonthTemplate: React.FC<Props> = ({ builder, tDBody, days }
       </thead>
       <tbody>
         {builder.bodyWeeks().map((week, i) => (
-          <tr key={i}>{week.map(({ dayNumber, index }) => { return tDBody(dayNumber, index, days) })}</tr>
+          <tr key={i}>{week.map(({ dayNumber, index }) => { return tDBody(dayNumber, index) })}</tr>
         ))}
       </tbody>
     </Table>

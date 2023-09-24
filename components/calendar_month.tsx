@@ -15,17 +15,16 @@ type MonthProps = {
   year: number;
   month: number;
   monthDataList: Array<CalendarMonthData>;
-  days: Array<DayObject>;
   workingWeek: Week;
   handleUpdateDay: (attributeName: string, value: boolean | string, dayIndex: number) => void;
 }
 
-export const CalendarMonth: React.FC<MonthProps>= ({ year, month, days, workingWeek, handleUpdateDay, monthDataList }) => {
+export const CalendarMonth: React.FC<MonthProps>= ({ year, month, workingWeek, handleUpdateDay, monthDataList }) => {
   const builder = CalendarViewBuilder(year, month);
-  const tDBody = (dayNumber: number | null, index: number, days: Array<DayObject>) => {
+  const tDBody = (dayNumber: number | null, index: number) => {
     if(dayNumber === null) { return <td key={index}></td> }
     let dayIndex = dayNumber - 1;
-    let day = monthDataList[0].days[dayIndex];
+    let day = monthDataList[0].days[dayIndex]; // NOTE: ここでは1つのカレンダーのみ入ってくるので、0番目を参照する
     let calendarDate = CalendarDate(year, month, dayNumber);
     let tdClassName = (workingWeek[calendarDate.weekDayName()]) ? 'bg-info' : 'bg-secondary text-light';
     if(Number(day.actual)) { tdClassName = 'bg-success text-light' }
@@ -54,6 +53,6 @@ export const CalendarMonth: React.FC<MonthProps>= ({ year, month, days, workingW
   }
 
   return (
-    <CalendarMonthTemplate builder={builder} days={days} tDBody={tDBody} />
+    <CalendarMonthTemplate builder={builder} tDBody={tDBody} />
   );
 };

@@ -96,7 +96,7 @@ const Page: NextPageWithLayout = () => {
         </Col>
       </Row>
 
-      {<CalendarMonth year={Number(year)} month={Number(month)} monthDataList={monthDataList} days={days} workingWeek={calendar.week} handleUpdateDay={handleUpdateDay} />}
+      {<CalendarMonth year={Number(year)} month={Number(month)} monthDataList={monthDataList} workingWeek={calendar.week} handleUpdateDay={handleUpdateDay} />}
       {<MonthSummary days={days} standardTime={calendar.standardTime} />}
 
       <Col>
