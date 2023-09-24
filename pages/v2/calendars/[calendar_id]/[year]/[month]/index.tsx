@@ -78,14 +78,22 @@ const Page: NextPageWithLayout = () => {
         <Col>
           {calendar.name ? <h1>{calendar.name}の{year}年{month}月</h1> : <h1>{year}年{month}月</h1>}
         </Col>
+      </Row>
 
-        <Col className="text-end mt-3">
+      <Row className='mb-3'>
+        <Col className="mt-3">
+          <Link href={`/v2/calendars/all/${year}/${month}`}>
+            <Button>総合カレンダー</Button>
+          </Link>
+        </Col>
+
+        <Col className="mt-3">
           <Link href={`/v2/calendars/${calendar.id}/months`}>
             <Button>管理中の月一覧</Button>
           </Link>
         </Col>
 
-        <Col className="text-end mt-3">
+        <Col className="mt-3">
           <Link href={`/v2/calendars/${calendar.id}/edit`}>
             <Button>カレンダーの編集</Button>
           </Link>

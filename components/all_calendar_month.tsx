@@ -48,9 +48,10 @@ export const AllCalendarMonth: React.FC<Props>= ({ year, month, calendars }) => 
   return (
     <>
       <h1>{year}年{month}月予定の総合カレンダー</h1>
+
       <Row className='mb-3 mt-3'>
         {calendars.map((calendar) => (
-          <Col key={calendar.id}>
+          <Col className="text-end" key={calendar.id}>
             <Link href={`/v2/calendars/${calendar.id}/${year}/${month}`}>
               <Button>{calendar.name}のカレンダー</Button>
             </Link>
