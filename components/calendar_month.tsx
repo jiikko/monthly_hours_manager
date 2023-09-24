@@ -41,9 +41,9 @@ export const CalendarMonth: React.FC<MonthProps>= ({ year, month, days, workingW
                 <Form.Control type="text" value={day.actual} name={'actual'} onChange={(e) => handleUpdateDay('actual', e.target.value, dayIndex)} />
               </FloatingLabel>
             </>
-        )}
-      </Form>
-    </td>
+          )}
+        </Form>
+      </td>
     )
   }
 

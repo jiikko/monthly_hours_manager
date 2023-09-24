@@ -1,16 +1,18 @@
 import {RequiredUser} from 'layouts/required_user';
 import {Layout} from 'layouts/v2';
 import {useRouter} from 'next/router';
+import { AllCalendarMonth } from 'components/all_calendar_month';
 import type {NextPageWithLayout} from 'pages/_app';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { year, month } = router.query;
+  if(year === undefined || month === undefined) { return <></> }
+
+  const days = []
 
   return (
-    <>
-      <h1>集約した{year}年{month}月のカレンダー</h1>
-    </>
+    <AllCalendarMonth year={Number(year)} month={Number(month)} days={days} />
   )
 }
 
