@@ -1,11 +1,10 @@
 import {CalendarMonthTemplate} from 'components/calendar_month_template';
 import {Week} from 'lib/calendar';
 import {CalendarDate} from 'lib/calendar_date';
+import {CalendarMonthData} from 'lib/calendar_month_data';
 import {CalendarViewBuilder} from 'lib/calendar_view_builder';
 import {FloatingLabel, Form} from 'react-bootstrap';
-import {CalendarMonthData} from 'lib/calendar_month_data';
 
-type HandleUpdateDayType = (attributeName: string, value: boolean | string, dayIndex: number) => void;
 type MonthProps = {
   year: number;
   month: number;
@@ -19,9 +18,9 @@ export const CalendarMonth: React.FC<MonthProps>= ({ year, month, workingWeek, h
   const tDBody = (dayNumber: number | null, index: number) => {
     if(dayNumber === null) { return <td key={index}></td> }
 
-    let dayIndex = dayNumber - 1;
-    let day = monthDataList[0].days[dayIndex]; // NOTE: ここでは1つのカレンダーのみ入ってくるので、0番目を参照する
-    let calendarDate = CalendarDate(year, month, dayNumber);
+    const dayIndex = dayNumber - 1;
+    const calendarDate = CalendarDate(year, month, dayNumber);
+    const day = monthDataList[0].days[dayIndex]; // NOTE: ここでは1つのカレンダーのみ入ってくるので、0番目を参照する
     let tdClassName = (workingWeek[calendarDate.weekDayName()]) ? 'bg-info' : 'bg-secondary text-light';
     if(Number(day.actual)) { tdClassName = 'bg-success text-light' }
     if(day.isHoliday) { tdClassName = 'bg-secondary text-light' }

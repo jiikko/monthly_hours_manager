@@ -21,15 +21,14 @@ export const AllCalendarMonth: React.FC<Props>= ({ year, month, calendars }) => 
   const monthDataList = calendars.map((c) => {
     const days = c.months[monthKey]
     if(days === undefined) { return null }
-
     return { name: c.name, days: c.months[monthKey] } }
   ).filter((item) => item) as Array<CalendarMonthData>
 
   const tDBody = (dayNumber: (number | null), index: number) => {
     if(dayNumber === null) { return <td key={index}></td> }
 
-    let calendarDate = CalendarDate(year, month, dayNumber);
-    let dayIndex = dayNumber - 1;
+    const dayIndex = dayNumber - 1;
+    const calendarDate = CalendarDate(year, month, dayNumber);
 
     return(
       <td key={index}>
@@ -46,7 +45,7 @@ export const AllCalendarMonth: React.FC<Props>= ({ year, month, calendars }) => 
     )
   }
 
-  return(
+  return (
     <>
       <h1>{year}年{month}月予定の総合カレンダー</h1>
       <Row className='mb-3 mt-3'>
