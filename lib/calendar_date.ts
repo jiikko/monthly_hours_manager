@@ -60,12 +60,12 @@ const CalendarDate = (()  => {
     }
 
     // NOTE: 月の最初の日の曜日を取得する
-    function firstWeekDayOfMonth() {
+    function firstWeekDayOfMonth(): number {
       return new Date(year(), month() - 1, 1).getDay();
     }
 
     //  当月の最終日の日付を取得
-    function lastDayOfMonth() {
+    function lastDayOfMonth(): number {
       return new Date(year(), month(), 0).getDate();
     }
 

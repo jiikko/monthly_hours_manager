@@ -1,10 +1,9 @@
-import { Layout } from '../layouts/v1'
-import type { NextPageWithLayout } from './_app';
-import { useState } from 'react';
-import { useRouter } from 'next/router';
-import { PathGenerator } from '../lib/path_generator';
-import { useAuth } from '../hooks/use_auth';
-import { Row, Alert, Button, Form, Col } from 'react-bootstrap';
+import {useRouter} from 'next/router';
+import {useState} from 'react';
+import {Alert, Button, Col, Form, Row} from 'react-bootstrap';
+import {useAuth} from '../hooks/use_auth';
+import {Layout} from '../layouts/v1';
+import type {NextPageWithLayout} from './_app';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();

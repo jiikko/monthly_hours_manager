@@ -1,10 +1,10 @@
-import type { NextPageWithLayout } from './_app'
-import { Layout } from '../layouts/v1';
-import { Week } from 'lib/calendar';
-import { PathGenerator } from '../lib/path_generator';
-import { SettingForm } from '../components/setting_form';
-import { useCalendarState } from '../hooks/use_calendar_state';
-import { toast } from 'react-toastify';
+import {Week} from 'lib/calendar';
+import {toast} from 'react-toastify';
+import {SettingForm} from '../components/setting_form';
+import {useCalendarState} from '../hooks/use_calendar_state';
+import {Layout} from '../layouts/v1';
+import {PathGenerator} from '../lib/path_generator';
+import type {NextPageWithLayout} from './_app';
 
 const Page: NextPageWithLayout = () => {
   const { dispatch, calendar } = useCalendarState(PathGenerator().editPath);

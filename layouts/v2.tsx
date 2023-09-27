@@ -24,6 +24,9 @@ export function Layout({ children }: LayoutProps) {
   const loaded = user !== undefined;
 
   const handleLogout = async () => {
+    const result = confirm('ログアウトしますか？');
+    if(!result) { return }
+
     logout();
     alert('ログアウトしました');
     document.location = '/';

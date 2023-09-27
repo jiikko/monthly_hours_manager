@@ -1,12 +1,12 @@
-import type { NextPageWithLayout } from 'pages/_app'
-import { Layout } from 'layouts/v2';
-import { Week, Calendar } from 'lib/calendar';
-import { SettingForm } from 'components/setting_form';
-import { useRouter } from 'next/router';
-import { toast } from 'react-toastify';
-import { useManageCalendar } from 'hooks/use_manage_calendar';
-import { useCurrentUser } from 'hooks/use_current_user';
-import { RequiredUser } from 'layouts/required_user';
+import {SettingForm} from 'components/setting_form';
+import {useCurrentUser} from 'hooks/use_current_user';
+import {useManageCalendar} from 'hooks/use_manage_calendar';
+import {RequiredUser} from 'layouts/required_user';
+import {Layout} from 'layouts/v2';
+import {Calendar, Week} from 'lib/calendar';
+import {useRouter} from 'next/router';
+import type {NextPageWithLayout} from 'pages/_app';
+import {toast} from 'react-toastify';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();

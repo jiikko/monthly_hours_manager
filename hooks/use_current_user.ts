@@ -1,12 +1,13 @@
-import { useContext } from 'react';
-import { AuthContext} from 'contexts/auth_context'
+import { AuthContext } from "contexts/auth_context";
+import { User } from "firebase/auth";
+import { useContext } from "react";
 
 export type Type = {
-  user: any;
+  user: User;
 };
 
 export const useCurrentUser = (): Type => {
   const { user } = useContext(AuthContext);
 
-  return { user }
-}
+  return { user };
+};

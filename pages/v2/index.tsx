@@ -1,6 +1,6 @@
-import type { NextPageWithLayout } from '../_app'
-import { Layout } from '../../layouts/v2';
-import { AboutWithoutSetting } from 'components/about_without_setting';
+import {AboutWithoutSetting} from 'components/about_without_setting';
+import {Layout} from '../../layouts/v2';
+import type {NextPageWithLayout} from '../_app';
 
 const Page: NextPageWithLayout = () => {
   return (

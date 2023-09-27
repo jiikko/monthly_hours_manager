@@ -1,20 +1,20 @@
-import type { NextPageWithLayout } from 'pages/_app'
-import { Layout } from 'layouts/v2';
-import { useEffect, useContext } from 'react';
-import { CalendarDate } from 'lib/calendar_date';
-import { CalendarMonth } from 'components/calendar_month';
-import { useRouter } from 'next/router';
-import { DayObject } from 'lib/days_generator';
-import { MonthSummary } from 'components/month_summary';
-import { DaysGenerator } from 'lib/days_generator';
-import { toast } from 'react-toastify';
-import { useManageCalendar } from 'hooks/use_manage_calendar';
-import { Button, Col, Row } from 'react-bootstrap';
-import { RequiredCalendar } from 'layouts/required_calendar';
-import { CalendarContext } from 'contexts/calendar_context';
-import { useCurrentUser } from 'hooks/use_current_user';
+import {CalendarMonth} from 'components/calendar_month';
+import {MonthSummary} from 'components/month_summary';
+import {CalendarContext} from 'contexts/calendar_context';
+import {useCurrentUser} from 'hooks/use_current_user';
+import {useManageCalendar} from 'hooks/use_manage_calendar';
+import {RequiredCalendar} from 'layouts/required_calendar';
+import {RequiredUser} from 'layouts/required_user';
+import {Layout} from 'layouts/v2';
+import {CalendarDate} from 'lib/calendar_date';
+import {CalendarMonthData} from 'lib/calendar_month_data';
+import {DayObject, DaysGenerator} from 'lib/days_generator';
 import Link from 'next/link';
-import { RequiredUser } from 'layouts/required_user';
+import {useRouter} from 'next/router';
+import type {NextPageWithLayout} from 'pages/_app';
+import {useContext, useEffect} from 'react';
+import {Button, Col, Row} from 'react-bootstrap';
+import {toast} from 'react-toastify';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -70,6 +70,7 @@ const Page: NextPageWithLayout = () => {
   } else {
     return null
   }
+  const monthDataList = [{ name: null, days: days }] as Array<CalendarMonthData>;
 
   return(
     <>
@@ -77,21 +78,29 @@ const Page: NextPageWithLayout = () => {
         <Col>
           {calendar.name ? <h1>{calendar.name}の{year}年{month}月</h1> : <h1>{year}年{month}月</h1>}
         </Col>
+      </Row>
 
-        <Col className="text-end mt-3">
+      <Row className='mb-3'>
+        <Col className="mt-3">
+          <Link href={`/v2/calendars/all/${year}/${month}`}>
+            <Button>総合カレンダー</Button>
+          </Link>
+        </Col>
+
+        <Col className="mt-3">
           <Link href={`/v2/calendars/${calendar.id}/months`}>
             <Button>管理中の月一覧</Button>
           </Link>
         </Col>
 
-        <Col className="text-end mt-3">
+        <Col className="mt-3">
           <Link href={`/v2/calendars/${calendar.id}/edit`}>
             <Button>カレンダーの編集</Button>
           </Link>
         </Col>
       </Row>
 
-      {<CalendarMonth year={Number(year)} month={Number(month)} days={days} workingWeek={calendar.week} handleUpdateDay={handleUpdateDay} />}
+      {<CalendarMonth year={Number(year)} month={Number(month)} monthDataList={monthDataList} workingWeek={calendar.week} handleUpdateDay={handleUpdateDay} />}
       {<MonthSummary days={days} standardTime={calendar.standardTime} />}
 
       <Col>

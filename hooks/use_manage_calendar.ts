@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { Calendar } from 'lib/calendar';
-import type { User } from '@firebase/auth'
-import { db } from "lib/firebase";
-import { getDoc, doc, getDocs, updateDoc, deleteDoc, collection, addDoc, query } from 'firebase/firestore';
-import { Week } from '../lib/calendar';
+import type {User} from '@firebase/auth';
+import {addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc} from 'firebase/firestore';
+import {Calendar} from 'lib/calendar';
+import {db} from "lib/firebase";
+import {useState} from 'react';
+import {Week} from '../lib/calendar';
 
 export const useManageCalendar = () => {
   const [calendar, setCalendar] = useState<Calendar>(undefined);
