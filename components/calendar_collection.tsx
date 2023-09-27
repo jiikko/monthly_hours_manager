@@ -1,9 +1,9 @@
-import { CalendarDate, CalendarDateType } from 'lib/calendar_date';
-import { Button, Row, Col, Table, Nav } from 'react-bootstrap';
-import { MonthCalculator } from 'lib/month_calculator';
-import { Calendar } from 'lib/calendar';
-import { PathGenerator } from 'lib/path_generator';
+import {Calendar} from 'lib/calendar';
+import {CalendarDate, CalendarDateType} from 'lib/calendar_date';
+import {MonthCalculator} from 'lib/month_calculator';
+import {PathGenerator} from 'lib/path_generator';
 import Link from 'next/link';
+import {Button, Col, Nav, Row, Table} from 'react-bootstrap';
 
 type Props = {
   calendars: Array<Calendar>;
@@ -19,8 +19,8 @@ export const CalendarCollection: React.FC<Props>= ({ calendars }) => {
 
     return (
       <>
-        予定: {calculateTime(calendars, date.monthlyKey(), 'totalScheduled')}時間<br/>
-        実績: {calculateTime(calendars, date.monthlyKey(), 'totalActual')}時間
+        予定: {calculateTime([calendar], date.monthlyKey(), 'totalScheduled')}時間<br/>
+        実績: {calculateTime([calendar], date.monthlyKey(), 'totalActual')}時間
       </>
     );
   }
