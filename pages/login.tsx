@@ -5,7 +5,7 @@ import {useAuth} from '../hooks/use_auth';
 import {Layout} from '../layouts/v1';
 import type {NextPageWithLayout} from './_app';
 import * as yup from 'yup';
-import {useForm} from 'react-hook-form';
+import {useController, useForm} from 'react-hook-form';
 import { yupResolver}  from '@hookform/resolvers/yup';
 
 const schema = yup.object().shape({
@@ -29,7 +29,15 @@ const Page: NextPageWithLayout = () => {
  const { control, handleSubmit, register, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
   });
-  console.log(errors)
+
+  const { field: emailField, fieldState: emailFieldState } = useController({
+    name: 'email',
+    control,
+  });
+  const { field: passwordField, fieldState: passwordFieldState } = useController({
+    name: 'password',
+    control,
+  });
 
   return (
     <>
@@ -40,17 +48,17 @@ const Page: NextPageWithLayout = () => {
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Form.Group controlId="formEmail">
           <Form.Label>Email address</Form.Label>
-          <Form.Control type="email" placeholder="Enter email" {...register("email")} isInvalid={!!errors.email} />
+          <Form.Control {...emailField} type="email" placeholder="Enter email" isInvalid={!!emailFieldState.error} />
           <Form.Control.Feedback type="invalid">
-            {errors.email?.message}
+            {emailFieldState.error?.message}
           </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group controlId="formPassword">
           <Form.Label>Password</Form.Label>
-          <Form.Control type="password" placeholder="Password" { ...register("password")} isInvalid={!!errors.password} />
+          <Form.Control {...passwordField} type="password" placeholder="Password" isInvalid={!!passwordFieldState.error} />
           <Form.Control.Feedback type="invalid">
-            {errors.password?.message}
+            {passwordFieldState.error?.message}
           </Form.Control.Feedback>
         </Form.Group>
 
