@@ -4,6 +4,14 @@ import {Alert, Button, Col, Form, Row} from 'react-bootstrap';
 import {useAuth} from '../hooks/use_auth';
 import {Layout} from '../layouts/v1';
 import type {NextPageWithLayout} from './_app';
+import * as yup from 'yup';
+import {useForm} from 'react-hook-form';
+import { yupResolver}  from '@hookform/resolvers/yup';
+
+const schema = yup.object().shape({
+  email: yup.string().email('無効なメールアドレスです').required('必須項目です'),
+  password: yup.string().required('必須項目です'),
+});
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -11,13 +19,17 @@ const Page: NextPageWithLayout = () => {
   const [password, setPassword] = useState('');
   const { login } = useAuth();
   const [formErrorMessage, setFormErrorMessage] = useState('');
-  const handleSubmit = () => {
+  const onSubmit = () => {
     login(email, password).then(() => {
       router.push('/v2');
     }).catch((error) => {
       setFormErrorMessage(error.message);
     });
   }
+ const { control, handleSubmit, register, formState: { errors } } = useForm({
+    resolver: yupResolver(schema),
+  });
+  console.log(errors)
 
   return (
     <>
@@ -25,15 +37,21 @@ const Page: NextPageWithLayout = () => {
       <div className="alert alert-info">ログイン後、既存データ(クエリパラメータ)の引き継ぎは行いません。</div>
       {formErrorMessage && <Alert variant="danger">{formErrorMessage}</Alert>}
 
-      <Form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         <Form.Group controlId="formEmail">
           <Form.Label>Email address</Form.Label>
-          <Form.Control type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Form.Control type="email" placeholder="Enter email" {...register("email")} isInvalid={!!errors.email} />
+          <Form.Control.Feedback type="invalid">
+            {errors.email?.message}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group controlId="formPassword">
           <Form.Label>Password</Form.Label>
-          <Form.Control type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <Form.Control type="password" placeholder="Password" { ...register("password")} isInvalid={!!errors.password} />
+          <Form.Control.Feedback type="invalid">
+            {errors.password?.message}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Row>
