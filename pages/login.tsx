@@ -15,12 +15,10 @@ const schema = yup.object().shape({
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const { login } = useAuth();
   const [formErrorMessage, setFormErrorMessage] = useState('');
-  const onSubmit = () => {
-    login(email, password).then(() => {
+  const onSubmit = (data: { email: string, password: string }) => {
+    login(data.email, data.password).then(() => {
       router.push('/v2');
     }).catch((error) => {
       setFormErrorMessage(error.message);
