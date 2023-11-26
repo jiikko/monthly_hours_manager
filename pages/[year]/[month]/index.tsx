@@ -74,13 +74,14 @@ const Page: NextPageWithLayout = () => {
   if(calendar.months[monthKey]) {
     days = calendar.months[monthKey].map((day: DayObject, _: number) => { return(new DayObject(day.scheduled, day.actual, day.day, day.isHoliday)) })
   }
+  if(loading) { return }
   // NOTE: 画面遷移中にちらつかないようにするため
-  if(loading || calendar.months[monthKey] === undefined) { return }
   if(calendar.hasNoSetting()) {
     return(
       <div className="alert alert-danger" role="alert">カレンダーの設定情報がありません。設定してください。</div>
     )
   }
+  if(calendar.months[monthKey] === undefined) { return }
   const monthDataList = [{ name: calendar.name, days: days }]
 
   return (
