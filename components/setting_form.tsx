@@ -1,6 +1,8 @@
 import { Form, Button } from 'react-bootstrap';
-import { useState, useEffect } from 'react';
 import { Calendar, Week } from 'lib/calendar';
+import {useController, useForm, Controller} from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver}  from '@hookform/resolvers/yup';
 
 type Props = {
   calendar: Calendar;
@@ -8,49 +10,86 @@ type Props = {
   submitLabel: string;
 }
 
-export const SettingForm: React.FC<Props> = ({ calendar, handleSubmit, submitLabel }) => {
+const schema = yup.object().shape({
+  name: yup.string().required('必須項目です'),
+  standardTime: yup.number().typeError('基準時間は数値である必要があります'),
+  workingWeek: yup.object().shape({
+    mon: yup.boolean(),
+    tue: yup.boolean(),
+    wed: yup.boolean(),
+    thu: yup.boolean(),
+    fri: yup.boolean(),
+    sat: yup.boolean(),
+    sun: yup.boolean(),
+  }),
+});
+
+export const SettingForm: React.FC<Props> = ({ calendar, handleSubmit: handleParentSubmit, submitLabel }) => {
   const defaultStandardTime = 84;
-  const [name, setName] = useState('');
-  const [standardTime, setStandardTime] = useState(undefined);
-  const [workingWeek, setWorkingWeek] = useState(Week.create());
-
-  const handleWorkingDaysChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newWorkingWeek = Week.parse(workingWeek);
-    newWorkingWeek[e.target.name] = e.target.checked;
-    setWorkingWeek(newWorkingWeek);
+  const { control, handleSubmit } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      name: calendar.name,
+      standardTime: calendar.standardTime || defaultStandardTime,
+      workingWeek: calendar.week || Week.create(),
+    }
+  });
+  const { field: nameField, fieldState: nameFieldState } = useController({
+    name: 'name',
+    control,
+  });
+  const { field: standardTimeField, fieldState: standardTimeFieldState } = useController({
+    name: 'standardTime',
+    control,
+  });
+  const wrapperHandleSubmit = (data: any) => {
+    handleParentSubmit(data.name, data.standardTime, Week.parse(data.workingWeek))
   };
-
-  useEffect(() => {
-    setName(calendar.name || '');
-    setStandardTime(calendar.standardTime || defaultStandardTime);
-    setWorkingWeek(calendar.week || Week.create());
-  }, [calendar]);
+  const dayTable = {
+    mon: '月',
+    tue: '火',
+    wed: '水',
+    thu: '木',
+    fri: '金',
+    sat: '土',
+    sun: '日',
+  };
 
   return (
     <>
-      <Form onSubmit={(e) => e.preventDefault()}>
+      <Form onSubmit={handleSubmit(wrapperHandleSubmit)}>
         <Form.Group className="mb-3">
           <Form.Label htmlFor="name">名前</Form.Label>
-          <Form.Control type="text" id={'name'} defaultValue={name} onChange={(e) => setName(e.target.value)}  />
+          <Form.Control {...nameField} type="text" isInvalid={!!nameFieldState.error} />
+          <Form.Control.Feedback type="invalid">{nameFieldState.error?.message}</Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">
           <Form.Label htmlFor={'standardTime'}>基準時間</Form.Label>
-          <Form.Control type="text" id={'standardTime'} defaultValue={standardTime} onChange={(e) => setStandardTime(Number(e.target.value))}  required />
+          <Form.Control {...standardTimeField} type="text" isInvalid={!!standardTimeFieldState.error} />
+          <Form.Control.Feedback type="invalid">{standardTimeFieldState.error?.message}</Form.Control.Feedback>
         </Form.Group>
 
         <Form.Label>稼働曜日</Form.Label>
-        <Form.Check type="switch" id='m' name="mon" label="月" className='mb-2' checked={workingWeek.mon || false} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" id='t' name="tue" label="火" className='mb-2' checked={workingWeek.tue || false} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" id='w' name="wed" label="水" className='mb-2' checked={workingWeek.wed || false} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" id='thu' name="thu" label="木" className='mb-2' checked={workingWeek.thu || false} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" id='fri' name="fri" label="金" className='mb-2' checked={workingWeek.fri || false} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" id='sat' name="sat" label="土" className='mb-2' checked={workingWeek.sat || false} onChange={handleWorkingDaysChange} />
-        <Form.Check type="switch" id='sun' name="sun" label="日" className='mb-4' checked={workingWeek.sun || false} onChange={handleWorkingDaysChange} />
+        {['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].map(day => (
+          <Controller
+            key={day}
+            name={`workingWeek.${day}`}
+            control={control}
+            render={({ field }) => (
+              <Form.Check
+                type="switch"
+                id={day}
+                label={dayTable[day]}
+                className='mb-2'
+                checked={field.value || false}
+                onChange={e => field.onChange(e.target.checked)}
+              />
+            )}
+          />
+        ))}
 
-        <Button variant="primary" type="submit" onClick={(_) => handleSubmit(name, standardTime, workingWeek)}>
-          {submitLabel}
-        </Button>
+        <Button variant="primary" type="submit">{submitLabel}</Button>
       </Form>
     </>
   )
