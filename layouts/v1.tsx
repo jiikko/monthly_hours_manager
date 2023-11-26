@@ -64,6 +64,8 @@ export function Layout({ children }: LayoutProps) {
 
       <Container>
         <Row className="justify-content-md-between p-3">
+          {user && (<><Nav.Link href="/v2"  className='text-decoration-underline'>バージョン2では、複数のカレンダーをクラウドに保存できます。</Nav.Link><br /><br /></>)}
+
           {children}
         </Row>
       </Container>
