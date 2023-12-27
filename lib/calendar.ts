@@ -18,13 +18,13 @@ export class Week {
 
   static parse(week: Week): Week {
     return new Week(
-      week.mon || false,
-      week.tue || false,
-      week.wed || false,
-      week.thu || false,
-      week.fri || false,
-      week.sat || false,
-      week.sun || false
+      week.mon,
+      week.tue,
+      week.wed,
+      week.thu,
+      week.fri,
+      week.sat,
+      week.sun
     );
   }
 

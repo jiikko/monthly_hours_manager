@@ -3,6 +3,7 @@ import { Calendar, Week } from "lib/calendar";
 import { useController, useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import {useEffect} from "react";
 
 type Props = {
   calendar: Calendar;
@@ -30,7 +31,7 @@ export const SettingForm: React.FC<Props> = ({
   submitLabel,
 }) => {
   const defaultStandardTime = 84;
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, reset } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       name: calendar.name,
@@ -63,6 +64,14 @@ export const SettingForm: React.FC<Props> = ({
     sat: "土",
     sun: "日",
   };
+
+  useEffect(() => {
+    reset({
+      name: calendar.name,
+      standardTime: calendar.standardTime || defaultStandardTime,
+      workingWeek: calendar.week || Week.create(),
+    });
+  }, [calendar, reset, defaultStandardTime]);
 
   return (
     <>

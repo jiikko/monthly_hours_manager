@@ -14,6 +14,7 @@ export const useCalendarState = (redirectPathFunc?: any, redirectPathFuncArgs?: 
   const [calendarState, dispatch] = useReducer(
     CalendarReducer, { name: '', standardTime: 0, week: Week.create(), months: {} }
   );
+  calendarState.week ||= Week.create();
   const calendar = new Calendar(calendarState.name, calendarState.standardTime, Week.parse(calendarState.week), calendarState.months, !!user);
   const loading = user === undefined
   const loaded = user !== undefined
