@@ -68,6 +68,7 @@ describe('CalendarDate', () => {
       expect(calendarDate.lastDayOfMonth()).toBe(31);
       expect(calendarDate.firstWeekDayOfMonth()).toBe(5);
       expect(calendarDate.monthlyKey()).toBe('2023-12');
+      expect(calendarDate.nextDateOnMonth().monthlyKey()).toBe('2024-1');
       expect(calendarDate.isNationalHoliday()).toBe(false);
     })
   })

@@ -75,7 +75,7 @@ export const CalendarCollection: React.FC<Props>= ({ calendars }) => {
                 {renderMonthSummary(calendar, date)}
               </td>
               <td>
-                <Nav.Link as={Link} href={pathGenerator.monthPathV2(calendar.id, date.year(), date.nextMonth())}>
+                <Nav.Link as={Link} href={pathGenerator.monthPathV2(calendar.id, dateOnNextMonth.year(), dateOnNextMonth.month())}>
                   <Button variant='info'>表示する</Button>
                 </Nav.Link>
                 {renderMonthSummary(calendar, dateOnNextMonth)}

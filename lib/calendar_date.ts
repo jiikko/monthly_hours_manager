@@ -74,8 +74,15 @@ const CalendarDate = (()  => {
     }
 
     function nextDateOnMonth() {
-      const nextDate = new Date(year(), month(), 1);
-      return CalendarDate(nextDate.getFullYear(), nextDate.getMonth() + 1, nextDate.getDate());
+      let nextYear = year();
+      let nextMonth = month();
+      if (nextMonth === 12) {
+        nextYear += 1;
+        nextMonth = 1;
+      } else {
+        nextMonth += 1;
+      }
+      return CalendarDate(nextYear, nextMonth, 1);
     }
 
     return { day,
