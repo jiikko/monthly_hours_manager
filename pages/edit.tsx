@@ -9,7 +9,7 @@ import type {NextPageWithLayout} from './_app';
 const Page: NextPageWithLayout = () => {
   const { dispatch, calendar } = useCalendarState(PathGenerator().editPath);
   const handleSubmit = async (name: string, standardTime: number, week: Week) => {
-    dispatch({ type:'updateCalendar', payload: { name, standardTime, week: week.toObject() }});
+    dispatch({ type:'updateCalendar', payload: { name, standardTime, week }});
     toast('カレンダー情報の変更に成功しました。')
   }
 
