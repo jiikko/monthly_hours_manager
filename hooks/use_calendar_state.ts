@@ -2,7 +2,7 @@ import { useReducer, useEffect, useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 import { CalendarReducer } from '../reducers/calendar_reducer';
 import { JsonParameter } from '../lib/json_parameter';
-import { Calendar } from '../lib/calendar';
+import { Calendar, Week } from '../lib/calendar';
 import { AuthContext} from '../contexts/auth_context'
 import { db } from "../lib/firebase";
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -12,9 +12,10 @@ export const useCalendarState = (redirectPathFunc?: any, redirectPathFuncArgs?: 
   const router = useRouter();
   const { user } = useContext(AuthContext);
   const [calendarState, dispatch] = useReducer(
-    CalendarReducer, { name: '', standardTime: 0, week: {}, months: {} }
+    CalendarReducer, { name: '', standardTime: 0, week: Week.create(), months: {} }
   );
-  const calendar = new Calendar(calendarState.name, calendarState.standardTime, calendarState.week, calendarState.months, !!user);
+  calendarState.week ||= Week.create();
+  const calendar = new Calendar(calendarState.name, calendarState.standardTime, Week.parse(calendarState.week), calendarState.months, !!user);
   const loading = user === undefined
   const loaded = user !== undefined
 
@@ -62,7 +63,7 @@ export const useCalendarState = (redirectPathFunc?: any, redirectPathFuncArgs?: 
       console.log('calendar.months:', calendar.months)
 
       setDoc(docRef, {
-        name: calendar.name, standardTime: calendar.standardTime, week: calendar.week, months: (calendar.months || {})
+        name: calendar.name, standardTime: calendar.standardTime, week: calendar.week.toObject(), months: (calendar.months || {})
       });
     } else if(user === null && redirectPathFunc) {
       // NOTE: stateからクエリパラメータに反映する

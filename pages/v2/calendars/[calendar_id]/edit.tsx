@@ -46,7 +46,7 @@ const Page: NextPageWithLayout = () => {
           作成日: {calendar.formattedCreatedAt()}
         </Col>
       </Row>
-      {<SettingForm calendar={calendar} handleSubmit={handleSubmit}  submitLabel={'更新する'} />}
+      {<SettingForm calendar={calendar} handleSubmit={handleSubmit} submitLabel={'更新する'} />}
     </>
   )
 }
