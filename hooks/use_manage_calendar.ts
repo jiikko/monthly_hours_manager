@@ -46,6 +46,7 @@ export const useManageCalendar = () => {
       console.log("Document data:", docSnap.data());
       const doc = docSnap.data()
       const calendar = new Calendar(doc.name, doc.standardTime, Week.parse(doc.week), doc.months, false, docSnap.id, doc.created_at.toDate())
+      calendar.sortByMonthKey();
       updateCalendarForReRender(calendar, monthKey);
     } else {
       setCalendar(null);
