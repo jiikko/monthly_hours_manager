@@ -107,4 +107,19 @@ export class Calendar implements CalendarType {
   formattedCreatedAt(): string {
     return this.createdAt.toISOString().slice(0, 10);
   }
+
+  sortByMonthKey(): void {
+    if (!this.months) { return; }
+
+    const sortedKeys = Object.keys(this.months).sort((a, b) => {
+      const dateA = new Date(a + '-01');
+      const dateB = new Date(b + '-01');
+      return dateA.getTime() - dateB.getTime();
+    });
+    const sortedMonths: MonthTable = {};
+    sortedKeys.forEach(key => {
+      sortedMonths[key] = this.months[key];
+    });
+    this.months = sortedMonths;
+  }
 }
