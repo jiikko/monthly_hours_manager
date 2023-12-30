@@ -1,7 +1,6 @@
-import { Calendar } from 'lib/calendar';
-import { Table, Row, Col, Button  } from 'react-bootstrap';
+import {Calendar} from 'lib/calendar';
 import Link from 'next/link';
-import { MonthCalculator } from 'lib/month_calculator';
+import {Button, Col, Row, Table} from 'react-bootstrap';
 
 type Props = {
   calendar: Calendar;
@@ -37,8 +36,8 @@ export const CalendarMonthsTable: React.FC<Props> = ({ calendar, handleDeleteCal
             return(
               <tr key={key}>
                 <td>{key}</td>
-                <td>{new MonthCalculator(calendar.months[key]).totalScheduled()}時間</td>
-                <td>{new MonthCalculator(calendar.months[key]).totalActual()}時間</td>
+                <td>{calendar.sumByMonth(key, 'totalScheduled')}時間</td>
+                <td>{calendar.sumByMonth(key, 'totalActual')}時間</td>
                 <td>
                   <Link href={`/v2/calendars/${calendar.id}/${key.split('-')[0]}/${key.split('-')[1] }`}>
                     <Button>詳細</Button>

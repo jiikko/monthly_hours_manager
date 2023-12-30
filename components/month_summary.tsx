@@ -1,6 +1,6 @@
-import { DayObject } from '../lib/days_generator';
-import { Table } from 'react-bootstrap';
-import { MonthCalculator } from 'lib/month_calculator';
+import {MonthCalculator} from 'lib/month_calculator';
+import {Table} from 'react-bootstrap';
+import {DayObject} from '../lib/days_generator';
 
 type SummaryProps = {
   days: Array<DayObject>;
@@ -9,7 +9,6 @@ type SummaryProps = {
 
 export const MonthSummary: React.FC<SummaryProps> = ({ days, standardTime }) => {
   const calculator = new MonthCalculator(days)
-  const daysWithoutHoliday = calculator.daysWithoutHoliday();
   const totalScheduled = calculator.totalScheduled();
   const diffScheduled = Number((totalScheduled - standardTime).toFixed(1));
   const totalScheduledClassName = (totalScheduled >= standardTime) ? 'text-white bg-success' : 'text-white bg-danger';

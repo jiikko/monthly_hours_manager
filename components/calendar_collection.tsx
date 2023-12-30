@@ -1,6 +1,5 @@
 import {Calendar} from 'lib/calendar';
 import {CalendarDate, CalendarDateType} from 'lib/calendar_date';
-import {MonthCalculator} from 'lib/month_calculator';
 import {PathGenerator} from 'lib/path_generator';
 import Link from 'next/link';
 import {Button, Col, Nav, Row, Table} from 'react-bootstrap';
@@ -24,11 +23,11 @@ export const CalendarCollection: React.FC<Props>= ({ calendars }) => {
       </>
     );
   }
-  const calculateTime = (calendars: Array<Calendar>, dateKey: string, method: string): number => {
+  const calculateTime = (calendars: Array<Calendar>, monthKey: string, method: string): number => {
     return calendars.reduce((total, calendar) => {
-      const days = calendar.months[dateKey];
-      const monthCalculator = new MonthCalculator(days);
-      return total + monthCalculator[method]();
+      const days = calendar.months[monthKey];
+      const monthTotal = calendar.sumByMonth(monthKey, method);
+      return total + monthTotal;
     }, 0);
   };
 
