@@ -1,5 +1,6 @@
-import { MonthTable } from "./days_generator";
-import { JsonParameter } from "./json_parameter";
+import {MonthTable} from "./days_generator";
+import {JsonParameter} from "./json_parameter";
+import {MonthCalculator} from "./month_calculator";
 
 export class Week {
   constructor(
@@ -121,5 +122,10 @@ export class Calendar implements CalendarType {
       sortedMonths[key] = this.months[key];
     });
     this.months = sortedMonths;
+  }
+
+  sumByMonth(monthKey: string, method: string): number {
+    const c = new MonthCalculator(this.months[monthKey])
+    return Number(c[method]().toFixed(2));
   }
 }
