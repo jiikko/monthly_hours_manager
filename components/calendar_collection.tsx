@@ -27,7 +27,7 @@ export const CalendarCollection: React.FC<Props>= ({ calendars }) => {
     return calendars.reduce((total, calendar) => {
       const days = calendar.months[monthKey];
       const monthTotal = calendar.sumByMonth(monthKey, method);
-      return total + monthTotal;
+      return Number((total + monthTotal).toFixed(2));
     }, 0);
   };
 
