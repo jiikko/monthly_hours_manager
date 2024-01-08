@@ -1,9 +1,28 @@
 import type {User} from '@firebase/auth';
-import {addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc} from 'firebase/firestore';
+import {addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, runTransaction, updateDoc} from 'firebase/firestore';
 import {Calendar} from 'lib/calendar';
 import {db} from "lib/firebase";
 import {useState} from 'react';
 import {Week} from '../lib/calendar';
+
+class CalendarError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "CalendarError";
+  }
+}
+
+export class CalendarNotFoundError extends CalendarError {
+  constructor() {
+    super("カレンダーが存在しません。");
+  }
+}
+
+export class OutdatedCalendarError extends CalendarError {
+  constructor() {
+    super("他の画面で更新されているため更新できません。再度読み込んでください。");
+  }
+}
 
 export const useManageCalendar = () => {
   const [calendar, setCalendar] = useState<Calendar>(undefined);
@@ -32,6 +51,32 @@ export const useManageCalendar = () => {
     });
   }
 
+  const updateCalendarWithLock = async (user: User, calendar_id: string, name: string, standardTime: number, week: Week, lockVersion: number) => {
+    const entryPath = calendarPath(user, calendar_id);
+    const docRef = doc(db, entryPath);
+
+    await runTransaction(db, async (transaction) => {
+      const docSnapshot = await transaction.get(docRef);
+
+      if (!docSnapshot.exists()) {
+        throw new CalendarNotFoundError();
+      }
+
+      const currentVersion = docSnapshot.data().lockVersion || 0;
+
+      if (lockVersion && currentVersion !== lockVersion) {
+        throw new OutdatedCalendarError();
+      }
+
+      transaction.update(docRef, {
+        name: name,
+        standardTime: standardTime,
+        week: week.toObject(),
+        lockVersion: currentVersion + 1
+      });
+    });
+  }
+
   const deleteCalendar = async (user: User, calendar_id: string) => {
     const entryPath = calendarPath(user, calendar_id);
     const docRef = doc(db, entryPath);
@@ -45,7 +90,7 @@ export const useManageCalendar = () => {
     if (docSnap.exists()) {
       console.log("Document data:", docSnap.data());
       const doc = docSnap.data()
-      const calendar = new Calendar(doc.name, doc.standardTime, Week.parse(doc.week), doc.months, false, docSnap.id, doc.created_at.toDate())
+      const calendar = new Calendar(doc.name, doc.standardTime, Week.parse(doc.week), doc.months, false, docSnap.id, doc.created_at.toDate(), doc.lockVersion)
       calendar.sortByMonthKey();
       updateCalendarForReRender(calendar, monthKey);
     } else {
@@ -92,6 +137,7 @@ export const useManageCalendar = () => {
     fetchCalendars,
     fetchSingleCalendar,
     updateCalendar,
+    updateCalendarWithLock,
     updateMonths,
   };
 }

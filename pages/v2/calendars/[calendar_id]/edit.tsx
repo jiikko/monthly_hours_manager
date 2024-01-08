@@ -1,7 +1,7 @@
 import {SettingForm} from 'components/setting_form';
 import {CalendarContext} from 'contexts/calendar_context';
 import {useCurrentUser} from 'hooks/use_current_user';
-import {useManageCalendar} from 'hooks/use_manage_calendar';
+import {CalendarNotFoundError, OutdatedCalendarError, useManageCalendar} from 'hooks/use_manage_calendar';
 import {RequiredCalendar} from 'layouts/required_calendar';
 import {RequiredUser} from 'layouts/required_user';
 import {Layout} from 'layouts/v2';
@@ -16,7 +16,7 @@ const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { user } = useCurrentUser()
   const { calendar } = useContext(CalendarContext);
-  const { updateCalendar, deleteCalendar } = useManageCalendar();
+  const { updateCalendarWithLock, deleteCalendar } = useManageCalendar();
 
   const handleDelete = async () => {
     const result = confirm('削除しますか？')
@@ -28,9 +28,16 @@ const Page: NextPageWithLayout = () => {
   }
 
   const handleSubmit = async (name: string, standardTime: number, week: Week) => {
-    await updateCalendar(user, calendar.id, name, standardTime, week);
-    toast("カレンダーを更新しました。");
-    router.push(`/v2/calendars`, undefined,{ scroll: false })
+    await updateCalendarWithLock(user, calendar.id, name, standardTime, week, calendar.lockVersion).then(() => {
+      toast("カレンダーを更新しました。");
+      router.push(`/v2/calendars`, undefined,{ scroll: false })
+    }).catch((error) => {
+      if (error instanceof OutdatedCalendarError || error instanceof CalendarNotFoundError) {
+        toast.error(error.message);
+      } else {
+        toast.warn(`カレンダーの更新に失敗しました。${error}`);
+      }
+    })
   }
 
   return (
