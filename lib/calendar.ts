@@ -74,7 +74,8 @@ export class Calendar implements CalendarType {
     public months: MonthTable,
     public shouldOutputQueryParam?: boolean,
     public id?: string,
-    public createdAt?: Date
+    public createdAt?: Date,
+    public lockVersion?: number
   ) {}
 
   static initializeWithDefault(): Calendar {

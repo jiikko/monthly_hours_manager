@@ -2,7 +2,7 @@ import {CalendarMonth} from 'components/calendar_month';
 import {MonthSummary} from 'components/month_summary';
 import {CalendarContext} from 'contexts/calendar_context';
 import {useCurrentUser} from 'hooks/use_current_user';
-import {useManageCalendar} from 'hooks/use_manage_calendar';
+import {CalendarNotFoundError, OutdatedCalendarError, useManageCalendar} from 'hooks/use_manage_calendar';
 import {RequiredCalendar} from 'layouts/required_calendar';
 import {RequiredUser} from 'layouts/required_user';
 import {Layout} from 'layouts/v2';
@@ -23,7 +23,7 @@ const Page: NextPageWithLayout = () => {
   const { user } = useCurrentUser()
   const date = CalendarDate(year && Number(year), month && Number(month), 1);
   const monthKey = date.monthlyKey();
-  const { updateMonths } = useManageCalendar();
+  const { updateMonthsWithLock } = useManageCalendar();
 
   const handleConfirm = (message: string, action: () => void) => {
     const result = confirm(message);
@@ -38,21 +38,42 @@ const Page: NextPageWithLayout = () => {
   }
   const recalculateDays = (days: Array<DayObject>): void => {
     calendar.months[monthKey] = DaysGenerator.executeWithDays(Number(year), Number(month), calendar.standardTime, calendar.week, days)
-    updateMonths(calendar, user, monthKey);
-    toast('再計算しました')
+    updateMonthsWithLock(calendar, user, monthKey).then(() => {
+      toast('再計算しました')
+    }).catch((error) => {
+      if (error instanceof OutdatedCalendarError || error instanceof CalendarNotFoundError) {
+        toast.error(error.message);
+      } else {
+        toast.warn(`カレンダーの更新に失敗しました。${error}`);
+      }
+    })
   }
   const handleUpdateDay = async (attributeName: string, value: boolean | string, dayIndex: number): Promise<void> => {
     days[dayIndex][attributeName] = value;
     calendar.months[monthKey] = days.map((day: DayObject) => { return(day.toObject()) });
-    updateMonths(calendar, user, monthKey);
-    toast('時間を更新しました');
+    updateMonthsWithLock(calendar, user, monthKey).then(() => {
+      toast('時間を更新しました');
+    }).catch((error) => {
+      if (error instanceof OutdatedCalendarError || error instanceof CalendarNotFoundError) {
+        toast.error(error.message);
+      } else {
+        toast.warn(`カレンダーの更新に失敗しました。${error}`);
+      }
+    })
   }
   const initializeDays = async (): Promise<void> => {  // asyncとPromise<void>を追加
     const days = DaysGenerator.execute(Number(year), Number(month), calendar.standardTime, calendar.week);
     if(calendar.months === undefined) { calendar.months = {} }
     calendar.months[monthKey] = days;
-    updateMonths(calendar, user, monthKey);
-    toast('初期化しました');
+    updateMonthsWithLock(calendar, user, monthKey).then(() => {
+      toast('初期化しました');
+    }).catch((error) => {
+      if (error instanceof OutdatedCalendarError || error instanceof CalendarNotFoundError) {
+        toast.error(error.message);
+      } else {
+        toast.warn(`カレンダーの更新に失敗しました。${error}`);
+      }
+    })
   };
 
   useEffect(() => {
