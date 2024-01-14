@@ -163,5 +163,6 @@ export const useManageCalendar = () => {
     updateMonths,
     updateMonthsWithLock,
     updateCalendarForReRender,
+    setCalendar,
   };
 }
