@@ -81,6 +81,11 @@ export const CalendarMonth: React.FC<MonthProps> = ({
                       false
                     )
                   }
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      handleUpdateDay("actual", (e.target as HTMLInputElement).value, dayIndex, false)
+                    }
+                  }}
                   onChange={(e) =>
                     handleUpdateDay("scheduled", e.target.value, dayIndex, true)
                   }
@@ -99,6 +104,11 @@ export const CalendarMonth: React.FC<MonthProps> = ({
                       false
                     )
                   }
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      handleUpdateDay("actual", (e.target as HTMLInputElement).value, dayIndex, false)
+                    }
+                  }}
                   onChange={(e) =>
                     handleUpdateDay("actual", e.target.value, dayIndex, true)
                   }
