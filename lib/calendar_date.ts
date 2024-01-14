@@ -12,7 +12,9 @@ type CalendarDateType = {
   weekDayName: () => string;
   isNationalHoliday: () => boolean;
   previousMonthDate: () => CalendarDateType;
-  nextDateOnMonth: () => CalendarDateType;
+  previousMonth: () => number;
+  previousYear: () => number;
+  nextYear: () => number;
   nextMonthDate: () => CalendarDateType;
 }
 
@@ -35,11 +37,35 @@ const CalendarDate = (()  => {
       return date.getMonth() + 1; // NOTE: 0~11で取得されるため、1~12で返す
     }
 
+    function previousMonth() {
+      if (month() === 1) {
+        return 12;
+      } else {
+        return month() - 1;
+      }
+    }
+
     function nextMonth() {
-      if (month() === 12) { // 12月の次は1月
+      if (month() === 12) {
         return 1;
       } else {
         return month() + 1;
+      }
+    }
+
+    function previousYear() {
+      if (month() === 1) {
+        return year() - 1;
+      } else {
+        return year();
+      }
+    }
+
+    function nextYear() {
+      if (month() === 12) {
+        return year() + 1;
+      } else {
+        return year();
       }
     }
 
@@ -99,18 +125,6 @@ const CalendarDate = (()  => {
       return CalendarDate(nextYear, nextMonth, 1);
     }
 
-    function nextDateOnMonth() {
-      let nextYear = year();
-      let nextMonth = month();
-      if (nextMonth === 12) {
-        nextYear += 1;
-        nextMonth = 1;
-      } else {
-        nextMonth += 1;
-      }
-      return CalendarDate(nextYear, nextMonth, 1);
-    }
-
     return { day,
       firstWeekDayOfMonth,
       isNationalHoliday,
@@ -118,7 +132,9 @@ const CalendarDate = (()  => {
       month,
       monthlyKey,
       previousMonthDate,
-      nextDateOnMonth, // @deprecated
+      previousMonth,
+      previousYear,
+      nextYear,
       nextMonthDate,
       nextMonth,
       weekDay,
