@@ -83,7 +83,7 @@ const Page: NextPageWithLayout = () => {
       }
     }
     initializeCalendar();
-  }, []);
+  }, [monthKey]);
 
   let days = []
   if(calendar.months && calendar.months[monthKey]) {
@@ -92,6 +92,8 @@ const Page: NextPageWithLayout = () => {
     return null
   }
   const monthDataList = [{ name: null, days: days }] as Array<CalendarMonthData>;
+  const previousMonthDate = date.previousMonthDate();
+  const nextMonthDate = date.nextMonthDate();
 
   return(
     <>
@@ -102,6 +104,17 @@ const Page: NextPageWithLayout = () => {
       </Row>
 
       <Row className='mb-3'>
+        <Col className="mt-3">
+          <Link href={`/v2/calendars/${calendar.id}/${previousMonthDate.year()}/${previousMonthDate.month()}`}>
+            <Button variant='success'>前月を表示する</Button>
+          </Link>
+        </Col>
+        <Col className="mt-3">
+          <Link href={`/v2/calendars/${calendar.id}/${nextMonthDate.year()}/${nextMonthDate.month()}`}>
+            <Button variant='success'>翌月を表示する</Button>
+          </Link>
+        </Col>
+
         <Col className="mt-3">
           <Link href={`/v2/calendars/all/${year}/${month}`}>
             <Button>総合カレンダー</Button>

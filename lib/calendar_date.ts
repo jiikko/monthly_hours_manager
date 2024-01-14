@@ -11,7 +11,9 @@ type CalendarDateType = {
   lastDayOfMonth: () => number;
   weekDayName: () => string;
   isNationalHoliday: () => boolean;
+  previousMonthDate: () => CalendarDateType;
   nextDateOnMonth: () => CalendarDateType;
+  nextMonthDate: () => CalendarDateType;
 }
 
 // new Dateから月を取得すると0~11で取得されるため、処理しやすい値で返すDateクラスのラッパー
@@ -73,6 +75,30 @@ const CalendarDate = (()  => {
       return !!JapaneseHolidays.isHoliday(date);
     }
 
+    function previousMonthDate() {
+      let previousYear = year();
+      let previousMonth = month();
+      if (previousMonth === 1) {
+        previousYear -= 1;
+        previousMonth = 12;
+      } else {
+        previousMonth -= 1;
+      }
+      return CalendarDate(previousYear, previousMonth, 1);
+    }
+
+    function nextMonthDate() {
+      let nextYear = year();
+      let nextMonth = month();
+      if (nextMonth === 12) {
+        nextYear += 1;
+        nextMonth = 1;
+      } else {
+        nextMonth += 1;
+      }
+      return CalendarDate(nextYear, nextMonth, 1);
+    }
+
     function nextDateOnMonth() {
       let nextYear = year();
       let nextMonth = month();
@@ -91,7 +117,9 @@ const CalendarDate = (()  => {
       lastDayOfMonth,
       month,
       monthlyKey,
-      nextDateOnMonth,
+      previousMonthDate,
+      nextDateOnMonth, // @deprecated
+      nextMonthDate,
       nextMonth,
       weekDay,
       weekDayName,
