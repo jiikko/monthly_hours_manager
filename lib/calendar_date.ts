@@ -11,7 +11,6 @@ type CalendarDateType = {
   lastDayOfMonth: () => number;
   weekDayName: () => string;
   isNationalHoliday: () => boolean;
-  previousMonthDate: () => CalendarDateType;
   previousMonth: () => number;
   previousYear: () => number;
   nextYear: () => number;
@@ -101,18 +100,6 @@ const CalendarDate = (()  => {
       return !!JapaneseHolidays.isHoliday(date);
     }
 
-    function previousMonthDate() {
-      let previousYear = year();
-      let previousMonth = month();
-      if (previousMonth === 1) {
-        previousYear -= 1;
-        previousMonth = 12;
-      } else {
-        previousMonth -= 1;
-      }
-      return CalendarDate(previousYear, previousMonth, 1);
-    }
-
     function nextMonthDate() {
       let nextYear = year();
       let nextMonth = month();
@@ -131,7 +118,6 @@ const CalendarDate = (()  => {
       lastDayOfMonth,
       month,
       monthlyKey,
-      previousMonthDate,
       previousMonth,
       previousYear,
       nextYear,
