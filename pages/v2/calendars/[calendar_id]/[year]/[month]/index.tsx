@@ -23,7 +23,7 @@ const Page: NextPageWithLayout = () => {
   const { user } = useCurrentUser()
   const date = CalendarDate(year && Number(year), month && Number(month), 1);
   const monthKey = date.monthlyKey();
-  const { updateMonthsWithLock } = useManageCalendar();
+  const { updateMonthsWithLock, updateCalendarForReRender } = useManageCalendar();
 
   const handleConfirm = (message: string, action: () => void) => {
     const result = confirm(message);
@@ -48,9 +48,14 @@ const Page: NextPageWithLayout = () => {
       }
     })
   }
-  const handleUpdateDay = async (attributeName: string, value: boolean | string, dayIndex: number): Promise<void> => {
+  const handleUpdateDay = async (attributeName: string, value: boolean | string, dayIndex: number, onlyUpdateState: boolean): Promise<void> => {
     days[dayIndex][attributeName] = value;
     calendar.months[monthKey] = days.map((day: DayObject) => { return(day.toObject()) });
+    if(onlyUpdateState) {
+      updateCalendarForReRender(calendar, monthKey);
+      return
+    }
+
     updateMonthsWithLock(calendar, user, monthKey).then(() => {
       toast('時間を更新しました');
     }).catch((error) => {
