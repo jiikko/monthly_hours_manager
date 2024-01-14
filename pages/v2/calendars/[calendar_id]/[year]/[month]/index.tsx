@@ -83,7 +83,7 @@ const Page: NextPageWithLayout = () => {
       }
     }
     initializeCalendar();
-  }, []);
+  }, [monthKey]);
 
   let days = []
   if(calendar.months && calendar.months[monthKey]) {
@@ -102,6 +102,17 @@ const Page: NextPageWithLayout = () => {
       </Row>
 
       <Row className='mb-3'>
+        <Col className="mt-3">
+          <Link href={`/v2/calendars/${calendar.id}/${date.previousYear()}/${date.previousMonth()}`}>
+            <Button variant='success'>前月を表示する</Button>
+          </Link>
+        </Col>
+        <Col className="mt-3">
+          <Link href={`/v2/calendars/${calendar.id}/${date.nextYear()}/${date.nextMonth()}`}>
+            <Button variant='success'>翌月を表示する</Button>
+          </Link>
+        </Col>
+
         <Col className="mt-3">
           <Link href={`/v2/calendars/all/${year}/${month}`}>
             <Button>総合カレンダー</Button>

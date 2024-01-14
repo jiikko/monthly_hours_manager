@@ -10,7 +10,7 @@ type Props = {
 
 export const CalendarCollection: React.FC<Props>= ({ calendars }) => {
   const date = CalendarDate();
-  const dateOnNextMonth = date.nextDateOnMonth();
+  const dateOnNextMonth = date.nextMonthDate();
   const pathGenerator = PathGenerator()
   const renderMonthSummary = (calendar: Calendar, date: CalendarDateType) => {
     const days = calendar.months[date.monthlyKey()]
