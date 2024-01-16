@@ -38,8 +38,8 @@ const Page: NextPageWithLayout = () => {
   }
   const recalculateDays = (days: Array<DayObject>): void => {
     calendar.months[monthKey] = DaysGenerator.executeWithDays(Number(year), Number(month), calendar.standardTime, calendar.week, days)
-    updateMonthsWithLock(calendar, user, monthKey).then(() => {
-      toast('再計算しました')
+    updateMonthsWithLock(calendar, user, monthKey).then((updated) => {
+      if(updated) { toast('再計算しました') }
     }).catch((error) => {
       if (error instanceof OutdatedCalendarError || error instanceof CalendarNotFoundError) {
         toast.error(error.message);

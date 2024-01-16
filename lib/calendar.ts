@@ -129,4 +129,11 @@ export class Calendar implements CalendarType {
     const c = new MonthCalculator(this.months[monthKey])
     return Number(c[method]().toFixed(2));
   }
+
+  isEqual(calendar: Calendar): boolean {
+    return this.name === calendar.name &&
+      this.standardTime === calendar.standardTime &&
+      this.week === calendar.week &&
+      this.months === calendar.months;
+  }
 }

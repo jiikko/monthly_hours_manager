@@ -41,7 +41,7 @@ export const useManageCalendar = () => {
     updateCalendarForReRender(calendar, monthKey);
   }
 
-  const updateMonthsWithLock = async (calendar: Calendar, user: User, monthKey: string) => {
+  const updateMonthsWithLock = async (calendar: Calendar, user: User, monthKey: string): Promise<boolean> => {
     const entryPath = calendarPath(user, calendar.id);
     const docRef = doc(db, entryPath);
 
@@ -51,16 +51,24 @@ export const useManageCalendar = () => {
         throw new CalendarNotFoundError();
       }
 
-      const currentVersion = docSnapshot.data().lockVersion || 0;
-
+      const data = docSnapshot.data();
+      const beforeCalendar = new Calendar(data.name, data.standardTime, Week.parse(data.week), data.months, false, docSnapshot.id, data.created_at.toDate(), data.lockVersion);
+      const currentVersion = beforeCalendar.lockVersion || 0;
       if (calendar.lockVersion && currentVersion !== calendar.lockVersion) {
         throw new OutdatedCalendarError();
       }
+
+      if(calendar.isEqual(beforeCalendar)) { return false }
+
       calendar.lockVersion = currentVersion + 1;
       transaction.update(docRef, { months: calendar.months, lockVersion: calendar.lockVersion });
-    }).then(() => {
+      return true
+    }).then((updated) => {
       updateCalendarForReRender(calendar, monthKey);
+      return updated
     });
+
+    return true
   }
 
   const updateCalendar = async (user: User, calendar_id: string, name: string, standardTime: number, week: Week) => {
