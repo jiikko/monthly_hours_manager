@@ -45,7 +45,7 @@ export const useManageCalendar = () => {
     const entryPath = calendarPath(user, calendar.id);
     const docRef = doc(db, entryPath);
 
-    await runTransaction(db, async (transaction) => {
+    const result = await runTransaction(db, async (transaction) => {
       const docSnapshot = await transaction.get(docRef);
       if (!docSnapshot.exists()) {
         throw new CalendarNotFoundError();
@@ -62,13 +62,13 @@ export const useManageCalendar = () => {
 
       calendar.lockVersion = currentVersion + 1;
       transaction.update(docRef, { months: calendar.months, lockVersion: calendar.lockVersion });
-      return true
+      return true;
     }).then((updated) => {
       updateCalendarForReRender(calendar, monthKey);
-      return updated
+      return updated;
     });
 
-    return true
+    return result;
   }
 
   const updateCalendar = async (user: User, calendar_id: string, name: string, standardTime: number, week: Week) => {

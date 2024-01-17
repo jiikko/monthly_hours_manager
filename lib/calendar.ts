@@ -2,6 +2,32 @@ import {MonthTable} from "./days_generator";
 import {JsonParameter} from "./json_parameter";
 import {MonthCalculator} from "./month_calculator";
 
+function isObject(object) {
+  return object != null && typeof object === 'object';
+}
+function deepEqual(object1, object2) {
+  const keys1 = Object.keys(object1);
+  const keys2 = Object.keys(object2);
+
+  if (keys1.length !== keys2.length) {
+    return false;
+  }
+
+  for (let key of keys1) {
+    const val1 = object1[key];
+    const val2 = object2[key];
+    const areObjects = isObject(val1) && isObject(val2);
+    if (
+      areObjects && !deepEqual(val1, val2) ||
+      !areObjects && val1 !== val2
+    ) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 export class Week {
   constructor(
     public mon: boolean,
@@ -130,10 +156,18 @@ export class Calendar implements CalendarType {
     return Number(c[method]().toFixed(2));
   }
 
-  isEqual(calendar: Calendar): boolean {
+  isEqual(calendar: CalendarType): boolean {
+    if (!(calendar instanceof Calendar)) {
+      return false;
+    }
+
     return this.name === calendar.name &&
       this.standardTime === calendar.standardTime &&
-      this.week === calendar.week &&
-      this.months === calendar.months;
+      deepEqual(this.week, calendar.week) &&
+      deepEqual(this.months, calendar.months) &&
+      this.shouldOutputQueryParam === calendar.shouldOutputQueryParam &&
+      this.id === calendar.id &&
+      this.createdAt.toJSON() === calendar.createdAt.toJSON() &&
+      this.lockVersion === calendar.lockVersion;
   }
 }
