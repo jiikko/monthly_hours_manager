@@ -1,6 +1,7 @@
 import {MonthTable} from "./days_generator";
 import {JsonParameter} from "./json_parameter";
 import {MonthCalculator} from "./month_calculator";
+import _isEqual from 'lodash/isEqual'
 
 export class Week {
   constructor(
@@ -128,5 +129,21 @@ export class Calendar implements CalendarType {
   sumByMonth(monthKey: string, method: string): number {
     const c = new MonthCalculator(this.months[monthKey])
     return Number(c[method]().toFixed(2));
+  }
+
+  isEqual(calendar: CalendarType): boolean {
+    if (!(calendar instanceof Calendar)) {
+      return false;
+    }
+    // console.log('months isEqual', _isEqual(this.months, calendar.months))
+
+    return this.name === calendar.name &&
+      this.standardTime === calendar.standardTime &&
+      _isEqual(this.week, calendar.week) &&
+      _isEqual(this.months, calendar.months) &&
+      this.shouldOutputQueryParam === calendar.shouldOutputQueryParam &&
+      this.id === calendar.id &&
+      this.createdAt.toJSON() === calendar.createdAt.toJSON() &&
+      this.lockVersion === calendar.lockVersion;
   }
 }
