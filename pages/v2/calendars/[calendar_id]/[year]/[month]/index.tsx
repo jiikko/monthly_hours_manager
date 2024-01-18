@@ -38,8 +38,8 @@ const Page: NextPageWithLayout = () => {
   }
   const recalculateDays = (days: Array<DayObject>): void => {
     calendar.months[monthKey] = DaysGenerator.executeWithDays(Number(year), Number(month), calendar.standardTime, calendar.week, days)
-    updateMonthsWithLock(calendar, user, monthKey).then((updated) => {
-      if(updated) { toast('再計算しました') }
+    updateMonthsWithLock(calendar, user, monthKey).then(() => {
+      toast('再計算しました')
     }).catch((error) => {
       if (error instanceof OutdatedCalendarError || error instanceof CalendarNotFoundError) {
         toast.error(error.message);
@@ -49,15 +49,15 @@ const Page: NextPageWithLayout = () => {
     })
   }
   const handleUpdateDay = async (attributeName: string, value: boolean | string, dayIndex: number, onlyUpdateState: boolean): Promise<void> => {
-    days[dayIndex][attributeName] = value;
+    days[dayIndex][attributeName] = Number(value);
     calendar.months[monthKey] = days.map((day: DayObject) => { return(day.toObject()) });
     if(onlyUpdateState) {
       updateCalendarForReRender(calendar, monthKey);
       return
     }
 
-    updateMonthsWithLock(calendar, user, monthKey).then(() => {
-      toast('時間を更新しました');
+    updateMonthsWithLock(calendar, user, monthKey).then((updated) => {
+      if(updated) { toast('時間を更新しました'); }
     }).catch((error) => {
       if (error instanceof OutdatedCalendarError || error instanceof CalendarNotFoundError) {
         toast.error(error.message);

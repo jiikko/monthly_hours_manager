@@ -58,7 +58,10 @@ export const useManageCalendar = () => {
         throw new OutdatedCalendarError();
       }
 
-      if(calendar.isEqual(beforeCalendar)) { return false }
+      if(calendar.isEqual(beforeCalendar)) {
+        console.log('no update')
+        return false
+      }
 
       calendar.lockVersion = currentVersion + 1;
       transaction.update(docRef, { months: calendar.months, lockVersion: calendar.lockVersion });
