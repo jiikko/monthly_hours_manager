@@ -3,7 +3,7 @@ import { Week } from "lib/calendar";
 import { CalendarDate } from "lib/calendar_date";
 import { CalendarMonthData } from "lib/calendar_month_data";
 import { CalendarMonthView } from "lib/calendar_month_view";
-import { FloatingLabel, Form } from "react-bootstrap";
+import { Badge, FloatingLabel, Form } from "react-bootstrap";
 
 type MonthProps = {
   year: number;
@@ -47,9 +47,26 @@ export const CalendarMonth: React.FC<MonthProps> = ({
       tdClassName = "bg-warning text-light";
     }
 
+    const renderTodayLabel = () => {
+      return (
+        <Badge bg="danger" className="m-1">
+          {renderNotTodayLabel()}
+        </Badge>
+      );
+    };
+    const renderNotTodayLabel = () => {
+      return (
+        <>
+          {calendarDate.day()}日{calendarDate.isNationalHoliday() && "(祝)"}
+        </>
+      );
+    };
+
     return (
       <td key={index} className={tdClassName}>
-        {dayNumber}日{calendarDate.isNationalHoliday() && "(祝)"}
+        <div>
+          {calendarDate.isToday() ? renderTodayLabel() : renderNotTodayLabel()}
+        </div>
         <br />
         <Form>
           <Form.Check
@@ -97,12 +114,7 @@ export const CalendarMonth: React.FC<MonthProps> = ({
                   value={day.actual}
                   name={"actual"}
                   onBlur={(e) =>
-                    handleUpdateDay(
-                      "actual",
-                      e.target.value,
-                      dayIndex,
-                      false
-                    )
+                    handleUpdateDay("actual", e.target.value, dayIndex, false)
                   }
                   onKeyPress={(e) => {
                     if (e.key === "Enter") {
