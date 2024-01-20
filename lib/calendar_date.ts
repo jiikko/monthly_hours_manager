@@ -16,6 +16,7 @@ type CalendarDateType = {
   nextYear: () => number;
   nextMonthDate: () => CalendarDateType;
   isToday: () => boolean;
+  compareYearMonth: (other: CalendarDateType) => Boolean;
 }
 
 // new Dateから月を取得すると0~11で取得されるため、処理しやすい値で返すDateクラスのラッパー
@@ -118,6 +119,11 @@ const CalendarDate = (()  => {
       return today.getFullYear() === year() && today.getMonth() + 1 === month() && today.getDate() === day();
     }
 
+    // 年月が同じかを比較すると0
+    function compareYearMonth(other: CalendarDateType) {
+      return(year() === other.year() && month() === other.month());
+    }
+
     return { day,
       firstWeekDayOfMonth,
       isNationalHoliday,
@@ -133,6 +139,7 @@ const CalendarDate = (()  => {
       weekDayName,
       year,
       isToday,
+      compareYearMonth,
     };
   };
 })();

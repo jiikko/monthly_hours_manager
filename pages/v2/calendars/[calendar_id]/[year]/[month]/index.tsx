@@ -115,7 +115,7 @@ const Page: NextPageWithLayout = () => {
         </Col>
         <Col className="mt-3">
           <Link href={`/v2/calendars/${calendar.id}/${todayDate.year()}/${todayDate.month()}`}>
-            <Button variant='success'>今月を表示する</Button>
+            <Button variant='success' disabled={thisDate.compareYearMonth(todayDate) }>今月を表示する</Button>
           </Link>
         </Col>
         <Col className="mt-3">
