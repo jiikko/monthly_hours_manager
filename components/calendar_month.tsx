@@ -98,7 +98,7 @@ export const CalendarMonth: React.FC<MonthProps> = ({
                       false
                     )
                   }
-                  onKeyPress={(e) => {
+                  onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       (e.target as HTMLInputElement).blur();
                     }
@@ -116,7 +116,7 @@ export const CalendarMonth: React.FC<MonthProps> = ({
                   onBlur={(e) =>
                     handleUpdateDay("actual", e.target.value, dayIndex, false)
                   }
-                  onKeyPress={(e) => {
+                  onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       (e.target as HTMLInputElement).blur();
                     }
