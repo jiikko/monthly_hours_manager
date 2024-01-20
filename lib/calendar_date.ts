@@ -16,7 +16,7 @@ type CalendarDateType = {
   nextYear: () => number;
   nextMonthDate: () => CalendarDateType;
   isToday: () => boolean;
-  compareYearMonth: (other: CalendarDateType) => Boolean;
+  compareYearMonth: (other: CalendarDateType) => boolean;
 }
 
 // new Dateから月を取得すると0~11で取得されるため、処理しやすい値で返すDateクラスのラッパー
