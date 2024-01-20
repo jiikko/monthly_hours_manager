@@ -6,7 +6,7 @@ import {CalendarNotFoundError, OutdatedCalendarError, useManageCalendar} from 'h
 import {RequiredCalendar} from 'layouts/required_calendar';
 import {RequiredUser} from 'layouts/required_user';
 import {Layout} from 'layouts/v2';
-import {CalendarDate} from 'lib/calendar_date';
+import {CalendarDate, Today } from 'lib/calendar_date';
 import {CalendarMonthData} from 'lib/calendar_month_data';
 import {DayObject, DaysGenerator} from 'lib/days_generator';
 import Link from 'next/link';
@@ -21,8 +21,9 @@ const Page: NextPageWithLayout = () => {
   const { year, month } = router.query;
   const { calendar } = useContext(CalendarContext);
   const { user } = useCurrentUser()
-  const date = CalendarDate(year && Number(year), month && Number(month), 1);
-  const monthKey = date.monthlyKey();
+  const thisDate = CalendarDate(year && Number(year), month && Number(month), 1);
+  const todayDate = Today();
+  const monthKey = thisDate.monthlyKey();
   const { updateMonthsWithLock, updateCalendarForReRender } = useManageCalendar();
 
   const handleConfirm = (message: string, action: () => void) => {
@@ -108,12 +109,17 @@ const Page: NextPageWithLayout = () => {
 
       <Row className='mb-3'>
         <Col className="mt-3">
-          <Link href={`/v2/calendars/${calendar.id}/${date.previousYear()}/${date.previousMonth()}`}>
+          <Link href={`/v2/calendars/${calendar.id}/${thisDate.previousYear()}/${thisDate.previousMonth()}`}>
             <Button variant='success'>前月を表示する</Button>
           </Link>
         </Col>
         <Col className="mt-3">
-          <Link href={`/v2/calendars/${calendar.id}/${date.nextYear()}/${date.nextMonth()}`}>
+          <Link href={`/v2/calendars/${calendar.id}/${todayDate.year()}/${todayDate.month()}`}>
+            <Button variant='success' disabled={thisDate.compareYearMonth(todayDate) }>今月を表示する</Button>
+          </Link>
+        </Col>
+        <Col className="mt-3">
+          <Link href={`/v2/calendars/${calendar.id}/${thisDate.nextYear()}/${thisDate.nextMonth()}`}>
             <Button variant='success'>翌月を表示する</Button>
           </Link>
         </Col>
