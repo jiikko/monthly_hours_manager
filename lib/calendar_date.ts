@@ -137,5 +137,9 @@ const CalendarDate = (()  => {
   };
 })();
 
-export { CalendarDate };
+function Today(): CalendarDateType {
+  return CalendarDate();
+}
+
+export { CalendarDate, Today };
 export type { CalendarDateType };
