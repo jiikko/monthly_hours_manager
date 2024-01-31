@@ -50,13 +50,17 @@ const Page: NextPageWithLayout = () => {
     })
   }
   const handleUpdateDay = async (attributeName: string, value: boolean | string, dayIndex: number, onlyUpdateState: boolean): Promise<void> => {
-    days[dayIndex][attributeName] = Number(value);
+    // NOTE: `0.5`を入力するときに途中で `0.` となるので、 `0.` を保持できるように整数へのキャストはしない
+    days[dayIndex][attributeName] = value;
     calendar.months[monthKey] = days.map((day: DayObject) => { return(day.toObject()) });
     if(onlyUpdateState) {
       updateCalendarForReRender(calendar, monthKey);
       return
     }
 
+    // NOTE: 永続化するときは `0.`を入れることはないので整数へのキャストをしていい
+    days[dayIndex][attributeName] = Number(value);
+    calendar.months[monthKey] = days.map((day: DayObject) => { return(day.toObjectForStore()) });
     updateMonthsWithLock(calendar, user, monthKey).then((updated) => {
       if(updated) { toast('時間を更新しました'); }
     }).catch((error) => {

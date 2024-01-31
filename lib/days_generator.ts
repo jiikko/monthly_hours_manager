@@ -47,8 +47,13 @@ export class DayObject implements DayData {
   }
 
   // NOTE: firestoreに保存するためにオブジェクトに変換する
-  toObject(): DayData {
+  toObjectForStore(): DayData {
     return { day: this.day, scheduled: this.scheduledHour(), actual: this.actualHour(), isHoliday: this.isHoliday };
+  }
+
+  // NOTE:  this.scheduled, this.actualには文字列が入ってくる可能性がある
+  toObject(): DayData {
+    return { day: this.day, scheduled: this.scheduled, actual: this.actual, isHoliday: this.isHoliday };
   }
 }
 
