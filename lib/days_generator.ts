@@ -35,7 +35,11 @@ export class DayObject implements DayData {
   }
 
   scheduledHour(): number {
-    return Number(this.scheduled);
+    if(this.isHoliday) {
+      return 0;
+    } else {
+      return Number(this.scheduled);
+    }
   }
 
   actualHour(): number {
