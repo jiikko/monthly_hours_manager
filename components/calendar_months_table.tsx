@@ -29,6 +29,7 @@ export const CalendarMonthsTable: React.FC<Props> = ({ calendar, handleDeleteCal
             <th>予定時間</th>
             <th>実績時間</th>
             <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
