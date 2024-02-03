@@ -3,6 +3,7 @@ import { Calendar } from "lib/calendar";
 import { CalendarDate } from "lib/calendar_date";
 import { CalendarMonthData } from "lib/calendar_month_data";
 import { CalendarMonthView } from "lib/calendar_month_view";
+import { DayObject } from "lib/days_generator";
 import Link from "next/link";
 import React from "react";
 import { Button, Col, Row } from "react-bootstrap";
@@ -39,10 +40,20 @@ export const AllCalendarMonth: React.FC<Props> = ({
 
     const dayIndex = dayNumber - 1;
     const calendarDate = CalendarDate(year, month, dayNumber);
-    const totalHours = monthDataList.reduce(
-      (a, b) => a + Number(b.days[dayIndex].scheduled),
-      0
-    );
+    monthDataList.forEach((monthData) => {
+      const day = monthData.days[dayIndex];
+      const dayObj = new DayObject(
+        day.scheduled,
+        day.actual,
+        day.day,
+        day.isHoliday
+      );
+      monthData.days[dayIndex] = dayObj;
+    });
+    const totalHours = monthDataList.reduce((accumulator, currentValue) => {
+      const day = currentValue.days[dayIndex];
+      return accumulator + day.scheduledHour();
+    }, 0);
     let tdClassName = "table-";
     if (totalHours === 8) {
       tdClassName += "success";
@@ -60,7 +71,7 @@ export const AllCalendarMonth: React.FC<Props> = ({
         <ul className="list-group">
           {monthDataList.map((monthData, i) => (
             <li key={i} className="list-group-item">
-              {monthData.name}: {monthData.days[dayIndex].scheduled}h
+              {monthData.name}: {monthData.days[dayIndex].scheduledHour()}h
             </li>
           ))}
         </ul>
