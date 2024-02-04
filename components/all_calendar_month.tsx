@@ -6,7 +6,7 @@ import { CalendarMonthView } from "lib/calendar_month_view";
 import { DayObject } from "lib/days_generator";
 import Link from "next/link";
 import React from "react";
-import { Button, Col, Row } from "react-bootstrap";
+import { Badge, Button, Col, Row } from "react-bootstrap";
 
 type Props = {
   year: number;
@@ -62,11 +62,25 @@ export const AllCalendarMonth: React.FC<Props> = ({
     } else {
       tdClassName += "success";
     }
+    const renderTodayLabel = () => {
+      return (
+        <Badge bg="danger" className="m-1">
+          {renderNotTodayLabel()}
+        </Badge>
+      );
+    };
+    const renderNotTodayLabel = () => {
+      return (
+        <>
+          {calendarDate.day()}日{calendarDate.isNationalHoliday() && "(祝)"}
+          ({totalHours}h)
+        </>
+      );
+    };
 
     return (
       <td key={index} className={tdClassName}>
-        {dayNumber}日{calendarDate.isNationalHoliday() && "(祝)"}(合計
-        {totalHours}h)
+        {calendarDate.isToday() ? renderTodayLabel() : renderNotTodayLabel()}
         <br />
         <ul className="list-group">
           {monthDataList.map((monthData, i) => (
