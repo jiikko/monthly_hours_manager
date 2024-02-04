@@ -67,7 +67,6 @@ export const CalendarMonth: React.FC<MonthProps> = ({
         <div>
           {calendarDate.isToday() ? renderTodayLabel() : renderNotTodayLabel()}
         </div>
-        <br />
         <Form>
           <Form.Check
             type="switch"
