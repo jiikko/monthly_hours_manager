@@ -5,6 +5,7 @@ import { PathGenerator } from '../lib/path_generator';
 import { useAuth } from '../hooks/use_auth';
 import Link from 'next/link';
 import { useCurrentUser } from 'hooks/use_current_user';
+import { useReloadOnInactive } from "hooks/use_reload_on_inactive";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -22,6 +23,7 @@ export function Layout({ children }: LayoutProps) {
   const loggedInEmail = user && user.email;
   const logged = !!loggedInEmail;
   const loaded = user !== undefined;
+  useReloadOnInactive();
 
   const handleLogout = async () => {
     const result = confirm('ログアウトしますか？');
