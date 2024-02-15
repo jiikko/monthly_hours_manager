@@ -37,6 +37,12 @@ const Page: NextPageWithLayout = () => {
   const handleRecalculateDaysButton = (days: Array<DayObject>) => {
     handleConfirm('実績が入力されていない時間をすべて削除しますが、操作を続けますか？', () => { recalculateDays(days) });
   }
+  const fillActualFromScheduled = (days: Array<DayObject>) => {
+    handleConfirm('予定を実績へコピーしますが、操作を続けますか？', () => {
+      days.forEach((day: DayObject) => { day.actual = day.scheduled });
+      recalculateDays(days)
+    });
+  }
   const recalculateDays = (days: Array<DayObject>): void => {
     calendar.months[monthKey] = DaysGenerator.executeWithDays(Number(year), Number(month), calendar.standardTime, calendar.week, days)
     updateMonthsWithLock(calendar, user, monthKey).then(() => {
@@ -155,6 +161,9 @@ const Page: NextPageWithLayout = () => {
       </Col>
       <Col>
         <Button type='button' variant="primary" onClick={((_) => handleRecalculateDaysButton(days)) }>未稼働日の予定を再計算する</Button>
+      </Col>
+      <Col>
+        <Button type='button' variant="info" onClick={((_) => fillActualFromScheduled (days)) }>予定を実績へコピーする</Button>
       </Col>
     </>
   )

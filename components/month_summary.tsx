@@ -13,7 +13,7 @@ export const MonthSummary: React.FC<SummaryProps> = ({ days, standardTime }) => 
   const diffScheduled = Number((totalScheduled - standardTime).toFixed(1));
   const totalScheduledClassName = (totalScheduled >= standardTime) ? 'text-white bg-success' : 'text-white bg-danger';
   const totalActual = calculator.totalActual();
-  const diffActual = totalActual - standardTime;
+  const diffActual = Number((totalActual - standardTime).toFixed(1));
   const totalActualClassName = (totalActual >= standardTime) ? 'text-white bg-success' : '';
 
   return(
