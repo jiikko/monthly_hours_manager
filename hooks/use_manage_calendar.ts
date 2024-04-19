@@ -1,5 +1,5 @@
 import type {User} from '@firebase/auth';
-import {addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, runTransaction, updateDoc} from 'firebase/firestore';
+import {addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, runTransaction, updateDoc} from 'firebase/firestore';
 import {Calendar} from 'lib/calendar';
 import {db} from "lib/firebase";
 import {useState} from 'react';
@@ -133,16 +133,16 @@ export const useManageCalendar = () => {
   };
 
   const fetchCalendars = async (user: User) => {
-    const q = query(collection(db, `time-manager-v2/${user.uid}/calendars`));
+    const q = query(
+      collection(db, `time-manager-v2/${user.uid}/calendars`),
+      orderBy('displayOrder', 'asc')
+    );
     const querySnapshot = await getDocs(q);
     const list = [];
     querySnapshot.forEach((doc) => {
       const data = doc.data()
       const calendar = new Calendar(data.name, data.standardTime, Week.parse(data.week), data.months, false, doc.id, data.created_at.toDate());
       list.push(calendar);
-    });
-    list.sort((a, b) => {
-      return a.createdAt.getTime() - b.createdAt.getTime();
     });
 
     return list
