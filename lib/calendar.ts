@@ -76,6 +76,7 @@ export class Calendar implements CalendarType {
     public shouldOutputQueryParam?: boolean,
     public id?: string,
     public createdAt?: Date,
+    public displayOrder?: number,
     public lockVersion?: number
   ) {}
 

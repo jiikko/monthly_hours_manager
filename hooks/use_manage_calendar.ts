@@ -1,5 +1,5 @@
 import type {User} from '@firebase/auth';
-import {addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, runTransaction, updateDoc} from 'firebase/firestore';
+import {addDoc, collection, deleteDoc, doc, getDoc, getDocs, limit, orderBy, query, runTransaction, updateDoc} from 'firebase/firestore';
 import {Calendar} from 'lib/calendar';
 import {db} from "lib/firebase";
 import {useState} from 'react';
@@ -123,7 +123,7 @@ export const useManageCalendar = () => {
     if (docSnap.exists()) {
       console.log("Document data:", docSnap.data());
       const doc = docSnap.data()
-      const calendar = new Calendar(doc.name, doc.standardTime, Week.parse(doc.week), doc.months, false, docSnap.id, doc.created_at.toDate(), doc.lockVersion)
+      const calendar = new Calendar(doc.name, doc.standardTime, Week.parse(doc.week), doc.months, false, docSnap.id, doc.created_at.toDate(), doc.displayOrder, doc.lockVersion)
       calendar.sortByMonthKey();
       updateCalendarForReRender(calendar, monthKey);
     } else {
@@ -141,20 +141,40 @@ export const useManageCalendar = () => {
     const list = [];
     querySnapshot.forEach((doc) => {
       const data = doc.data()
-      const calendar = new Calendar(data.name, data.standardTime, Week.parse(data.week), data.months, false, doc.id, data.created_at.toDate());
+      const calendar = new Calendar(data.name, data.standardTime, Week.parse(data.week), data.months, false, doc.id, data.created_at.toDate(), data.displayOrder)
       list.push(calendar);
     });
 
     return list
   }
 
+  const fetchNextDisplayOrder = async (user: User): Promise<number> => {
+    const q = query(
+      collection(db, `time-manager-v2/${user.uid}/calendars`),
+      orderBy('displayOrder', 'desc'),
+      limit(1)
+    );
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      return 1; // カレンダーがない場合は1を返す
+    } else {
+      const doc = querySnapshot.docs[0];
+      const data = doc.data();
+      return (data.displayOrder || 0) + 1; // 最大のdisplay_orderに1を加えた値を返す
+    }
+  };
+
   const createCalendar = async (user: User, name: string, standardTime: number, week: Week) => {
     const newEntryPath = `time-manager-v2/${user.uid}/calendars`;
+    const nextDisplayOrder = await fetchNextDisplayOrder(user);
+
     await addDoc(collection(db, newEntryPath), {
       name,
       standardTime,
       week: week.toObject(),
       months: {},
+      displayOrder: nextDisplayOrder,
       created_at: new Date(),
     });
   }
