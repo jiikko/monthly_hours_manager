@@ -2,6 +2,7 @@ import {Calendar} from 'lib/calendar';
 import {CalendarDate, CalendarDateType} from 'lib/calendar_date';
 import {PathGenerator} from 'lib/path_generator';
 import Link from 'next/link';
+import React from 'react';
 import {Button, Col, Nav, Row, Table} from 'react-bootstrap';
 
 type Props = {
@@ -12,6 +13,7 @@ export const CalendarCollection: React.FC<Props>= ({ calendars }) => {
   const date = CalendarDate();
   const dateOnNextMonth = date.nextMonthDate();
   const pathGenerator = PathGenerator()
+  const [sortable, setSortable] = React.useState(false);
   const renderMonthSummary = (calendar: Calendar, date: CalendarDateType) => {
     const days = calendar.months[date.monthlyKey()]
     if(days === undefined) { return null }
@@ -33,11 +35,19 @@ export const CalendarCollection: React.FC<Props>= ({ calendars }) => {
 
   return (
     <>
-      <h1 className='mb-4'>作成したカレンダーの一覧</h1>
+      <h1>作成したカレンダーの一覧</h1>
+      <Row>
+        <Col className='text-end'>
+          <Button onClick={() => setSortable(!sortable)}>
+            並び替え
+          </Button>
+        </Col>
+      </Row>
 
       <Table>
         <thead>
           <tr>
+            <th></th>
             <th>カレンダー名</th>
             <th>基準時間</th>
             <th>稼働曜日</th>
@@ -59,6 +69,9 @@ export const CalendarCollection: React.FC<Props>= ({ calendars }) => {
         <tbody>
           {calendars.map((calendar, index) => (
             <tr key={index}>
+              <td>
+                {sortable && <span style={{'cursor': 'move'}}>☰</span>}
+              </td>
               <td>{calendar.name}</td>
               <td>{calendar.standardTime}時間</td>
               <td>
@@ -92,6 +105,7 @@ export const CalendarCollection: React.FC<Props>= ({ calendars }) => {
             </tr>
           ))}
           <tr className='table-info'>
+              <td></td>
               <td>合計</td>
               <td>{calendars.reduce((a, b) => a + b.standardTime, 0)}時間</td>
               <td></td>
