@@ -15,6 +15,7 @@ const Page: NextPageWithLayout = () => {
   const rows = calendars.map((calendar) => {
     return {
       name: calendar.name,
+      calendar: calendar,
       standardTime: calendar.standardTime,
       week: calendar.week.format(),
       createdAt: calendar.formattedCreatedAt(),

@@ -8,7 +8,14 @@ type Props = {
 };
 
 export const DraggableTableRow = ({ row }: Props) => {
-  const { attributes, listeners, transform, transition, setNodeRef, isDragging } = useSortable({
+  const {
+    attributes,
+    listeners,
+    transform,
+    transition,
+    setNodeRef,
+    isDragging,
+  } = useSortable({
     id: row.original.name,
   });
   const style = {
@@ -24,7 +31,9 @@ export const DraggableTableRow = ({ row }: Props) => {
           if (i === 0) {
             return (
               <td key={cell.id}>
-                <div {...attributes} {...listeners}>!11111!!</div>
+                <div {...attributes} {...listeners}>
+                  ↕️
+                </div>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </td>
             );

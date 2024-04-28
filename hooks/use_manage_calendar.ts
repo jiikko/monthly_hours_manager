@@ -52,7 +52,7 @@ export const useManageCalendar = () => {
       }
 
       const data = docSnapshot.data();
-      const beforeCalendar = new Calendar(data.name, data.standardTime, Week.parse(data.week), data.months, false, docSnapshot.id, data.created_at.toDate(), data.lockVersion);
+      const beforeCalendar = new Calendar(data.name, data.standardTime, Week.parse(data.week), data.months, false, docSnapshot.id, data.created_at.toDate(), data.displayOrder, data.lockVersion);
       const currentVersion = beforeCalendar.lockVersion || 0;
       if (calendar.lockVersion && currentVersion !== calendar.lockVersion) {
         throw new OutdatedCalendarError();
@@ -123,6 +123,7 @@ export const useManageCalendar = () => {
     if (docSnap.exists()) {
       console.log("Document data:", docSnap.data());
       const doc = docSnap.data()
+
       const calendar = new Calendar(doc.name, doc.standardTime, Week.parse(doc.week), doc.months, false, docSnap.id, doc.created_at.toDate(), doc.displayOrder, doc.lockVersion)
       calendar.sortByMonthKey();
       updateCalendarForReRender(calendar, monthKey);

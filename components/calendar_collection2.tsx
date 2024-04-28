@@ -22,7 +22,12 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { Calendar } from "lib/calendar";
+import { CalendarDate, CalendarDateType } from "lib/calendar_date";
+import { PathGenerator } from "lib/path_generator";
+import Link from "next/link";
 import React, { Dispatch, SetStateAction } from "react";
+import { Button, Col, Nav, Row, Table } from "react-bootstrap";
 import { DraggableTableRow } from "./DraggableTableRow";
 import { StaticTableRow } from "./StaticTableRow";
 
@@ -33,6 +38,7 @@ type Props = {
 
 export type Element = {
   name: string;
+  calendar: Calendar;
   standardTime: number;
   week: string;
   createdAt: string;
@@ -43,8 +49,42 @@ export type Element = {
 };
 
 export const CalendarCollection2: React.FC<Props> = ({ data, setData }) => {
+  const pathGenerator = PathGenerator();
+  const date = CalendarDate();
+  const dateOnNextMonth = date.nextMonthDate();
+  const renderMonthSummary = (calendar: Calendar, date: CalendarDateType) => {
+    const days = calendar.months[date.monthlyKey()];
+    if (days === undefined) {
+      return null;
+    }
+
+    return (
+      <>
+        予定: {calculateTime([calendar], date.monthlyKey(), "totalScheduled")}
+        時間
+        <br />
+        実績: {calculateTime([calendar], date.monthlyKey(), "totalActual")}時間
+      </>
+    );
+  };
+  const calculateTime = (
+    calendars: Array<Calendar>,
+    monthKey: string,
+    method: string
+  ): number => {
+    return calendars.reduce((total, calendar) => {
+      const monthTotal = calendar.sumByMonth(monthKey, method);
+      return Number((total + monthTotal).toFixed(2));
+    }, 0);
+  };
+
   const [activeName, setActiveName] = React.useState("");
   const columns: ColumnDef<Element>[] = [
+    {
+      id: "blank",
+      header: "",
+      accessorKey: "blank",
+    },
     {
       id: "name",
       header: "カレンダー名",
@@ -67,23 +107,84 @@ export const CalendarCollection2: React.FC<Props> = ({ data, setData }) => {
     },
     {
       id: "thisMonthLink",
-      header: "今月",
+      header: function () {
+        return (
+          <Link
+            href={`/v2/calendars/all/${date.year()}/${date.month()}`}
+            className="text-decoration-underline"
+          >
+            今月({date.month()}月)
+          </Link>
+        );
+      },
       accessorKey: "thisMonthLink",
+      cell: function (cell) {
+        return (
+          <>
+            <Nav.Link
+              as={Link}
+              href={pathGenerator.monthPathV2(
+                cell.row.original.calendar.id,
+                date.year(),
+                date.month()
+              )}
+            >
+              <Button variant="info">表示する</Button>
+            </Nav.Link>
+            {renderMonthSummary(cell.row.original.calendar, date)}
+          </>
+        );
+      },
     },
     {
       id: "nextMonthLink",
-      header: "来月",
+      header: function () {
+        return (
+          <Link
+            href={`/v2/calendars/all/${dateOnNextMonth.year()}/${dateOnNextMonth.month()}`}
+            className="text-decoration-underline"
+          >
+            来月({dateOnNextMonth.month()}月)
+          </Link>
+        );
+      },
       accessorKey: "nextMonthLink",
+      cell: (cell) => (
+        <>
+          <Nav.Link
+            as={Link}
+            href={pathGenerator.monthPathV2(
+              cell.row.original.calendar.id,
+              dateOnNextMonth.year(),
+              dateOnNextMonth.month()
+            )}
+          >
+            <Button variant="info">表示する</Button>
+          </Nav.Link>
+
+          {renderMonthSummary(cell.row.original.calendar, dateOnNextMonth)}
+        </>
+      ),
     },
     {
       id: "monthsLink",
       header: "月別",
       accessorKey: "monthsLink",
+      cell: (cell) => (
+        <Link href={`/v2/calendars/${cell.row.original.calendar.id}/months`}>
+          <Button>月一覧</Button>
+        </Link>
+      ),
     },
     {
       id: "editLink",
       header: "編集",
       accessorKey: "editLink",
+      cell: (cell) => (
+        <Link href={`/v2/calendars/${cell.row.original.calendar.id}/edit`}>
+          <Button>編集</Button>
+        </Link>
+      ),
     },
   ];
   const items = React.useMemo(() => data?.map(({ name }) => name), [data]);
@@ -135,6 +236,7 @@ export const CalendarCollection2: React.FC<Props> = ({ data, setData }) => {
 
   return (
     <>
+      <h1>作成したカレンダーの一覧</h1>
       <DndContext
         sensors={sensors}
         onDragEnd={handleDragEnd}
@@ -143,7 +245,7 @@ export const CalendarCollection2: React.FC<Props> = ({ data, setData }) => {
         collisionDetection={closestCenter}
         modifiers={[restrictToVerticalAxis]}
       >
-        <table>
+        <Table>
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
@@ -167,18 +269,72 @@ export const CalendarCollection2: React.FC<Props> = ({ data, setData }) => {
                 <DraggableTableRow key={row.original.name} row={row} />
               ))}
             </SortableContext>
+            <tr className="table-info">
+              <td></td>
+              <td>合計</td>
+              <td>
+                {data.reduce((sum, item) => sum + item.standardTime, 0)}時間
+              </td>
+              <td></td>
+              <td></td>
+              <td>
+                予定:{" "}
+                {calculateTime(
+                  data.map((item) => item.calendar),
+                  date.monthlyKey(),
+                  "totalScheduled"
+                )}
+                時間
+                <br />
+                実績:{" "}
+                {calculateTime(
+                  data.map((item) => item.calendar),
+                  date.monthlyKey(),
+                  "totalActual"
+                )}
+                時間
+              </td>
+              <td>
+                予定:{" "}
+                {calculateTime(
+                  data.map((item) => item.calendar),
+                  dateOnNextMonth.monthlyKey(),
+                  "totalScheduled"
+                )}
+                時間
+                <br />
+                実績:{" "}
+                {calculateTime(
+                  data.map((item) => item.calendar),
+                  dateOnNextMonth.monthlyKey(),
+                  "totalActual"
+                )}
+                時間
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
           </tbody>
-        </table>
+        </Table>
+
         <DragOverlay>
           {activeName && (
-            <table style={{ width: "100%" }}>
+            <Table striped bordered hover>
               <tbody>
                 {selectedRow && <StaticTableRow row={selectedRow} />}
               </tbody>
-            </table>
+            </Table>
           )}
         </DragOverlay>
       </DndContext>
+
+      <Row>
+        <Col className="text-end">
+          <Link href={`/v2/calendars/new`}>
+            <Button>新しいカレンダーを作成する</Button>
+          </Link>
+        </Col>
+      </Row>
     </>
   );
 };

@@ -12,7 +12,7 @@ export const StaticTableRow = ({ row }: Props) => {
         if (i === 0) {
           return (
             <td key={cell.id}>
-              <div>????</div>
+              <div>↕️</div>
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </td>
           );
