@@ -1,4 +1,4 @@
-import { CalendarCollection2 } from "components/calendar_collection2";
+import { CalendarCollection } from "components/calendar_collection";
 import { useCalendarCollection } from "hooks/use_calendar_collection";
 import { RequiredCalendarCollection } from "layouts/required_calendar_collection";
 import { RequiredUser } from "layouts/required_user";
@@ -27,7 +27,7 @@ const Page: NextPageWithLayout = () => {
   });
   const [data, setData] = React.useState(rows);
 
-  return <CalendarCollection2 data={data} setData={setData} />;
+  return <CalendarCollection data={data} setData={setData} />;
 };
 
 export default Page;
