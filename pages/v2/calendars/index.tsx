@@ -11,9 +11,9 @@ import type { NextPageWithLayout } from "pages/_app";
 import React from "react";
 
 const Page: NextPageWithLayout = () => {
-  const { calendars } = useCalendarCollection();
+  const { calendars } = useCalendarCollection(); // NOTE: 初回ロード時
   const { user } = useCurrentUser();
-  const { fetchCalendars } = useManageCalendar();
+  const { fetchCalendars } = useManageCalendar(); // NOTE: 画面再読み込み時に使う
   const date = CalendarDate();
   const dateOnNextMonth = date.nextMonthDate();
   const convertCalendarToRow = (calendar: Calendar) => {
