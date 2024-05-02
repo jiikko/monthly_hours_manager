@@ -1,5 +1,5 @@
 import type {User} from '@firebase/auth';
-import {addDoc, collection, deleteDoc, doc, getDoc, getDocs, limit, orderBy, query, runTransaction, updateDoc} from 'firebase/firestore';
+import {addDoc, collection, deleteDoc, doc, getDoc, getDocs, limit, orderBy, where, query, runTransaction, updateDoc} from 'firebase/firestore';
 import {Calendar} from 'lib/calendar';
 import {db} from "lib/firebase";
 import {useState} from 'react';
@@ -166,6 +166,34 @@ export const useManageCalendar = () => {
     }
   };
 
+  const updateCalendarDisplayOrder = async (
+    user: User,
+    activeCalendarId: string,
+    overCalenderId: string,
+    activeDisplayOrder: number,
+    oldDisplayOrder: number,
+  ): Promise<void> => {
+    await runTransaction(db, async (transaction) => {
+      const activeCalendarRef = doc(db, `time-manager-v2/${user.uid}/calendars`, activeCalendarId);
+      const offset = activeDisplayOrder < oldDisplayOrder ? 1 : 0;
+      const calendarsRef = collection(db, `time-manager-v2/${user.uid}/calendars`);
+      const q = query(
+        calendarsRef,
+        where("displayOrder", ">=", oldDisplayOrder + offset),
+        orderBy("displayOrder")
+      );
+      const snapshot = await getDocs(q);
+      snapshot.forEach(doc => {
+        const calendarData = doc.data();
+        if (doc.id !== activeCalendarId) {
+          transaction.update(doc.ref, { displayOrder: calendarData.displayOrder + 1 });
+        }
+      });
+
+      transaction.update(activeCalendarRef, { displayOrder: oldDisplayOrder + offset });
+    });
+  }
+
   const createCalendar = async (user: User, name: string, standardTime: number, week: Week) => {
     const newEntryPath = `time-manager-v2/${user.uid}/calendars`;
     const nextDisplayOrder = await fetchNextDisplayOrder(user);
@@ -196,5 +224,6 @@ export const useManageCalendar = () => {
     updateMonthsWithLock,
     updateCalendarForReRender,
     setCalendar,
+    updateCalendarDisplayOrder,
   };
 }

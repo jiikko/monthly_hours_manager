@@ -30,10 +30,14 @@ import React, { Dispatch, SetStateAction } from "react";
 import { Button, Col, Nav, Row, Table } from "react-bootstrap";
 import { DraggableTableRow } from "./DraggableTableRow";
 import { StaticTableRow } from "./StaticTableRow";
+import { useCurrentUser } from "hooks/use_current_user";
+import { useCalendarCollection } from "hooks/use_calendar_collection";
+import { useManageCalendar } from "hooks/use_manage_calendar";
 
 type Props = {
   data: Array<any>;
   setData: Dispatch<SetStateAction<Element[]>>;
+  fetchAndUpdateCalendars: () => void;
 };
 
 export type Element = {
@@ -48,7 +52,13 @@ export type Element = {
   editLink: string;
 };
 
-export const CalendarCollection: React.FC<Props> = ({ data, setData }) => {
+export const CalendarCollection: React.FC<Props> = ({
+  data,
+  setData,
+  fetchAndUpdateCalendars,
+}) => {
+  const { user } = useCurrentUser();
+  const { updateCalendarDisplayOrder } = useManageCalendar();
   const pathGenerator = PathGenerator();
   const date = CalendarDate();
   const dateOnNextMonth = date.nextMonthDate();
@@ -225,8 +235,20 @@ export const CalendarCollection: React.FC<Props> = ({ data, setData }) => {
         const newIndex = items.indexOf(over.id);
         return arrayMove(data, oldIndex, newIndex);
       });
-    }
 
+      const activeCalender = data[active.data.current.sortable.index].calendar;
+      const overCalender = data[over.data.current.sortable.index].calendar;
+
+      updateCalendarDisplayOrder(
+        user,
+        activeCalender.id,
+        overCalender.id,
+        activeCalender.displayOrder,
+        overCalender.displayOrder
+      ).then(() => {
+        fetchAndUpdateCalendars();
+      });
+    }
     setActiveName("");
   }
 
