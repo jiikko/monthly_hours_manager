@@ -1,5 +1,5 @@
 import { flexRender, Row } from "@tanstack/react-table";
-import { Element } from "./calendar_collection2";
+import { Element } from "./calendar_collection";
 
 type Props = {
   row: Row<Element>;
