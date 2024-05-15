@@ -6,7 +6,6 @@ import { GetServerSideProps } from "next";
 import type { NextPageWithLayout } from "pages/_app";
 
 const Page: NextPageWithLayout = () => {
-  // コンポーネントはリダイレクトが行われるため実際にはレンダリングされません
   return <div>Redirecting...</div>;
 };
 
@@ -15,7 +14,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const year = todayDate.year();
   const month = todayDate.month();
 
-  const { calendar_id } = context.params; // [calendar_id] のパラメータを取得
+  const { calendar_id } = context.params;
 
   return {
     redirect: {
