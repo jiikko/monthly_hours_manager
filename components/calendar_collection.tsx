@@ -107,7 +107,7 @@ export const CalendarCollection: React.FC<Props> = ({
     },
     {
       id: "week",
-      header: "週の始まり",
+      header: "稼働曜日",
       accessorKey: "week",
     },
     {

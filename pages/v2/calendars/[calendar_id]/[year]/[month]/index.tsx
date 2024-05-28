@@ -31,6 +31,48 @@ const Page: NextPageWithLayout = () => {
     if(result) { action(); }
   }
 
+const copyAsTable = (days: Array<DayObject>) => {
+    let table = `
+      <style>
+        .custom-table {
+          border-collapse: collapse;
+          width: 100%;
+        }
+        .custom-table, .custom-table th, .custom-table td {
+          border: 1px solid black;
+        }
+        .custom-row, .custom-cell {
+          height: 2px;
+        }
+        .custom-cell {
+          padding: 1px 0px 0px 5px;
+          margin: 0;
+        }
+        .custom-cell-body {
+          width: 70%;
+        }
+      </style>
+    `;
+    table += '<table class="custom-table"><tr class="custom-row"><th>日付</th><th>稼働時間(hour)</th><th class="custom-cell-body">内容</th></tr>';
+    days.forEach((day: DayObject) => {
+      table += `<tr class='custom-row'><td class='custom-cell'>${todayDate.year()}-${todayDate.month()}-${day.day}</td><td class='custom-cell'>${day.actual}</td><td class='custom-cell'></td></tr>`;
+    });
+    table += `<tr class='custom-row'><td class='custom-cell'></td><td class='custom-cell'>${days.reduce((acc, day) => acc + day.actual, 0)}</td><td></td></tr>`; // NOTE: 合計
+    table += '</table>';
+
+    const blob = new Blob([table], { type: 'text/html' });
+    const data = [new ClipboardItem({ "text/html": blob })];
+    navigator.clipboard
+        .write(data)
+        .then(() => {
+            toast("クリップボードにコピーしました");
+        })
+        .catch((err) => {
+            toast.error(`クリップボードへのコピーに失敗しました。${err}`);
+        });
+    return false;
+  };
+
   const handleInitializeDaysButton = () => {
     handleConfirm('現在入力済みの時間をすべて削除しますが、操作を続けますか？', initializeDays);
   }
@@ -114,6 +156,9 @@ const Page: NextPageWithLayout = () => {
       <Row className='mb-3'>
         <Col>
           {calendar.name ? <h1>{calendar.name}の{year}年{month}月</h1> : <h1>{year}年{month}月</h1>}
+        </Col>
+        <Col className="text-end">
+            <Button variant='success' onClick={((_) => copyAsTable(days)) }>表としてクリップボードにコピーする</Button>
         </Col>
       </Row>
 
