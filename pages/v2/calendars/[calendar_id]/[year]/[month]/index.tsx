@@ -55,10 +55,9 @@ const copyAsTable = (days: Array<DayObject>) => {
     `;
     table += '<table class="custom-table"><tr class="custom-row"><th>日付</th><th>稼働時間(hour)</th><th class="custom-cell-body">内容</th></tr>';
     days.forEach((day: DayObject) => {
-        table += `<tr class='custom-row'><td class='custom-cell'>${todayDate.year()}-${todayDate.month()}-${day.day}</td><td class='custom-cell'>${day.actual}</td><td class='custom-cell'></td></tr>`;
+      table += `<tr class='custom-row'><td class='custom-cell'>${todayDate.year()}-${todayDate.month()}-${day.day}</td><td class='custom-cell'>${day.actual}</td><td class='custom-cell'></td></tr>`;
     });
-        table += `<tr class='custom-row'><td class='custom-cell'></td><td class='custom-cell'>${days.reduce((acc, day) => acc + day.actual, 0)}</td><td></td></tr>`;
-
+    table += `<tr class='custom-row'><td class='custom-cell'></td><td class='custom-cell'>${days.reduce((acc, day) => acc + day.actual, 0)}</td><td></td></tr>`; // NOTE: 合計
     table += '</table>';
 
     const blob = new Blob([table], { type: 'text/html' });
